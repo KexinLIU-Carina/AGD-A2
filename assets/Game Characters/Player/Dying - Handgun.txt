@@ -1,0 +1,110 @@
+Dying - Handgun.png
+size: 2025, 2640
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Dying - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 410, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Dying - Handgun
+  rotate: false
+  xy: 676, 1
+  size: 414, 658
+  orig: 924, 864
+  offset: 294, 108
+  index: 1
+Dying - Handgun
+  rotate: false
+  xy: 1351, 1
+  size: 426, 656
+  orig: 924, 864
+  offset: 299, 115
+  index: 2
+Dying - Handgun
+  rotate: false
+  xy: 1, 661
+  size: 437, 651
+  orig: 924, 864
+  offset: 304, 124
+  index: 3
+Dying - Handgun
+  rotate: false
+  xy: 676, 661
+  size: 402, 649
+  orig: 924, 864
+  offset: 304, 157
+  index: 4
+Dying - Handgun
+  rotate: false
+  xy: 1351, 661
+  size: 405, 635
+  orig: 924, 864
+  offset: 280, 177
+  index: 5
+Dying - Handgun
+  rotate: false
+  xy: 1, 1321
+  size: 483, 576
+  orig: 924, 864
+  offset: 208, 219
+  index: 6
+Dying - Handgun
+  rotate: false
+  xy: 676, 1321
+  size: 522, 526
+  orig: 924, 864
+  offset: 153, 189
+  index: 7
+Dying - Handgun
+  rotate: false
+  xy: 1351, 1321
+  size: 558, 491
+  orig: 924, 864
+  offset: 112, 124
+  index: 8
+Dying - Handgun
+  rotate: false
+  xy: 1, 1981
+  size: 604, 436
+  orig: 924, 864
+  offset: 79, 65
+  index: 9
+Dying - Handgun
+  rotate: false
+  xy: 676, 1981
+  size: 670, 405
+  orig: 924, 864
+  offset: 35, 60
+  index: 10
+Dying - Handgun
+  rotate: false
+  xy: 1351, 1981
+  size: 673, 362
+  orig: 924, 864
+  offset: 36, 60
+  index: 11
+Dying - Handgun
+  rotate: false
+  xy: 1351, 1981
+  size: 673, 362
+  orig: 924, 864
+  offset: 36, 60
+  index: 12
+Dying - Handgun
+  rotate: false
+  xy: 1351, 1981
+  size: 673, 362
+  orig: 924, 864
+  offset: 36, 60
+  index: 13
+Dying - Handgun
+  rotate: false
+  xy: 1351, 1981
+  size: 673, 362
+  orig: 924, 864
+  offset: 36, 60
+  index: 14

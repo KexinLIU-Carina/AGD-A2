@@ -1,0 +1,89 @@
+Hurt - Rifle.png
+size: 1948, 1968
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Hurt - Rifle
+  rotate: false
+  xy: 1, 1
+  size: 485, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Hurt - Rifle
+  rotate: false
+  xy: 488, 1
+  size: 470, 647
+  orig: 924, 864
+  offset: 282, 103
+  index: 1
+Hurt - Rifle
+  rotate: false
+  xy: 975, 1
+  size: 456, 636
+  orig: 924, 864
+  offset: 274, 103
+  index: 2
+Hurt - Rifle
+  rotate: false
+  xy: 1462, 1
+  size: 449, 632
+  orig: 924, 864
+  offset: 274, 103
+  index: 3
+Hurt - Rifle
+  rotate: false
+  xy: 1, 657
+  size: 446, 631
+  orig: 924, 864
+  offset: 275, 103
+  index: 4
+Hurt - Rifle
+  rotate: false
+  xy: 488, 657
+  size: 446, 632
+  orig: 924, 864
+  offset: 277, 103
+  index: 5
+Hurt - Rifle
+  rotate: false
+  xy: 975, 657
+  size: 452, 636
+  orig: 924, 864
+  offset: 279, 103
+  index: 6
+Hurt - Rifle
+  rotate: false
+  xy: 1462, 657
+  size: 458, 640
+  orig: 924, 864
+  offset: 281, 103
+  index: 7
+Hurt - Rifle
+  rotate: false
+  xy: 1, 1313
+  size: 463, 643
+  orig: 924, 864
+  offset: 283, 103
+  index: 8
+Hurt - Rifle
+  rotate: false
+  xy: 488, 1313
+  size: 470, 647
+  orig: 924, 864
+  offset: 284, 103
+  index: 9
+Hurt - Rifle
+  rotate: false
+  xy: 975, 1313
+  size: 475, 650
+  orig: 924, 864
+  offset: 286, 103
+  index: 10
+Hurt - Rifle
+  rotate: false
+  xy: 1462, 1313
+  size: 480, 652
+  orig: 924, 864
+  offset: 288, 103
+  index: 11

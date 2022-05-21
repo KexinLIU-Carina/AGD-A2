@@ -1,0 +1,47 @@
+Jump Start - Handgun.png
+size: 1236, 1418
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Jump Start - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 410, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Jump Start - Handgun
+  rotate: false
+  xy: 413, 1
+  size: 398, 669
+  orig: 924, 864
+  offset: 291, 98
+  index: 1
+Jump Start - Handgun
+  rotate: false
+  xy: 825, 1
+  size: 386, 681
+  orig: 924, 864
+  offset: 291, 95
+  index: 2
+Jump Start - Handgun
+  rotate: false
+  xy: 1, 710
+  size: 379, 692
+  orig: 924, 864
+  offset: 291, 93
+  index: 3
+Jump Start - Handgun
+  rotate: false
+  xy: 413, 710
+  size: 376, 700
+  orig: 924, 864
+  offset: 288, 93
+  index: 4
+Jump Start - Handgun
+  rotate: false
+  xy: 825, 710
+  size: 373, 707
+  orig: 924, 864
+  offset: 285, 94
+  index: 5

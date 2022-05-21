@@ -1,0 +1,131 @@
+Attacking.png
+size: 1740, 2262
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Flaming
+  rotate: false
+  xy: 1, 1
+  size: 526, 371
+  orig: 660, 512
+  offset: 89, 71
+  index: 0
+Flaming
+  rotate: false
+  xy: 581, 1
+  size: 536, 370
+  orig: 660, 512
+  offset: 82, 71
+  index: 1
+Flaming
+  rotate: false
+  xy: 1161, 1
+  size: 549, 368
+  orig: 660, 512
+  offset: 74, 72
+  index: 2
+Flaming
+  rotate: false
+  xy: 1, 378
+  size: 557, 371
+  orig: 660, 512
+  offset: 73, 71
+  index: 3
+Flaming
+  rotate: false
+  xy: 581, 378
+  size: 564, 372
+  orig: 660, 512
+  offset: 74, 71
+  index: 4
+Flaming
+  rotate: false
+  xy: 1161, 378
+  size: 568, 372
+  orig: 660, 512
+  offset: 75, 73
+  index: 5
+Flaming
+  rotate: false
+  xy: 1, 755
+  size: 569, 369
+  orig: 660, 512
+  offset: 77, 77
+  index: 6
+Flaming
+  rotate: false
+  xy: 581, 755
+  size: 571, 371
+  orig: 660, 512
+  offset: 78, 76
+  index: 7
+Flaming
+  rotate: false
+  xy: 1161, 755
+  size: 572, 373
+  orig: 660, 512
+  offset: 79, 76
+  index: 8
+Flaming
+  rotate: false
+  xy: 1, 1132
+  size: 574, 375
+  orig: 660, 512
+  offset: 80, 76
+  index: 9
+Flaming
+  rotate: false
+  xy: 581, 1132
+  size: 578, 375
+  orig: 660, 512
+  offset: 78, 75
+  index: 10
+Flaming
+  rotate: false
+  xy: 1161, 1132
+  size: 577, 375
+  orig: 660, 512
+  offset: 78, 74
+  index: 11
+Flaming
+  rotate: false
+  xy: 1, 1509
+  size: 573, 373
+  orig: 660, 512
+  offset: 79, 75
+  index: 12
+Flaming
+  rotate: false
+  xy: 581, 1509
+  size: 569, 371
+  orig: 660, 512
+  offset: 80, 75
+  index: 13
+Flaming
+  rotate: false
+  xy: 1161, 1509
+  size: 563, 370
+  orig: 660, 512
+  offset: 82, 76
+  index: 14
+Flaming
+  rotate: false
+  xy: 1, 1886
+  size: 554, 371
+  orig: 660, 512
+  offset: 84, 74
+  index: 15
+Flaming
+  rotate: false
+  xy: 581, 1886
+  size: 545, 372
+  orig: 660, 512
+  offset: 85, 72
+  index: 16
+Flaming
+  rotate: false
+  xy: 1161, 1886
+  size: 536, 371
+  orig: 660, 512
+  offset: 87, 72
+  index: 17

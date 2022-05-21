@@ -1,0 +1,89 @@
+Hurt.png
+size: 1779, 2184
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Hurt
+  rotate: false
+  xy: 1, 1
+  size: 432, 510
+  orig: 840, 760
+  offset: 195, 86
+  index: 0
+Hurt
+  rotate: false
+  xy: 594, 1
+  size: 424, 506
+  orig: 840, 760
+  offset: 208, 86
+  index: 1
+Hurt
+  rotate: false
+  xy: 1187, 1
+  size: 447, 511
+  orig: 840, 760
+  offset: 195, 86
+  index: 2
+Hurt
+  rotate: false
+  xy: 1, 547
+  size: 499, 522
+  orig: 840, 760
+  offset: 155, 86
+  index: 3
+Hurt
+  rotate: false
+  xy: 594, 547
+  size: 541, 533
+  orig: 840, 760
+  offset: 116, 86
+  index: 4
+Hurt
+  rotate: false
+  xy: 1187, 547
+  size: 570, 539
+  orig: 840, 760
+  offset: 93, 86
+  index: 5
+Hurt
+  rotate: false
+  xy: 1, 1093
+  size: 591, 544
+  orig: 840, 760
+  offset: 89, 86
+  index: 6
+Hurt
+  rotate: false
+  xy: 594, 1093
+  size: 573, 541
+  orig: 840, 760
+  offset: 105, 86
+  index: 7
+Hurt
+  rotate: false
+  xy: 1187, 1093
+  size: 550, 536
+  orig: 840, 760
+  offset: 123, 86
+  index: 8
+Hurt
+  rotate: false
+  xy: 1, 1639
+  size: 525, 530
+  orig: 840, 760
+  offset: 140, 86
+  index: 9
+Hurt
+  rotate: false
+  xy: 594, 1639
+  size: 497, 524
+  orig: 840, 760
+  offset: 158, 86
+  index: 10
+Hurt
+  rotate: false
+  xy: 1187, 1639
+  size: 467, 517
+  orig: 840, 760
+  offset: 175, 86
+  index: 11

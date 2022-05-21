@@ -1,0 +1,131 @@
+Moving.png
+size: 1746, 2214
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Moving Forward
+  rotate: false
+  xy: 1, 1
+  size: 575, 365
+  orig: 660, 512
+  offset: 68, 74
+  index: 0
+Moving Forward
+  rotate: false
+  xy: 583, 1
+  size: 574, 358
+  orig: 660, 512
+  offset: 68, 74
+  index: 1
+Moving Forward
+  rotate: false
+  xy: 1165, 1
+  size: 574, 350
+  orig: 660, 512
+  offset: 68, 75
+  index: 2
+Moving Forward
+  rotate: false
+  xy: 1, 370
+  size: 574, 346
+  orig: 660, 512
+  offset: 68, 75
+  index: 3
+Moving Forward
+  rotate: false
+  xy: 583, 370
+  size: 576, 341
+  orig: 660, 512
+  offset: 67, 76
+  index: 4
+Moving Forward
+  rotate: false
+  xy: 1165, 370
+  size: 576, 341
+  orig: 660, 512
+  offset: 67, 77
+  index: 5
+Moving Forward
+  rotate: false
+  xy: 1, 739
+  size: 577, 346
+  orig: 660, 512
+  offset: 67, 77
+  index: 6
+Moving Forward
+  rotate: false
+  xy: 583, 739
+  size: 578, 351
+  orig: 660, 512
+  offset: 66, 78
+  index: 7
+Moving Forward
+  rotate: false
+  xy: 1165, 739
+  size: 578, 358
+  orig: 660, 512
+  offset: 66, 79
+  index: 8
+Moving Forward
+  rotate: false
+  xy: 1, 1108
+  size: 580, 367
+  orig: 660, 512
+  offset: 65, 79
+  index: 9
+Moving Forward
+  rotate: false
+  xy: 583, 1108
+  size: 580, 359
+  orig: 660, 512
+  offset: 65, 79
+  index: 10
+Moving Forward
+  rotate: false
+  xy: 1165, 1108
+  size: 580, 352
+  orig: 660, 512
+  offset: 65, 78
+  index: 11
+Moving Forward
+  rotate: false
+  xy: 1, 1477
+  size: 580, 346
+  orig: 660, 512
+  offset: 65, 78
+  index: 12
+Moving Forward
+  rotate: false
+  xy: 583, 1477
+  size: 578, 341
+  orig: 660, 512
+  offset: 66, 77
+  index: 13
+Moving Forward
+  rotate: false
+  xy: 1165, 1477
+  size: 578, 340
+  orig: 660, 512
+  offset: 66, 76
+  index: 14
+Moving Forward
+  rotate: false
+  xy: 1, 1846
+  size: 577, 344
+  orig: 660, 512
+  offset: 67, 76
+  index: 15
+Moving Forward
+  rotate: false
+  xy: 583, 1846
+  size: 577, 349
+  orig: 660, 512
+  offset: 67, 75
+  index: 16
+Moving Forward
+  rotate: false
+  xy: 1165, 1846
+  size: 575, 356
+  orig: 660, 512
+  offset: 68, 74
+  index: 17

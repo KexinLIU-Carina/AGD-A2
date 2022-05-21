@@ -1,0 +1,131 @@
+Idle - Handgun.png
+size: 3708, 1330
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 410, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Idle - Handgun
+  rotate: false
+  xy: 413, 1
+  size: 410, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 1
+Idle - Handgun
+  rotate: false
+  xy: 825, 1
+  size: 410, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 2
+Idle - Handgun
+  rotate: false
+  xy: 1237, 1
+  size: 410, 657
+  orig: 924, 864
+  offset: 290, 103
+  index: 3
+Idle - Handgun
+  rotate: false
+  xy: 1649, 1
+  size: 410, 659
+  orig: 924, 864
+  offset: 290, 103
+  index: 4
+Idle - Handgun
+  rotate: false
+  xy: 2061, 1
+  size: 409, 660
+  orig: 924, 864
+  offset: 290, 103
+  index: 5
+Idle - Handgun
+  rotate: false
+  xy: 2473, 1
+  size: 409, 661
+  orig: 924, 864
+  offset: 290, 103
+  index: 6
+Idle - Handgun
+  rotate: false
+  xy: 2885, 1
+  size: 410, 661
+  orig: 924, 864
+  offset: 289, 104
+  index: 7
+Idle - Handgun
+  rotate: false
+  xy: 3297, 1
+  size: 409, 662
+  orig: 924, 864
+  offset: 289, 104
+  index: 8
+Idle - Handgun
+  rotate: false
+  xy: 1, 666
+  size: 409, 663
+  orig: 924, 864
+  offset: 289, 104
+  index: 9
+Idle - Handgun
+  rotate: false
+  xy: 413, 666
+  size: 409, 663
+  orig: 924, 864
+  offset: 289, 104
+  index: 10
+Idle - Handgun
+  rotate: false
+  xy: 825, 666
+  size: 410, 662
+  orig: 924, 864
+  offset: 289, 104
+  index: 11
+Idle - Handgun
+  rotate: false
+  xy: 1237, 666
+  size: 409, 662
+  orig: 924, 864
+  offset: 290, 103
+  index: 12
+Idle - Handgun
+  rotate: false
+  xy: 1649, 666
+  size: 409, 661
+  orig: 924, 864
+  offset: 290, 103
+  index: 13
+Idle - Handgun
+  rotate: false
+  xy: 2061, 666
+  size: 409, 659
+  orig: 924, 864
+  offset: 290, 103
+  index: 14
+Idle - Handgun
+  rotate: false
+  xy: 2473, 666
+  size: 410, 658
+  orig: 924, 864
+  offset: 290, 103
+  index: 15
+Idle - Handgun
+  rotate: false
+  xy: 2885, 666
+  size: 410, 656
+  orig: 924, 864
+  offset: 290, 104
+  index: 16
+Idle - Handgun
+  rotate: false
+  xy: 3297, 666
+  size: 410, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 17

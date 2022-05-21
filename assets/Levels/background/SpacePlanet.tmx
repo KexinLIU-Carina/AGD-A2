@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="2">
+ <tileset firstgid="1" name="Ground" tilewidth="32" tileheight="32" tilecount="1980" columns="60">
+  <image source="background_00.png" width="1920" height="1080"/>
+ </tileset>
+ <imagelayer id="2" name="Background" offsetx="2" offsety="-6" repeatx="1">
+  <image source="background_05.png" width="1920" height="1080"/>
+ </imagelayer>
+ <imagelayer id="4" name="Foreground" offsetx="0" offsety="-13.2253" repeatx="1">
+  <image source="background_04.png" width="1920" height="1080"/>
+ </imagelayer>
+ <imagelayer id="5" name="Planets">
+  <image source="background_03.png" width="1920" height="1080"/>
+ </imagelayer>
+ <layer id="16" name="Ground" width="60" height="33">
+  <data encoding="base64" compression="zlib">
+   eJztw4PaFmYAANAv/rll17Zs28uutWzbNlZt2V61bBu3kG3bNs599J7nOZFIEARBEARBEARBEARBEARBEARBEPy8jsaORI553BOe9JSnPeNZz3neC170kpe94lWved0b3vSWt73jXe953wc+9JGPfeJTn/ncF770la9941vf+d4PfvSTn/3iV7/53UhUJBLN6MYwprGMbZRxjGs845vAhCYysb+YxKQmM7kpTGkqU5vGtKYzvRnMaCZ/9Td/N7NZzGo2s5vDnOYyt3nMaz7zW8CCFrKwRSxqMYtbwpKWsrRlLGs5y1vBiv5hJStbxapWs7o1rGkta1vHutazvg3804b+ZSMb28SmNrO5LWxpK1vbxra2s70d7GgnO9vFrnazuz3saS9728e+9rO/AxzoIAc7xKEOc7gjHOkoRzvGsY5zvH87wYlO8h//dbJTnOo0pzvDmc5ytnOc6zznu8CFLnKxS1zqfy5zuSv835WucrVrXOs617vBjW5ys1vc6ja3u8Od7nK3e9zrPvd7wIMe8rBH/AHDxnmW
+  </data>
+ </layer>
+ <objectgroup id="13" name="Collision" visible="0">
+  <object id="1" name="GroundCollision" x="0" y="993" width="1920" height="32"/>
+ </objectgroup>
+</map>

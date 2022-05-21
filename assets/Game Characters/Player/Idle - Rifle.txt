@@ -1,0 +1,131 @@
+Idle - Rifle.png
+size: 2814, 1989
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle - Rifle
+  rotate: false
+  xy: 0, 0
+  size: 468, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Idle - Rifle
+  rotate: false
+  xy: 469, 0
+  size: 468, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 1
+Idle - Rifle
+  rotate: false
+  xy: 938, 0
+  size: 468, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 2
+Idle - Rifle
+  rotate: false
+  xy: 1407, 0
+  size: 468, 657
+  orig: 924, 864
+  offset: 290, 103
+  index: 3
+Idle - Rifle
+  rotate: false
+  xy: 1876, 0
+  size: 468, 659
+  orig: 924, 864
+  offset: 290, 103
+  index: 4
+Idle - Rifle
+  rotate: false
+  xy: 2345, 0
+  size: 468, 660
+  orig: 924, 864
+  offset: 290, 103
+  index: 5
+Idle - Rifle
+  rotate: false
+  xy: 0, 663
+  size: 468, 661
+  orig: 924, 864
+  offset: 290, 103
+  index: 6
+Idle - Rifle
+  rotate: false
+  xy: 469, 663
+  size: 469, 661
+  orig: 924, 864
+  offset: 289, 104
+  index: 7
+Idle - Rifle
+  rotate: false
+  xy: 938, 663
+  size: 469, 662
+  orig: 924, 864
+  offset: 289, 104
+  index: 8
+Idle - Rifle
+  rotate: false
+  xy: 1407, 663
+  size: 469, 663
+  orig: 924, 864
+  offset: 289, 104
+  index: 9
+Idle - Rifle
+  rotate: false
+  xy: 1876, 663
+  size: 469, 663
+  orig: 924, 864
+  offset: 289, 104
+  index: 10
+Idle - Rifle
+  rotate: false
+  xy: 2345, 663
+  size: 469, 662
+  orig: 924, 864
+  offset: 289, 104
+  index: 11
+Idle - Rifle
+  rotate: false
+  xy: 0, 1326
+  size: 468, 662
+  orig: 924, 864
+  offset: 290, 103
+  index: 12
+Idle - Rifle
+  rotate: false
+  xy: 469, 1326
+  size: 468, 661
+  orig: 924, 864
+  offset: 290, 103
+  index: 13
+Idle - Rifle
+  rotate: false
+  xy: 938, 1326
+  size: 468, 659
+  orig: 924, 864
+  offset: 290, 103
+  index: 14
+Idle - Rifle
+  rotate: false
+  xy: 1407, 1326
+  size: 468, 658
+  orig: 924, 864
+  offset: 290, 103
+  index: 15
+Idle - Rifle
+  rotate: false
+  xy: 1876, 1326
+  size: 468, 656
+  orig: 924, 864
+  offset: 290, 104
+  index: 16
+Idle - Rifle
+  rotate: false
+  xy: 2345, 1326
+  size: 468, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 17

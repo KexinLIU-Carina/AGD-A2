@@ -1,0 +1,131 @@
+Running - Rifle.png
+size: 2970, 2067
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Running - Rifle
+  rotate: false
+  xy: 1, 1
+  size: 441, 663
+  orig: 924, 864
+  offset: 291, 109
+  index: 0
+Running - Rifle
+  rotate: false
+  xy: 496, 1
+  size: 446, 684
+  orig: 924, 864
+  offset: 291, 104
+  index: 1
+Running - Rifle
+  rotate: false
+  xy: 991, 1
+  size: 452, 687
+  orig: 924, 864
+  offset: 291, 117
+  index: 2
+Running - Rifle
+  rotate: false
+  xy: 1486, 1
+  size: 454, 679
+  orig: 924, 864
+  offset: 291, 119
+  index: 3
+Running - Rifle
+  rotate: false
+  xy: 1981, 1
+  size: 456, 667
+  orig: 924, 864
+  offset: 291, 117
+  index: 4
+Running - Rifle
+  rotate: false
+  xy: 2476, 1
+  size: 456, 668
+  orig: 924, 864
+  offset: 292, 105
+  index: 5
+Running - Rifle
+  rotate: false
+  xy: 1, 690
+  size: 454, 665
+  orig: 924, 864
+  offset: 292, 100
+  index: 6
+Running - Rifle
+  rotate: false
+  xy: 496, 690
+  size: 452, 657
+  orig: 924, 864
+  offset: 292, 103
+  index: 7
+Running - Rifle
+  rotate: false
+  xy: 991, 690
+  size: 448, 670
+  orig: 924, 864
+  offset: 292, 96
+  index: 8
+Running - Rifle
+  rotate: false
+  xy: 1486, 690
+  size: 444, 667
+  orig: 924, 864
+  offset: 291, 104
+  index: 9
+Running - Rifle
+  rotate: false
+  xy: 1981, 690
+  size: 451, 683
+  orig: 924, 864
+  offset: 288, 104
+  index: 10
+Running - Rifle
+  rotate: false
+  xy: 2476, 690
+  size: 483, 684
+  orig: 924, 864
+  offset: 261, 119
+  index: 11
+Running - Rifle
+  rotate: false
+  xy: 1, 1379
+  size: 493, 675
+  orig: 924, 864
+  offset: 254, 124
+  index: 12
+Running - Rifle
+  rotate: false
+  xy: 496, 1379
+  size: 487, 657
+  orig: 924, 864
+  offset: 262, 126
+  index: 13
+Running - Rifle
+  rotate: false
+  xy: 991, 1379
+  size: 472, 663
+  orig: 924, 864
+  offset: 278, 108
+  index: 14
+Running - Rifle
+  rotate: false
+  xy: 1486, 1379
+  size: 455, 664
+  orig: 924, 864
+  offset: 293, 101
+  index: 15
+Running - Rifle
+  rotate: false
+  xy: 1981, 1379
+  size: 453, 666
+  orig: 924, 864
+  offset: 293, 93
+  index: 16
+Running - Rifle
+  rotate: false
+  xy: 2476, 1379
+  size: 447, 673
+  orig: 924, 864
+  offset: 292, 93
+  index: 17

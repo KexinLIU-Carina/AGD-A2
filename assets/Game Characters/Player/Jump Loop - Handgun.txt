@@ -1,0 +1,47 @@
+Jump Loop - Handgun.png
+size: 1125, 1426
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Jump Loop - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 369, 710
+  orig: 924, 864
+  offset: 282, 99
+  index: 0
+Jump Loop - Handgun
+  rotate: false
+  xy: 376, 1
+  size: 370, 710
+  orig: 924, 864
+  offset: 284, 99
+  index: 1
+Jump Loop - Handgun
+  rotate: false
+  xy: 751, 1
+  size: 372, 711
+  orig: 924, 864
+  offset: 286, 99
+  index: 2
+Jump Loop - Handgun
+  rotate: false
+  xy: 1, 714
+  size: 373, 710
+  orig: 924, 864
+  offset: 288, 100
+  index: 3
+Jump Loop - Handgun
+  rotate: false
+  xy: 376, 714
+  size: 372, 710
+  orig: 924, 864
+  offset: 286, 100
+  index: 4
+Jump Loop - Handgun
+  rotate: false
+  xy: 751, 714
+  size: 371, 710
+  orig: 924, 864
+  offset: 284, 99
+  index: 5

@@ -1,0 +1,110 @@
+Dying - Rifle.png
+size: 3224, 1974
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Dying - Rifle
+  rotate: false
+  xy: 0, 0
+  size: 557, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Dying - Rifle
+  rotate: false
+  xy: 806, 0
+  size: 560, 658
+  orig: 924, 864
+  offset: 294, 108
+  index: 1
+Dying - Rifle
+  rotate: false
+  xy: 1612, 0
+  size: 562, 656
+  orig: 924, 864
+  offset: 299, 115
+  index: 2
+Dying - Rifle
+  rotate: false
+  xy: 2418, 0
+  size: 564, 651
+  orig: 924, 864
+  offset: 304, 124
+  index: 3
+Dying - Rifle
+  rotate: false
+  xy: 0, 658
+  size: 527, 649
+  orig: 924, 864
+  offset: 304, 157
+  index: 4
+Dying - Rifle
+  rotate: false
+  xy: 806, 658
+  size: 470, 635
+  orig: 924, 864
+  offset: 280, 177
+  index: 5
+Dying - Rifle
+  rotate: false
+  xy: 1612, 658
+  size: 483, 576
+  orig: 924, 864
+  offset: 208, 219
+  index: 6
+Dying - Rifle
+  rotate: false
+  xy: 2418, 658
+  size: 522, 569
+  orig: 924, 864
+  offset: 153, 189
+  index: 7
+Dying - Rifle
+  rotate: false
+  xy: 0, 1316
+  size: 558, 571
+  orig: 924, 864
+  offset: 112, 124
+  index: 8
+Dying - Rifle
+  rotate: false
+  xy: 806, 1316
+  size: 604, 529
+  orig: 924, 864
+  offset: 79, 65
+  index: 9
+Dying - Rifle
+  rotate: false
+  xy: 1612, 1316
+  size: 670, 457
+  orig: 924, 864
+  offset: 35, 60
+  index: 10
+Dying - Rifle
+  rotate: false
+  xy: 2418, 1316
+  size: 806, 368
+  orig: 924, 864
+  offset: 36, 54
+  index: 11
+Dying - Rifle
+  rotate: false
+  xy: 2418, 1316
+  size: 806, 368
+  orig: 924, 864
+  offset: 36, 54
+  index: 12
+Dying - Rifle
+  rotate: false
+  xy: 2418, 1316
+  size: 806, 368
+  orig: 924, 864
+  offset: 36, 54
+  index: 13
+Dying - Rifle
+  rotate: false
+  xy: 2418, 1316
+  size: 806, 368
+  orig: 924, 864
+  offset: 36, 54
+  index: 14

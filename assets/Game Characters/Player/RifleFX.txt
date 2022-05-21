@@ -1,0 +1,33 @@
+RifleFX.png
+size: 1148, 188
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+RifleFX
+  rotate: false
+  xy: 1, 1
+  size: 247, 186
+  orig: 320, 240
+  offset: 19, 30
+  index: 0
+RifleFX
+  rotate: false
+  xy: 288, 1
+  size: 247, 186
+  orig: 320, 240
+  offset: 19, 30
+  index: 1
+RifleFX
+  rotate: false
+  xy: 575, 1
+  size: 285, 185
+  orig: 320, 240
+  offset: 19, 27
+  index: 2
+RifleFX
+  rotate: false
+  xy: 862, 1
+  size: 285, 185
+  orig: 320, 240
+  offset: 19, 27
+  index: 3

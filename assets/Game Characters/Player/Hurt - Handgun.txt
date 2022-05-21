@@ -1,0 +1,89 @@
+Hurt - Handgun.png
+size: 1692, 1968
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Hurt - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 410, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Hurt - Handgun
+  rotate: false
+  xy: 424, 1
+  size: 407, 647
+  orig: 924, 864
+  offset: 282, 103
+  index: 1
+Hurt - Handgun
+  rotate: false
+  xy: 847, 1
+  size: 415, 636
+  orig: 924, 864
+  offset: 274, 103
+  index: 2
+Hurt - Handgun
+  rotate: false
+  xy: 1270, 1
+  size: 418, 632
+  orig: 924, 864
+  offset: 274, 103
+  index: 3
+Hurt - Handgun
+  rotate: false
+  xy: 1, 657
+  size: 421, 631
+  orig: 924, 864
+  offset: 275, 103
+  index: 4
+Hurt - Handgun
+  rotate: false
+  xy: 424, 657
+  size: 421, 632
+  orig: 924, 864
+  offset: 277, 103
+  index: 5
+Hurt - Handgun
+  rotate: false
+  xy: 847, 657
+  size: 418, 636
+  orig: 924, 864
+  offset: 279, 103
+  index: 6
+Hurt - Handgun
+  rotate: false
+  xy: 1270, 657
+  size: 415, 640
+  orig: 924, 864
+  offset: 281, 103
+  index: 7
+Hurt - Handgun
+  rotate: false
+  xy: 1, 1313
+  size: 412, 643
+  orig: 924, 864
+  offset: 283, 103
+  index: 8
+Hurt - Handgun
+  rotate: false
+  xy: 424, 1313
+  size: 410, 647
+  orig: 924, 864
+  offset: 284, 103
+  index: 9
+Hurt - Handgun
+  rotate: false
+  xy: 847, 1313
+  size: 406, 650
+  orig: 924, 864
+  offset: 286, 103
+  index: 10
+Hurt - Handgun
+  rotate: false
+  xy: 1270, 1313
+  size: 406, 652
+  orig: 924, 864
+  offset: 288, 103
+  index: 11

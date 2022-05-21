@@ -1,0 +1,131 @@
+Idle Blinking.png
+size: 1746, 1389
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle Blinking
+  rotate: false
+  xy: 1, 1
+  size: 285, 452
+  orig: 600, 600
+  offset: 161, 93
+  index: 0
+Idle Blinking
+  rotate: false
+  xy: 292, 1
+  size: 286, 452
+  orig: 600, 600
+  offset: 161, 93
+  index: 1
+Idle Blinking
+  rotate: false
+  xy: 583, 1
+  size: 286, 452
+  orig: 600, 600
+  offset: 160, 93
+  index: 2
+Idle Blinking
+  rotate: false
+  xy: 874, 1
+  size: 286, 453
+  orig: 600, 600
+  offset: 159, 93
+  index: 3
+Idle Blinking
+  rotate: false
+  xy: 1165, 1
+  size: 286, 454
+  orig: 600, 600
+  offset: 158, 93
+  index: 4
+Idle Blinking
+  rotate: false
+  xy: 1456, 1
+  size: 287, 456
+  orig: 600, 600
+  offset: 156, 93
+  index: 5
+Idle Blinking
+  rotate: false
+  xy: 1, 464
+  size: 288, 457
+  orig: 600, 600
+  offset: 154, 93
+  index: 6
+Idle Blinking
+  rotate: false
+  xy: 292, 464
+  size: 288, 459
+  orig: 600, 600
+  offset: 152, 93
+  index: 7
+Idle Blinking
+  rotate: false
+  xy: 583, 464
+  size: 288, 460
+  orig: 600, 600
+  offset: 151, 93
+  index: 8
+Idle Blinking
+  rotate: false
+  xy: 874, 464
+  size: 289, 461
+  orig: 600, 600
+  offset: 149, 93
+  index: 9
+Idle Blinking
+  rotate: false
+  xy: 1165, 464
+  size: 289, 461
+  orig: 600, 600
+  offset: 149, 93
+  index: 10
+Idle Blinking
+  rotate: false
+  xy: 1456, 464
+  size: 288, 461
+  orig: 600, 600
+  offset: 150, 93
+  index: 11
+Idle Blinking
+  rotate: false
+  xy: 1, 927
+  size: 288, 460
+  orig: 600, 600
+  offset: 151, 93
+  index: 12
+Idle Blinking
+  rotate: false
+  xy: 292, 927
+  size: 289, 459
+  orig: 600, 600
+  offset: 152, 93
+  index: 13
+Idle Blinking
+  rotate: false
+  xy: 583, 927
+  size: 288, 458
+  orig: 600, 600
+  offset: 154, 93
+  index: 14
+Idle Blinking
+  rotate: false
+  xy: 874, 927
+  size: 287, 457
+  orig: 600, 600
+  offset: 156, 93
+  index: 15
+Idle Blinking
+  rotate: false
+  xy: 1165, 927
+  size: 287, 455
+  orig: 600, 600
+  offset: 157, 93
+  index: 16
+Idle Blinking
+  rotate: false
+  xy: 1456, 927
+  size: 287, 454
+  orig: 600, 600
+  offset: 159, 93
+  index: 17

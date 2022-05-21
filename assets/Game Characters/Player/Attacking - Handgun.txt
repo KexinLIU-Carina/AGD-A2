@@ -1,0 +1,68 @@
+Attacking - Handgun.png
+size: 1272, 1968
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Firing - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 422, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Firing - Handgun
+  rotate: false
+  xy: 425, 1
+  size: 418, 654
+  orig: 924, 864
+  offset: 288, 104
+  index: 1
+Firing - Handgun
+  rotate: false
+  xy: 849, 1
+  size: 414, 654
+  orig: 924, 864
+  offset: 286, 104
+  index: 2
+Firing - Handgun
+  rotate: false
+  xy: 1, 657
+  size: 414, 654
+  orig: 924, 864
+  offset: 286, 104
+  index: 3
+Firing - Handgun
+  rotate: false
+  xy: 425, 657
+  size: 416, 654
+  orig: 924, 864
+  offset: 286, 104
+  index: 4
+Firing - Handgun
+  rotate: false
+  xy: 849, 657
+  size: 417, 654
+  orig: 924, 864
+  offset: 287, 104
+  index: 5
+Firing - Handgun
+  rotate: false
+  xy: 1, 1313
+  size: 418, 654
+  orig: 924, 864
+  offset: 288, 104
+  index: 6
+Firing - Handgun
+  rotate: false
+  xy: 425, 1313
+  size: 419, 654
+  orig: 924, 864
+  offset: 289, 104
+  index: 7
+Firing - Handgun
+  rotate: false
+  xy: 849, 1313
+  size: 421, 654
+  orig: 924, 864
+  offset: 289, 104
+  index: 8

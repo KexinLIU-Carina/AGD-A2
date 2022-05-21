@@ -1,0 +1,47 @@
+Jump Start - Rifle.png
+size: 1410, 1418
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Jump Start - Rifle
+  rotate: false
+  xy: 1, 1
+  size: 468, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Jump Start - Rifle
+  rotate: false
+  xy: 471, 1
+  size: 461, 669
+  orig: 924, 864
+  offset: 291, 98
+  index: 1
+Jump Start - Rifle
+  rotate: false
+  xy: 941, 1
+  size: 455, 681
+  orig: 924, 864
+  offset: 291, 95
+  index: 2
+Jump Start - Rifle
+  rotate: false
+  xy: 1, 710
+  size: 448, 692
+  orig: 924, 864
+  offset: 291, 93
+  index: 3
+Jump Start - Rifle
+  rotate: false
+  xy: 471, 710
+  size: 445, 700
+  orig: 924, 864
+  offset: 288, 93
+  index: 4
+Jump Start - Rifle
+  rotate: false
+  xy: 941, 710
+  size: 442, 707
+  orig: 924, 864
+  offset: 285, 94
+  index: 5

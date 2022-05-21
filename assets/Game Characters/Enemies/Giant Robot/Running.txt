@@ -1,0 +1,131 @@
+Running.png
+size: 1791, 3132
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Running
+  rotate: false
+  xy: 1, 1
+  size: 432, 510
+  orig: 840, 760
+  offset: 195, 86
+  index: 0
+Running
+  rotate: false
+  xy: 598, 1
+  size: 475, 510
+  orig: 840, 760
+  offset: 172, 92
+  index: 1
+Running
+  rotate: false
+  xy: 1195, 1
+  size: 517, 513
+  orig: 840, 760
+  offset: 150, 95
+  index: 2
+Running
+  rotate: false
+  xy: 1, 523
+  size: 557, 514
+  orig: 840, 760
+  offset: 127, 101
+  index: 3
+Running
+  rotate: false
+  xy: 598, 523
+  size: 592, 516
+  orig: 840, 760
+  offset: 106, 107
+  index: 4
+Running
+  rotate: false
+  xy: 1195, 523
+  size: 595, 518
+  orig: 840, 760
+  offset: 104, 108
+  index: 5
+Running
+  rotate: false
+  xy: 1, 1045
+  size: 560, 520
+  orig: 840, 760
+  offset: 125, 101
+  index: 6
+Running
+  rotate: false
+  xy: 598, 1045
+  size: 521, 517
+  orig: 840, 760
+  offset: 147, 96
+  index: 7
+Running
+  rotate: false
+  xy: 1195, 1045
+  size: 479, 512
+  orig: 840, 760
+  offset: 170, 92
+  index: 8
+Running
+  rotate: false
+  xy: 1, 1567
+  size: 436, 510
+  orig: 840, 760
+  offset: 193, 87
+  index: 9
+Running
+  rotate: false
+  xy: 598, 1567
+  size: 382, 512
+  orig: 840, 760
+  offset: 220, 89
+  index: 10
+Running
+  rotate: false
+  xy: 1195, 1567
+  size: 348, 514
+  orig: 840, 760
+  offset: 224, 93
+  index: 11
+Running
+  rotate: false
+  xy: 1, 2089
+  size: 324, 512
+  orig: 840, 760
+  offset: 228, 102
+  index: 12
+Running
+  rotate: false
+  xy: 598, 2089
+  size: 333, 512
+  orig: 840, 760
+  offset: 230, 111
+  index: 13
+Running
+  rotate: false
+  xy: 1195, 2089
+  size: 335, 513
+  orig: 840, 760
+  offset: 231, 113
+  index: 14
+Running
+  rotate: false
+  xy: 1, 2611
+  size: 327, 516
+  orig: 840, 760
+  offset: 228, 105
+  index: 15
+Running
+  rotate: false
+  xy: 598, 2611
+  size: 339, 519
+  orig: 840, 760
+  offset: 225, 95
+  index: 16
+Running
+  rotate: false
+  xy: 1195, 2611
+  size: 373, 515
+  orig: 840, 760
+  offset: 221, 90
+  index: 17

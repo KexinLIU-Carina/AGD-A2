@@ -1,0 +1,33 @@
+Attacking - Rifle.png
+size: 1936, 656
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Firing - Rifle
+  rotate: false
+  xy: 1, 1
+  size: 482, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Firing - Rifle
+  rotate: false
+  xy: 485, 1
+  size: 480, 654
+  orig: 924, 864
+  offset: 287, 104
+  index: 1
+Firing - Rifle
+  rotate: false
+  xy: 969, 1
+  size: 479, 654
+  orig: 924, 864
+  offset: 283, 104
+  index: 2
+Firing - Rifle
+  rotate: false
+  xy: 1453, 1
+  size: 479, 654
+  orig: 924, 864
+  offset: 285, 104
+  index: 3

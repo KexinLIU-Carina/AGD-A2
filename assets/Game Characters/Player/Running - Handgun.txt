@@ -1,0 +1,131 @@
+Running - Handgun.png
+size: 4059, 1378
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Running - Handgun
+  rotate: false
+  xy: 1, 1
+  size: 408, 663
+  orig: 924, 864
+  offset: 291, 109
+  index: 0
+Running - Handgun
+  rotate: false
+  xy: 452, 1
+  size: 407, 684
+  orig: 924, 864
+  offset: 291, 104
+  index: 1
+Running - Handgun
+  rotate: false
+  xy: 903, 1
+  size: 410, 687
+  orig: 924, 864
+  offset: 291, 117
+  index: 2
+Running - Handgun
+  rotate: false
+  xy: 1354, 1
+  size: 412, 679
+  orig: 924, 864
+  offset: 291, 119
+  index: 3
+Running - Handgun
+  rotate: false
+  xy: 1805, 1
+  size: 412, 667
+  orig: 924, 864
+  offset: 291, 117
+  index: 4
+Running - Handgun
+  rotate: false
+  xy: 2256, 1
+  size: 412, 668
+  orig: 924, 864
+  offset: 292, 105
+  index: 5
+Running - Handgun
+  rotate: false
+  xy: 2707, 1
+  size: 411, 665
+  orig: 924, 864
+  offset: 292, 100
+  index: 6
+Running - Handgun
+  rotate: false
+  xy: 3158, 1
+  size: 410, 657
+  orig: 924, 864
+  offset: 292, 103
+  index: 7
+Running - Handgun
+  rotate: false
+  xy: 3609, 1
+  size: 407, 670
+  orig: 924, 864
+  offset: 292, 96
+  index: 8
+Running - Handgun
+  rotate: false
+  xy: 1, 690
+  size: 407, 667
+  orig: 924, 864
+  offset: 291, 104
+  index: 9
+Running - Handgun
+  rotate: false
+  xy: 452, 690
+  size: 411, 683
+  orig: 924, 864
+  offset: 288, 104
+  index: 10
+Running - Handgun
+  rotate: false
+  xy: 903, 690
+  size: 441, 684
+  orig: 924, 864
+  offset: 261, 119
+  index: 11
+Running - Handgun
+  rotate: false
+  xy: 1354, 690
+  size: 449, 675
+  orig: 924, 864
+  offset: 254, 124
+  index: 12
+Running - Handgun
+  rotate: false
+  xy: 1805, 690
+  size: 440, 657
+  orig: 924, 864
+  offset: 262, 126
+  index: 13
+Running - Handgun
+  rotate: false
+  xy: 2256, 690
+  size: 423, 663
+  orig: 924, 864
+  offset: 278, 108
+  index: 14
+Running - Handgun
+  rotate: false
+  xy: 2707, 690
+  size: 410, 664
+  orig: 924, 864
+  offset: 293, 101
+  index: 15
+Running - Handgun
+  rotate: false
+  xy: 3158, 690
+  size: 411, 666
+  orig: 924, 864
+  offset: 293, 93
+  index: 16
+Running - Handgun
+  rotate: false
+  xy: 3609, 690
+  size: 408, 673
+  orig: 924, 864
+  offset: 292, 93
+  index: 17

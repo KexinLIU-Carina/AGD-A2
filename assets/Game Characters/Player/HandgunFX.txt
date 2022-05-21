@@ -1,0 +1,68 @@
+HandgunFX.png
+size: 768, 591
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+HandgunFX
+  rotate: false
+  xy: 1, 1
+  size: 190, 124
+  orig: 320, 240
+  offset: 16, 60
+  index: 0
+HandgunFX
+  rotate: false
+  xy: 257, 1
+  size: 190, 124
+  orig: 320, 240
+  offset: 16, 60
+  index: 1
+HandgunFX
+  rotate: false
+  xy: 513, 1
+  size: 250, 172
+  orig: 320, 240
+  offset: 18, 36
+  index: 2
+HandgunFX
+  rotate: false
+  xy: 1, 198
+  size: 254, 195
+  orig: 320, 240
+  offset: 20, 29
+  index: 3
+HandgunFX
+  rotate: false
+  xy: 257, 198
+  size: 234, 166
+  orig: 320, 240
+  offset: 29, 58
+  index: 4
+HandgunFX
+  rotate: false
+  xy: 513, 198
+  size: 218, 149
+  orig: 320, 240
+  offset: 32, 58
+  index: 5
+HandgunFX
+  rotate: false
+  xy: 1, 395
+  size: 166, 152
+  orig: 320, 240
+  offset: 32, 56
+  index: 6
+HandgunFX
+  rotate: false
+  xy: 257, 395
+  size: 3, 3
+  orig: 320, 240
+  offset: 0, 237
+  index: 7
+HandgunFX
+  rotate: false
+  xy: 513, 395
+  size: 3, 3
+  orig: 320, 240
+  offset: 0, 237
+  index: 8

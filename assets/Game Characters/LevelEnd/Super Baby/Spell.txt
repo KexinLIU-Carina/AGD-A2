@@ -1,0 +1,89 @@
+Spell.png
+size: 1588, 1407
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Attacking
+  rotate: false
+  xy: 1, 1
+  size: 372, 452
+  orig: 600, 600
+  offset: 161, 93
+  index: 0
+Attacking
+  rotate: false
+  xy: 398, 1
+  size: 324, 461
+  orig: 600, 600
+  offset: 145, 93
+  index: 1
+Attacking
+  rotate: false
+  xy: 795, 1
+  size: 319, 466
+  orig: 600, 600
+  offset: 132, 93
+  index: 2
+Attacking
+  rotate: false
+  xy: 1192, 1
+  size: 290, 467
+  orig: 600, 600
+  offset: 133, 93
+  index: 3
+Attacking
+  rotate: false
+  xy: 1, 470
+  size: 289, 466
+  orig: 600, 600
+  offset: 143, 93
+  index: 4
+Attacking
+  rotate: false
+  xy: 398, 470
+  size: 305, 457
+  orig: 600, 600
+  offset: 163, 93
+  index: 5
+Attacking
+  rotate: false
+  xy: 795, 470
+  size: 395, 437
+  orig: 600, 600
+  offset: 178, 93
+  index: 6
+Attacking
+  rotate: false
+  xy: 1192, 470
+  size: 389, 415
+  orig: 600, 600
+  offset: 185, 93
+  index: 7
+Attacking
+  rotate: false
+  xy: 1, 939
+  size: 389, 415
+  orig: 600, 600
+  offset: 185, 93
+  index: 8
+Attacking
+  rotate: false
+  xy: 398, 939
+  size: 383, 414
+  orig: 600, 600
+  offset: 191, 93
+  index: 9
+Attacking
+  rotate: false
+  xy: 795, 939
+  size: 375, 415
+  orig: 600, 600
+  offset: 198, 93
+  index: 10
+Attacking
+  rotate: false
+  xy: 1192, 939
+  size: 377, 433
+  orig: 600, 600
+  offset: 181, 93
+  index: 11

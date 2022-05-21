@@ -1,0 +1,89 @@
+Throwing.png
+size: 1844, 1284
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Throwing
+  rotate: false
+  xy: 1, 1
+  size: 398, 369
+  orig: 600, 480
+  offset: 128, 45
+  index: 0
+Throwing
+  rotate: false
+  xy: 462, 1
+  size: 379, 377
+  orig: 600, 480
+  offset: 121, 45
+  index: 1
+Throwing
+  rotate: false
+  xy: 923, 1
+  size: 323, 415
+  orig: 600, 480
+  offset: 111, 45
+  index: 2
+Throwing
+  rotate: false
+  xy: 1384, 1
+  size: 287, 426
+  orig: 600, 480
+  offset: 118, 45
+  index: 3
+Throwing
+  rotate: false
+  xy: 1, 429
+  size: 374, 396
+  orig: 600, 480
+  offset: 127, 45
+  index: 4
+Throwing
+  rotate: false
+  xy: 462, 429
+  size: 457, 368
+  orig: 600, 480
+  offset: 131, 46
+  index: 5
+Throwing
+  rotate: false
+  xy: 923, 429
+  size: 458, 350
+  orig: 600, 480
+  offset: 131, 47
+  index: 6
+Throwing
+  rotate: false
+  xy: 1384, 429
+  size: 459, 351
+  orig: 600, 480
+  offset: 117, 46
+  index: 7
+Throwing
+  rotate: false
+  xy: 1, 857
+  size: 453, 352
+  orig: 600, 480
+  offset: 111, 46
+  index: 8
+Throwing
+  rotate: false
+  xy: 462, 857
+  size: 435, 353
+  orig: 600, 480
+  offset: 116, 46
+  index: 9
+Throwing
+  rotate: false
+  xy: 923, 857
+  size: 426, 359
+  orig: 600, 480
+  offset: 122, 45
+  index: 10
+Throwing
+  rotate: false
+  xy: 1384, 857
+  size: 416, 365
+  orig: 600, 480
+  offset: 126, 45
+  index: 11

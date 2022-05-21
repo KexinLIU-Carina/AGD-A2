@@ -1,0 +1,89 @@
+Attacking.png
+size: 2852, 1971
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Attacking
+  rotate: false
+  xy: 1, 1
+  size: 536, 510
+  orig: 840, 760
+  offset: 195, 86
+  index: 0
+Attacking
+  rotate: false
+  xy: 714, 1
+  size: 555, 524
+  orig: 840, 760
+  offset: 202, 86
+  index: 1
+Attacking
+  rotate: false
+  xy: 1427, 1
+  size: 461, 607
+  orig: 840, 760
+  offset: 192, 86
+  index: 2
+Attacking
+  rotate: false
+  xy: 2140, 1
+  size: 393, 655
+  orig: 840, 760
+  offset: 188, 86
+  index: 3
+Attacking
+  rotate: false
+  xy: 1, 658
+  size: 607, 586
+  orig: 840, 760
+  offset: 149, 86
+  index: 4
+Attacking
+  rotate: false
+  xy: 714, 658
+  size: 711, 507
+  orig: 840, 760
+  offset: 128, 86
+  index: 5
+Attacking
+  rotate: false
+  xy: 1427, 658
+  size: 677, 470
+  orig: 840, 760
+  offset: 152, 86
+  index: 6
+Attacking
+  rotate: false
+  xy: 2140, 658
+  size: 666, 477
+  orig: 840, 760
+  offset: 152, 86
+  index: 7
+Attacking
+  rotate: false
+  xy: 1, 1315
+  size: 642, 487
+  orig: 840, 760
+  offset: 154, 86
+  index: 8
+Attacking
+  rotate: false
+  xy: 714, 1315
+  size: 614, 495
+  orig: 840, 760
+  offset: 159, 86
+  index: 9
+Attacking
+  rotate: false
+  xy: 1427, 1315
+  size: 594, 501
+  orig: 840, 760
+  offset: 168, 86
+  index: 10
+Attacking
+  rotate: false
+  xy: 2140, 1315
+  size: 567, 506
+  orig: 840, 760
+  offset: 180, 86
+  index: 11

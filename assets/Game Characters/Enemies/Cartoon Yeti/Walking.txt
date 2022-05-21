@@ -1,0 +1,131 @@
+Walking.png
+size: 1985, 1484
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walking
+  rotate: false
+  xy: 1, 1
+  size: 321, 368
+  orig: 600, 480
+  offset: 130, 45
+  index: 0
+Walking
+  rotate: false
+  xy: 398, 1
+  size: 295, 369
+  orig: 600, 480
+  offset: 138, 43
+  index: 1
+Walking
+  rotate: false
+  xy: 795, 1
+  size: 286, 368
+  orig: 600, 480
+  offset: 144, 42
+  index: 2
+Walking
+  rotate: false
+  xy: 1192, 1
+  size: 285, 366
+  orig: 600, 480
+  offset: 149, 42
+  index: 3
+Walking
+  rotate: false
+  xy: 1589, 1
+  size: 282, 362
+  orig: 600, 480
+  offset: 155, 43
+  index: 4
+Walking
+  rotate: false
+  xy: 1, 372
+  size: 284, 359
+  orig: 600, 480
+  offset: 155, 44
+  index: 5
+Walking
+  rotate: false
+  xy: 398, 372
+  size: 289, 362
+  orig: 600, 480
+  offset: 150, 42
+  index: 6
+Walking
+  rotate: false
+  xy: 795, 372
+  size: 291, 365
+  orig: 600, 480
+  offset: 145, 42
+  index: 7
+Walking
+  rotate: false
+  xy: 1192, 372
+  size: 294, 367
+  orig: 600, 480
+  offset: 139, 43
+  index: 8
+Walking
+  rotate: false
+  xy: 1589, 372
+  size: 318, 369
+  orig: 600, 480
+  offset: 131, 44
+  index: 9
+Walking
+  rotate: false
+  xy: 1, 743
+  size: 336, 369
+  orig: 600, 480
+  offset: 126, 43
+  index: 10
+Walking
+  rotate: false
+  xy: 398, 743
+  size: 356, 368
+  orig: 600, 480
+  offset: 117, 42
+  index: 11
+Walking
+  rotate: false
+  xy: 795, 743
+  size: 374, 366
+  orig: 600, 480
+  offset: 109, 42
+  index: 12
+Walking
+  rotate: false
+  xy: 1192, 743
+  size: 390, 362
+  orig: 600, 480
+  offset: 101, 43
+  index: 13
+Walking
+  rotate: false
+  xy: 1589, 743
+  size: 395, 359
+  orig: 600, 480
+  offset: 98, 44
+  index: 14
+Walking
+  rotate: false
+  xy: 1, 1114
+  size: 378, 362
+  orig: 600, 480
+  offset: 107, 42
+  index: 15
+Walking
+  rotate: false
+  xy: 398, 1114
+  size: 362, 365
+  orig: 600, 480
+  offset: 114, 42
+  index: 16
+Walking
+  rotate: false
+  xy: 795, 1114
+  size: 342, 367
+  orig: 600, 480
+  offset: 123, 43
+  index: 17

@@ -1,0 +1,131 @@
+Idle Blinking - Rifle.png
+size: 2826, 1995
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1, 1
+  size: 468, 654
+  orig: 924, 864
+  offset: 290, 104
+  index: 0
+Idle Blinking - Rifle
+  rotate: false
+  xy: 472, 1
+  size: 468, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 1
+Idle Blinking - Rifle
+  rotate: false
+  xy: 943, 1
+  size: 468, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 2
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1414, 1
+  size: 468, 657
+  orig: 924, 864
+  offset: 290, 103
+  index: 3
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1885, 1
+  size: 468, 659
+  orig: 924, 864
+  offset: 290, 103
+  index: 4
+Idle Blinking - Rifle
+  rotate: false
+  xy: 2356, 1
+  size: 468, 660
+  orig: 924, 864
+  offset: 290, 103
+  index: 5
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1, 666
+  size: 468, 661
+  orig: 924, 864
+  offset: 290, 103
+  index: 6
+Idle Blinking - Rifle
+  rotate: false
+  xy: 472, 666
+  size: 469, 661
+  orig: 924, 864
+  offset: 289, 104
+  index: 7
+Idle Blinking - Rifle
+  rotate: false
+  xy: 943, 666
+  size: 469, 662
+  orig: 924, 864
+  offset: 289, 104
+  index: 8
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1414, 666
+  size: 469, 663
+  orig: 924, 864
+  offset: 289, 104
+  index: 9
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1885, 666
+  size: 469, 663
+  orig: 924, 864
+  offset: 289, 104
+  index: 10
+Idle Blinking - Rifle
+  rotate: false
+  xy: 2356, 666
+  size: 469, 662
+  orig: 924, 864
+  offset: 289, 104
+  index: 11
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1, 1331
+  size: 468, 662
+  orig: 924, 864
+  offset: 290, 103
+  index: 12
+Idle Blinking - Rifle
+  rotate: false
+  xy: 472, 1331
+  size: 468, 661
+  orig: 924, 864
+  offset: 290, 103
+  index: 13
+Idle Blinking - Rifle
+  rotate: false
+  xy: 943, 1331
+  size: 468, 659
+  orig: 924, 864
+  offset: 290, 103
+  index: 14
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1414, 1331
+  size: 468, 658
+  orig: 924, 864
+  offset: 290, 103
+  index: 15
+Idle Blinking - Rifle
+  rotate: false
+  xy: 1885, 1331
+  size: 468, 656
+  orig: 924, 864
+  offset: 290, 104
+  index: 16
+Idle Blinking - Rifle
+  rotate: false
+  xy: 2356, 1331
+  size: 468, 655
+  orig: 924, 864
+  offset: 290, 104
+  index: 17
