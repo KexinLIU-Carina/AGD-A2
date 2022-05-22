@@ -6,19 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
@@ -41,16 +34,16 @@ public class GameScreen implements Screen {
     public Player player;
 
     // Enemies
-    private Enemy groundEnemy;
-    private AirEnemy airEnemy;
+    private EnemyFactory enemyFactory;
+    private Enemy randomEnemy;
 
     // Map
     private TiledMap level1;
     private TiledMapRenderer foregroundTiledMapRenderer;
     private TiledMapRenderer backgroundTiledMapRenderer;
 
-    int[] backgroundMapLayers = {0, 1, 2};
-    int[] foregroundMapLayers = {3};
+    int[] backgroundMapLayers = {0, 1, 2, 3, 4};
+    int[] foregroundMapLayers = {5, 6, 7, 8, 9, 10};
     float backgroundLayerSpeed = 0.2f;
     float foregroundLayerSpeed = 1.5f;
 
@@ -61,16 +54,11 @@ public class GameScreen implements Screen {
     private Rectangle collisionRectangle;
 
 
-    //UI Buttons
-    private TextButton restartButton;
-    private TextButton quitButton;
-    private Table table;
-    private Skin skin;
-
 
     private static GameScreen INSTANCE = null;
 
 
+    //  ---  Singleton ---------------
     private GameScreen() {}
 
 
@@ -80,6 +68,7 @@ public class GameScreen implements Screen {
         }
         return INSTANCE;
     }
+    // ------------------------------
 
 
     @Override
@@ -95,25 +84,25 @@ public class GameScreen implements Screen {
         // Player
         player = new Player();
 
-        // Enemies
-//        groundEnemy = new GroundEnemy();
-//        airEnemy = new AirEnemy();
+        // Enemy
+        enemyFactory = new EnemyFactory();
+        randomEnemy = enemyFactory.spawnRandomEnemy();
 
         // SpriteBatches
         uiBatch = new SpriteBatch();
 
         // Map
-        level1 = new TmxMapLoader().load("Levels/background/SpacePlanet.tmx");
-        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.7f);
-        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.55f);
+        level1 = new TmxMapLoader().load("Levels/Level1/Level1.tmx");
+        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.5f);
+        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.7f);
 
         // Map Collision Layer
-        collisionRectangle = new Rectangle();
-        MapObject collisionObject = level1.getLayers().get("Collision").getObjects().get("GroundCollision");
-        if(collisionObject instanceof RectangleMapObject) {
-            RectangleMapObject rmo = (RectangleMapObject) collisionObject;
-            collisionRectangle = rmo.getRectangle();
-        }
+//        collisionRectangle = new Rectangle();
+//        MapObject collisionObject = level1.getLayers().get("Collision").getObjects().get("GroundCollision");
+//        if(collisionObject instanceof RectangleMapObject) {
+//            RectangleMapObject rmo = (RectangleMapObject) collisionObject;
+//            collisionRectangle = rmo.getRectangle();
+//        }
 
         // Camera
         graphicsWidth = Gdx.graphics.getWidth();
@@ -129,22 +118,10 @@ public class GameScreen implements Screen {
 
         // Stage
         stage = new Stage();
-
-        stage.addActor(player);
-//        stage.addActor(groundEnemy);
-//        stage.addActor(airEnemy);
         Gdx.input.setInputProcessor(stage);
 
-
-        // End Game Buttons
-        skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
-        restartButton = new TextButton("Restart", skin, "default");
-        quitButton = new TextButton("Quit", skin, "default");
-        table = new Table();
-        table.add(restartButton).height(75).width(150).pad(20);
-        table.row();
-        table.add(quitButton).height(75).width(150).pad(20).space(20);
-        table.setPosition((graphicsWidth - table.getWidth()) / 2, (graphicsHeight - table.getHeight()) / 2);
+        stage.addActor(player);
+        stage.addActor(randomEnemy);
 
         newGame();
     }
@@ -154,17 +131,16 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
 
         player.reset();
-//        groundEnemy.reset();
-//        airEnemy.reset();
+        randomEnemy.reset();
     }
 
 
     // This method sets the player to be killed and the game restarted.
     // ---COMMENT OUT THIS METHOD FOR GOD MODE ----
-    public void killPlayer() {
-        player.setPlayerState(Player.PlayerState.DYING);
-        gameState = GameState.RESTART;
-    }
+//    public void killPlayer() {
+//        player.setPlayerState(Player.PlayerState.DYING);
+//        gameState = GameState.RESTART;
+//    }
 
 
     private void update() {
@@ -176,27 +152,12 @@ public class GameScreen implements Screen {
         switch (gameState) {
             case PLAYING:
 
+                // If all lives are lost it is game over
                 if (player.getNumberOfLives() <= 0) {
                     gameState = GameState.GAMEOVER;
                 }
 
-                // -- LAYER SCROLLING ----
-
-                // Set the layers to scroll at different speeds.
-                backgroundViewport.getCamera().translate(backgroundLayerSpeed, 0, 0);
-                foregroundViewport.getCamera().translate(foregroundLayerSpeed, 0, 0);
-
-                // Resets the layers to the start position once they have finished scrolling.
-                if (backgroundViewport.getCamera().position.x > 660) {
-                    backgroundViewport.getCamera().position.x = 400;
-                }
-                if (foregroundViewport.getCamera().position.x > 750) {
-                    foregroundViewport.getCamera().position.x = 400;
-                }
-
-
                 //-- RESTRICT PLAYER MOVEMENT ---------
-
                 // Prevent player from going off screen to the left
                 if (player.getSprite().getX() < 0) {
                     player.getSprite().setX(0);
@@ -213,10 +174,11 @@ public class GameScreen implements Screen {
                     if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
                         player.setDirection(Player.Direction.LEFT);
                         player.setPlayerState(Player.PlayerState.RUNNING);
-//                        player.getCurrentFrame().flip(true, false);
 
                         player.getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(-player.getCURRENT_MOVEMENT_SPEED());
                         player.getSprite().translate(player.getPositionAmount().x, player.getPositionAmount().y);
+
+                        foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
                     }
                     // Move Right
                     if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
@@ -225,39 +187,32 @@ public class GameScreen implements Screen {
 
                         player.getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(player.getCURRENT_MOVEMENT_SPEED());
                         player.getSprite().translate(player.getPositionAmount().x, player.getPositionAmount().y);
+
+                        foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
                     }
                     // Shoot
                     if (touchY < (graphicsHeight / 2)) {
-//                        if (player.getPlayerMissile().getProjectileState() == Projectile.ProjectileState.RESET) {
                             player.setPlayerState(Player.PlayerState.ATTACKING);
-//                            player.getPlayerMissile().setProjectileState(Projectile.ProjectileState.FIRING);
-//                        }
                     }
                 }
+                // If the screen is no longer being touched while the character is running, the running immediately stops and is idle.
+                // Other animation states have to play out their animations before stopping.
                 if(!checkTouch) {
                     if(player.getPlayerState() == Player.PlayerState.RUNNING) {
                         player.setPlayerState(Player.PlayerState.IDLE);
                     }
                 }
-//
+
+                Gdx.app.log("Move", "x" + randomEnemy.getSprite().getX());
+                if(randomEnemy.getSprite().getX() < 300) {
+
+                    randomEnemy.reset();
+                    randomEnemy = enemyFactory.spawnRandomEnemy();
+                }
+
 
             case RESTART:
                 //Poll for input
-                restartButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        // Remove the restart and quit buttons from the stage and restart
-                        table.remove();
-                        newGame();
-                    }
-                });
-
-                quitButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Gdx.app.exit();
-                    }
-                });
                 break;
 
             case GAMEOVER:
@@ -273,7 +228,17 @@ public class GameScreen implements Screen {
         update();
         stage.act();
 
+        // Render the map
+        backgroundViewport.update(graphicsWidth, graphicsHeight);
+        backgroundTiledMapRenderer.setView((OrthographicCamera) backgroundViewport.getCamera());
+        backgroundTiledMapRenderer.render(backgroundMapLayers);
+        foregroundViewport.update(graphicsWidth, graphicsHeight);
+        foregroundTiledMapRenderer.setView((OrthographicCamera) foregroundViewport.getCamera());
+        foregroundTiledMapRenderer.render(foregroundMapLayers);
+
+        // Render the stage actors
         stage.draw();
+
     }
 
     @Override

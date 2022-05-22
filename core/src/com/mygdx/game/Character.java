@@ -47,7 +47,6 @@ public class Character extends Actor {
         currentFrame = new TextureRegion();
         startPosition = new Vector2();
         positionAmount = new Vector2();
-
     }
 
 
@@ -55,13 +54,14 @@ public class Character extends Actor {
 
     @Override
     public void draw(Batch batch, float alpha) {
-
         batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
     }
 
 
 
 
+    // This method is used for animations that are not looped and have to be reset at the end of the animation.
+    // The animation is loaded into the current frame and played untill it is finished, when the statetime is reset to 0.
     public boolean setAnimationFrame(Animation<TextureRegion> animationFrame) {
 
         if (animationFrame.isAnimationFinished(getStateTime())) {

@@ -1,8 +1,8 @@
 package com.mygdx.game;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Player extends Character implements CharacterInterface {
 
 
-    // Player Stats
+    // ---- PLAYER STATS -------------------------
     public enum PlayerState { IDLE, RUNNING, JUMPING, FALLING, ATTACKING, HURT, DYING, DEAD }
     public enum Direction { LEFT, RIGHT }
 
@@ -28,7 +28,8 @@ public class Player extends Character implements CharacterInterface {
     private Projectile rifleProjectile;
 
 
-    // State Animations
+
+    // ---- STATE ANIMATIONS -------------------------
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> runningAnimation;
     private Animation<TextureRegion> jumpingStartAnimation;
@@ -37,7 +38,7 @@ public class Player extends Character implements CharacterInterface {
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
 
-    // All Animations
+    // ---- ALL ANIMATIONS -------------------------
     private Animation<TextureRegion> idleHandgunAnimation;
     private Animation<TextureRegion> idleRifleAnimation;
     private Animation<TextureRegion> runningHandgunAnimation;
@@ -57,10 +58,11 @@ public class Player extends Character implements CharacterInterface {
 
 
 
+
     public Player() {
 
         getSprite().setSize(100, 100);
-        getStartPosition().set(100, 50);
+        getStartPosition().set(100, 120);
 
         // Set movement speeds
         setRunningSpeed(200);
@@ -105,7 +107,8 @@ public class Player extends Character implements CharacterInterface {
     }
 
 
-    @Override
+    // Checks to see if the player is still alive after getting damaged. If still alive it enters the hurt state
+    // otherwise it enters the dying state
     public void healthCheck(int damage) {
         if((getHealth() - damage) > 0) {
             playerState = PlayerState.HURT;
@@ -117,20 +120,31 @@ public class Player extends Character implements CharacterInterface {
         }
     }
 
+    @Override
+    public void draw(Batch batch, float alpha) {
+        if(getDirection() == Direction.LEFT && !getCurrentFrame().isFlipX()) {
+            getCurrentFrame().flip(true, false);
+        }
+        if(getDirection() == Direction.RIGHT && getCurrentFrame().isFlipX()) {
+            getCurrentFrame().flip(true, false);
+        }
+        batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+    }
 
     @Override
     public void act(float delta) {
 
         stateTime = getStateTime();
         setStateTime(stateTime += delta);
-        setState();
+        switchStates();
 
     }
 
 
     @Override
-    public void setState() {
+    public void switchStates() {
 
+        // Normal player animations have a handgun equipped, but if a power up is enabled, all the animations are set to the more powerful rifle weapon.
         if (powerUp) {
             idleAnimation = idleRifleAnimation;
             runningAnimation = runningRifleAnimation;
@@ -153,6 +167,7 @@ public class Player extends Character implements CharacterInterface {
         }
 
 
+        // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
         switch (playerState) {
             case IDLE:
                 setCURRENT_MOVEMENT_SPEED(0);

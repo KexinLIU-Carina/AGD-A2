@@ -3,18 +3,18 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 
 public class EnemyDragon extends Enemy implements CharacterInterface {
 
-    private enum State { IDLE, WALKING, ATTACKING, HURT, DYING, DEAD }
 
-    private State state = State.WALKING;
     private Projectile dragonProjectile;
 
-    // Animations
+
+    // ---- ANIMATIONS -------------------------
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> walkingAnimation;
     private Animation<TextureRegion> attackingAnimation;
@@ -27,60 +27,63 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
 
     public EnemyDragon() {
 
+        // Set stats
         setName("Dragon");
-        setType(EnemyType.GROUND);
-        getStartPosition().set(Gdx.graphics.getWidth() + 100, 200);
+        getSprite().setSize(100, 100);
+        getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
         setHasProjectile(true);
 
-        setWalkingSpeed(100);
+        setWalkingSpeed(-50);
 
 
         // Initialize Projectile
-        dragonProjectile = new Projectile("Game Objects/Character Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3", 105, 65, -350f, -50f);
+        dragonProjectile = new Projectile("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3", 105, 65, -350f, -50f);
         dragonProjectile.getProjectileSprite().setSize(40, 20);
 
         // Load all animation frames into animation objects using Game Helper.
-        idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Idle.png", 3, 6, 18);
-        walkingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Walking.png", 3, 6, 18);
-        attackingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Attacking.png", 3, 6, 18);
-        hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Hurt.png", 3, 6, 18);
-        dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Dying.png", 3, 3, 9);
+        idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Idle.png", 3, 6, 18);
+        walkingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Walking.png", 3, 6, 18);
+        attackingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Attacking.png", 3, 6, 18);
+        hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Hurt.png", 3, 6, 18);
+        dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Dying.png", 3, 3, 9);
 
+        getHasState()[0] = true;
+        getHasState()[1] = false;
+        getHasState()[2] = false;
     }
 
 
-    @Override
-    public void healthCheck(int damage) {
-        if((getHealth() - damage) > 0) {
-            state = State.HURT;
-            setHealth(getHealth() - damage);
-        }
-        else {
-            state = State.DYING;
-            setHealth(0);
-        }
-    }
 
+    // Resets the enemy after it is killed.
     @Override
     public void reset() {
         setIsAlive(true);
         setHealth(getMax_Health());
-        state = State.WALKING;
+        setEnemyState(EnemyState.WALKING);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        Gdx.app.log("Move", "reset: ");
+    }
+
+    @Override
+    public void draw(Batch batch, float alpha) {
+
+        batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
     }
 
     @Override
     public void act(float delta) {
 
+        stateTime = getStateTime();
         setStateTime(stateTime += delta);
-        setState();
+        switchStates();
     }
 
 
+    // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
     @Override
-    public void setState() {
+    public void switchStates() {
 
-        switch (state) {
+        switch (getEnemyState()) {
             case IDLE:
                 setCURRENT_MOVEMENT_SPEED(0);
                 setCurrentFrame(idleAnimation.getKeyFrame(getStateTime(), true));
@@ -89,19 +92,21 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
             case WALKING:
                 setCURRENT_MOVEMENT_SPEED(getWalkingSpeed());
                 setCurrentFrame(walkingAnimation.getKeyFrame(getStateTime(), true));
+                getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+                getSprite().translate(getPositionAmount().x, getPositionAmount().y);
                 break;
 
             case ATTACKING:
                 setCURRENT_MOVEMENT_SPEED(0);
                 if(setAnimationFrame(attackingAnimation)) {
-                    state = State.IDLE;
+                    setEnemyState(EnemyState.IDLE);
                 }
                 break;
 
             case HURT:
                 setCURRENT_MOVEMENT_SPEED(0);
                 if(setAnimationFrame(hurtAnimation)) {
-                    state = State.IDLE;
+                    setEnemyState(EnemyState.IDLE);
                 }
                 break;
 
@@ -109,9 +114,11 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
                 setCURRENT_MOVEMENT_SPEED(0);
                 if (setAnimationFrame(dyingAnimation)) {
                     setIsAlive(false);
-                    state = State.DEAD;
+                    setEnemyState(EnemyState.DEAD);
                 }
                 break;
         }
     }
+
+
 }
