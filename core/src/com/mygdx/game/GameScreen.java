@@ -203,13 +203,6 @@ public class GameScreen implements Screen {
                     }
                 }
 
-                Gdx.app.log("Move", "x" + randomEnemy.getSprite().getX());
-                if(randomEnemy.getSprite().getX() < 300) {
-
-                    randomEnemy.reset();
-                    randomEnemy = enemyFactory.spawnRandomEnemy();
-                }
-
 
             case RESTART:
                 //Poll for input

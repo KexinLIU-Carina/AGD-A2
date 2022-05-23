@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -18,16 +19,21 @@ public class Enemy extends Character implements CharacterInterface {
 
     private String name;
 
-    // Not all enemies have the same states, this boolean acts as a check to make sure that an enemy has the state before it accesses it.
-    private boolean[] hasState;
+    // Not all enemies have the same states, these booleans act as a check to make sure that an enemy has the state before it accesses it.
+    private boolean hasRunningState;
+    private boolean hasThrowingState;
     private boolean hasProjectile = false;
 
 
-    public Enemy() {
-        hasState = new boolean[3];
+
+    // Draws enemy sprite facing left
+    @Override
+    public void draw(Batch batch, float alpha) {
+        if(!getCurrentFrame().isFlipX()) {
+            getCurrentFrame().flip(true, false);
+        }
+        batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
     }
-
-
 
     // Checks to see if the enemy is still alive after getting damaged. If still alive it enters the hurt state
     // otherwise it enters the dying state
@@ -57,7 +63,13 @@ public class Enemy extends Character implements CharacterInterface {
 
     public void setEnemyState(EnemyState enemyState) { this.enemyState = enemyState; }
 
-    public boolean[] getHasState() { return hasState; }
+    public boolean getHasRunningState() { return hasRunningState; }
+
+    public void setHasRunningState(boolean hasRunningState) { this.hasRunningState = hasRunningState; }
+
+    public boolean getHasThrowingState() { return hasThrowingState; }
+
+    public void setHasThrowingState(boolean hasThrowingState) { this.hasThrowingState = hasThrowingState; }
 
     public boolean getHasProjectile() { return hasProjectile; }
 

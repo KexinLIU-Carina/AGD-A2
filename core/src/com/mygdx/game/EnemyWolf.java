@@ -42,9 +42,9 @@ public class EnemyWolf extends Enemy implements CharacterInterface {
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Tiny Wolf 02/Hurt.png", 4, 3, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Tiny Wolf 02/Dying.png", 4, 3, 12);
 
-        getHasState()[0] = true;
-        getHasState()[1] = true;
-        getHasState()[2] = false;
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(false);
     }
 
 

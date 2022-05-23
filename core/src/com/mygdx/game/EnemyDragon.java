@@ -47,9 +47,9 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Hurt.png", 3, 6, 18);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Dying.png", 3, 3, 9);
 
-        getHasState()[0] = true;
-        getHasState()[1] = false;
-        getHasState()[2] = false;
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(false);
     }
 
 

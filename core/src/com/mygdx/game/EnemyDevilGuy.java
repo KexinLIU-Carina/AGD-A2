@@ -42,9 +42,9 @@ public class EnemyDevilGuy extends Enemy implements CharacterInterface {
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Hurt.png", 4, 3, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Dying.png", 3, 4, 12);
 
-        getHasState()[0] = true;
-        getHasState()[1] = true;
-        getHasState()[2] = false;
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(false);
     }
 
 
@@ -55,7 +55,6 @@ public class EnemyDevilGuy extends Enemy implements CharacterInterface {
         setHealth(getMax_Health());
         setEnemyState(EnemyState.WALKING);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-        Gdx.app.log("Move", "reset: ");
     }
 
 

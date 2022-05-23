@@ -42,9 +42,9 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Hurt.png", 3, 4, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Dying.png", 3, 4, 12);
 
-        getHasState()[0] = true;
-        getHasState()[1] = true;
-        getHasState()[2] = false;
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(false);
     }
 
 

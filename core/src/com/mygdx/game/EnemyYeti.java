@@ -39,7 +39,7 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
 
 
         // Initialize Projectile
-        yetiProjectile = new Projectile("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3", 105, 65, -350f, -50f);
+        yetiProjectile = new Projectile("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3", 105, 65, -350f, -50f);
         yetiProjectile.getProjectileSprite().setSize(40, 20);
 
         // Load all animation frames into animation objects using Game Helper.
@@ -51,9 +51,9 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Hurt.png", 4, 3, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Dying.png", 4, 3, 12);
 
-        getHasState()[0] = true;
-        getHasState()[1] = true;
-        getHasState()[2] = true;
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(true);
     }
 
 
@@ -65,7 +65,6 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
         setHealth(getMax_Health());
         setEnemyState(EnemyState.WALKING);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-        Gdx.app.log("Move", "reset: ");
     }
 
 
