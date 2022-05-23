@@ -56,7 +56,6 @@ public class EnemyWolf extends Enemy implements CharacterInterface {
         setHealth(getMax_Health());
         setEnemyState(EnemyState.WALKING);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-        Gdx.app.log("Move", "reset: ");
     }
 
 

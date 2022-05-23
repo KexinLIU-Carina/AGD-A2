@@ -3,6 +3,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
@@ -31,16 +32,28 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
         // Set stats
         setName("Yeti");
         getSprite().setSize(100, 100);
+
+        // Start offscreen right
         getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
-        setHasProjectile(true);
 
         setWalkingSpeed(-100);
         setRunningSpeed(-100);
 
+        setHasProjectile(true);
+
 
         // Initialize Projectile
-        yetiProjectile = new Projectile("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3", 105, 65, -350f, -50f);
+        yetiProjectile = new Projectile("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3");
         yetiProjectile.getProjectileSprite().setSize(40, 20);
+
+        yetiProjectile.getProjectileStartPosition().x = getSprite().getX();
+        yetiProjectile.getProjectileStartPosition().y = getSprite().getY();
+        yetiProjectile.getOffset().set(105, 65);
+        yetiProjectile.getProjectileSprite().setPosition(yetiProjectile.getProjectileStartWithOffset().x, yetiProjectile.getProjectileStartWithOffset().y);
+
+        yetiProjectile.setMovementSpeedX(350f);
+        yetiProjectile.setMovementSpeedY(-50f);
+
 
         // Load all animation frames into animation objects using Game Helper.
         idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Idle.png", 6, 3, 18);
@@ -67,6 +80,20 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
     }
 
+
+    @Override
+    public void draw(Batch batch, float alpha) {
+        // Draws enemy sprite facing left
+        if(!getCurrentFrame().isFlipX()) {
+            getCurrentFrame().flip(true, false);
+        }
+        batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+
+        // Draw the projectile if the enemy is attacking
+        if(getEnemyState() == EnemyState.THROWING) {
+            yetiProjectile.draw(batch, alpha);
+        }
+    }
 
     @Override
     public void act(float delta) {

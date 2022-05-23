@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -61,6 +63,7 @@ public class Player extends Character implements CharacterInterface {
 
     public Player() {
 
+        // Initialize size and start position
         getSprite().setSize(100, 100);
         getStartPosition().set(100, 120);
 
@@ -71,12 +74,20 @@ public class Player extends Character implements CharacterInterface {
 
 
         // Initialize Projectile
-        handgunProjectile = new Projectile("Game Characters/Player/HandgunFX.png", "Audio/Sounds/shot.mp3", 105, 65, 350f, -50f);
-        handgunProjectile.getProjectileSprite().setSize(40, 20);
+        playerProjectile = new Projectile("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3");
+        playerProjectile.getProjectileSprite().setSize(20, 10);
+        playerProjectile.getProjectileSprite().flip(true, false);
 
-        rifleProjectile = new Projectile("Game Characters/Player/RifleFX.png", "Audio/Sounds/shot.mp3", 105, 65, 350f, -50f);
-        rifleProjectile.getProjectileSprite().setSize(40, 20);
+        // Set the projectile to the players start position
+        playerProjectile.getProjectileStartPosition().x = getSprite().getX();
+        playerProjectile.getProjectileStartPosition().y = getSprite().getY();
+        // Offset the projectile so that it emits from the correct spot on the player
+        playerProjectile.getOffset().set(105, 65);
+        playerProjectile.getProjectileSprite().setPosition(playerProjectile.getProjectileStartWithOffset().x, playerProjectile.getProjectileStartWithOffset().y);
 
+
+        playerProjectile.setMovementSpeedX(350f);
+        playerProjectile.setMovementSpeedY(-50f);
 
 
         // Load all animation frames into animation objects using Game Helper.
@@ -100,10 +111,13 @@ public class Player extends Character implements CharacterInterface {
 
     @Override
     public void reset() {
+        // Player is alive again
         setIsAlive(true);
+        // Health back to full health
         setHealth(getMax_Health());
-        playerState = PlayerState.IDLE;
+        // Back to start position and idle
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        playerState = PlayerState.IDLE;
     }
 
 
@@ -122,13 +136,18 @@ public class Player extends Character implements CharacterInterface {
 
     @Override
     public void draw(Batch batch, float alpha) {
+        // Flips the sprite according to the correct direction
         if(getDirection() == Direction.LEFT && !getCurrentFrame().isFlipX()) {
             getCurrentFrame().flip(true, false);
+//            playerProjectile.getProjectileSprite().flip(true, false);
         }
         if(getDirection() == Direction.RIGHT && getCurrentFrame().isFlipX()) {
             getCurrentFrame().flip(true, false);
+//            playerProjectile.getProjectileSprite().flip(true, false);
+
         }
         batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+        playerProjectile.draw(batch, alpha);
     }
 
     @Override
@@ -136,8 +155,15 @@ public class Player extends Character implements CharacterInterface {
 
         stateTime = getStateTime();
         setStateTime(stateTime += delta);
-        switchStates();
 
+        // Updates the projectile to emit from wherever the player is.
+        playerProjectile.getProjectileStartPosition().x = getSprite().getX();
+        playerProjectile.getProjectileStartPosition().y = getSprite().getY();
+
+        playerProjectile.act(delta);
+
+        Gdx.app.log("Move", "afteract: " + playerProjectile.getProjectileSprite());
+        switchStates();
     }
 
 
@@ -153,7 +179,6 @@ public class Player extends Character implements CharacterInterface {
             attackingAnimation = attackingRifleAnimation;
             hurtAnimation = hurtRifleAnimation;
             dyingAnimation = dyingRifleAnimation;
-            playerProjectile = rifleProjectile;
         }
         else {
             idleAnimation = idleHandgunAnimation;
@@ -163,7 +188,6 @@ public class Player extends Character implements CharacterInterface {
             attackingAnimation = attackingHandgunAnimation;
             hurtAnimation = hurtHandgunAnimation;
             dyingAnimation = dyingHandgunAnimation;
-            playerProjectile = handgunProjectile;
         }
 
 
@@ -193,6 +217,7 @@ public class Player extends Character implements CharacterInterface {
 
             case ATTACKING:
                 setCURRENT_MOVEMENT_SPEED(0);
+                playerProjectile.setProjectileState(Projectile.ProjectileState.FIRING);
                 if(setAnimationFrame(attackingAnimation)) {
                     playerState = PlayerState.IDLE;
                 }
@@ -233,4 +258,8 @@ public class Player extends Character implements CharacterInterface {
     public boolean getPowerUp() { return powerUp; }
 
     public void setPowerUp(boolean powerUp) { this.powerUp = powerUp; }
+
+    public Projectile getPlayerProjectile() { return playerProjectile; }
+
+    public void setPlayerProjectile(Projectile playerProjectile) { this.playerProjectile = playerProjectile; }
 }

@@ -131,6 +131,7 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
 
         player.reset();
+        Gdx.app.log("Move", "Gamesprite1: " + player.getPlayerProjectile().getProjectileSprite());
         randomEnemy.reset();
     }
 
@@ -218,8 +219,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+        Gdx.app.log("Move", "b4upodate: " + player.getPlayerProjectile().getProjectileSprite());
+
         update();
         stage.act();
+
+        Gdx.app.log("Move", "Gamesprite2: " + player.getPlayerProjectile().getProjectileSprite());
 
         // Render the map
         backgroundViewport.update(graphicsWidth, graphicsHeight);

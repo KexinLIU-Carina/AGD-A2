@@ -37,8 +37,16 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
 
 
         // Initialize Projectile
-        dragonProjectile = new Projectile("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3", 105, 65, -350f, -50f);
+        dragonProjectile = new Projectile("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3");
         dragonProjectile.getProjectileSprite().setSize(40, 20);
+        dragonProjectile.getProjectileStartPosition().x = getSprite().getX();
+        dragonProjectile.getProjectileStartPosition().y = getSprite().getY();
+        dragonProjectile.getOffset().set(105, 65);
+        dragonProjectile.getProjectileSprite().setPosition(dragonProjectile.getProjectileStartWithOffset().x, dragonProjectile.getProjectileStartWithOffset().y);
+
+        dragonProjectile.setMovementSpeedX(350f);
+        dragonProjectile.setMovementSpeedY(-50f);
+
 
         // Load all animation frames into animation objects using Game Helper.
         idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Idle.png", 3, 6, 18);
@@ -61,13 +69,21 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
         setHealth(getMax_Health());
         setEnemyState(EnemyState.WALKING);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-        Gdx.app.log("Move", "reset: ");
     }
 
     @Override
     public void draw(Batch batch, float alpha) {
+        // // Draws enemy sprite facing left
+        if(!getCurrentFrame().isFlipX()) {
+            getCurrentFrame().flip(true, false);
+        }
 
         batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+
+        // Draw the projectile if the enemy is attacking
+        if(getEnemyState() == EnemyState.ATTACKING) {
+            dragonProjectile.draw(batch, alpha);
+        }
     }
 
     @Override
