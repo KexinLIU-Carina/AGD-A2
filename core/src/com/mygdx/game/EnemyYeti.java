@@ -23,6 +23,7 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
 
+    // The stateTime used for looping animations
     private float stateTime;
 
 
@@ -32,14 +33,13 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
         // Set stats
         setName("Yeti");
         getSprite().setSize(100, 100);
-
         // Start offscreen right
         getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        setHasProjectile(true);
 
         setWalkingSpeed(-100);
         setRunningSpeed(-100);
-
-        setHasProjectile(true);
 
 
         // Initialize Projectile
@@ -70,23 +70,13 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
     }
 
 
-
-    // Resets the enemy after it is killed.
-    @Override
-    public void reset() {
-        setIsAlive(true);
-        setHealth(getMax_Health());
-        setEnemyState(EnemyState.WALKING);
-        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-    }
-
-
     @Override
     public void draw(Batch batch, float alpha) {
         // Draws enemy sprite facing left
         if(!getCurrentFrame().isFlipX()) {
             getCurrentFrame().flip(true, false);
         }
+
         batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
 
         // Draw the projectile if the enemy is attacking
@@ -98,8 +88,7 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
     @Override
     public void act(float delta) {
 
-        stateTime = getStateTime();
-        setStateTime(stateTime += delta);
+        stateTime += delta;
         switchStates();
     }
 
@@ -111,19 +100,19 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
         switch (getEnemyState()) {
             case IDLE:
                 setCURRENT_MOVEMENT_SPEED(0);
-                setCurrentFrame(idleAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case WALKING:
                 setCURRENT_MOVEMENT_SPEED(getWalkingSpeed());
-                setCurrentFrame(walkingAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(walkingAnimation.getKeyFrame(stateTime, true));
                 getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
                 getSprite().translate(getPositionAmount().x, getPositionAmount().y);
                 break;
 
             case RUNNING:
                 setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
-                setCurrentFrame(runningAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(runningAnimation.getKeyFrame(stateTime, true));
                 getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
                 getSprite().translate(getPositionAmount().x, getPositionAmount().y);
                 break;
@@ -145,11 +134,12 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
             case HURT:
                 setCURRENT_MOVEMENT_SPEED(0);
                 if(setAnimationFrame(hurtAnimation)) {
-                    setEnemyState(EnemyState.IDLE);
+                    setEnemyState(EnemyState.WALKING);
                 }
                 break;
 
             case DYING:
+//                Gdx.app.log("MyDebug_MAIN", "YetiDying");
                 setCURRENT_MOVEMENT_SPEED(0);
                 if (setAnimationFrame(dyingAnimation)) {
                     setIsAlive(false);

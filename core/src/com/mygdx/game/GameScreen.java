@@ -131,7 +131,6 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
 
         player.reset();
-        Gdx.app.log("Move", "Gamesprite1: " + player.getPlayerProjectile().getProjectileSprite());
         randomEnemy.reset();
     }
 
@@ -160,8 +159,8 @@ public class GameScreen implements Screen {
 
                 //-- RESTRICT PLAYER MOVEMENT ---------
                 // Prevent player from going off screen to the left
-                if (player.getSprite().getX() < 0) {
-                    player.getSprite().setX(0);
+                if (player.getSprite().getX() < 200) {
+                    player.getSprite().setX(200);
                 }
                 // Prevent player from going too far to the right
                 if (player.getSprite().getX() > (graphicsWidth / 2)) {
@@ -193,7 +192,9 @@ public class GameScreen implements Screen {
                     }
                     // Shoot
                     if (touchY < (graphicsHeight / 2)) {
+                        if(player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
                             player.setPlayerState(Player.PlayerState.ATTACKING);
+                        }
                     }
                 }
                 // If the screen is no longer being touched while the character is running, the running immediately stops and is idle.
@@ -204,6 +205,31 @@ public class GameScreen implements Screen {
                     }
                 }
 
+                // -- ENEMY -------
+
+                // If the missile hits the enemies bounding box
+                if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle().overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
+                    // The enemy may have just walked into the projectile bounding box located on the player, which means the player did not shoot anything.
+                    // In this case it is the player who should die, not the enemy.
+                    if(randomEnemy.getSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
+                        if (randomEnemy.getIsAlive()) {
+//                            killPlayer();
+                        }
+                    }
+                    // The player has shot a missile and it has hit the enemy. If it is alive it should die, otherwise it is already dead.
+                    else {
+                        if (randomEnemy.getIsAlive()) {
+                            player.getPlayerProjectile().setProjectileState(Projectile.ProjectileState.RESET);
+                            randomEnemy.healthCheck(randomEnemy.getDamage());
+                        }
+                    }
+                }
+                if(randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
+                    randomEnemy.remove();
+                    randomEnemy = enemyFactory.spawnRandomEnemy();
+                    randomEnemy.reset();
+                    stage.addActor(randomEnemy);
+                }
 
             case RESTART:
                 //Poll for input
@@ -219,12 +245,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        Gdx.app.log("Move", "b4upodate: " + player.getPlayerProjectile().getProjectileSprite());
-
         update();
         stage.act();
-
-        Gdx.app.log("Move", "Gamesprite2: " + player.getPlayerProjectile().getProjectileSprite());
 
         // Render the map
         backgroundViewport.update(graphicsWidth, graphicsHeight);

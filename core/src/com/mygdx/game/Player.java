@@ -56,6 +56,7 @@ public class Player extends Character implements CharacterInterface {
     private Animation<TextureRegion> dyingHandgunAnimation;
     private Animation<TextureRegion> dyingRifleAnimation;
 
+    // The stateTime used for looping animations
     float stateTime = 0;
 
 
@@ -65,7 +66,7 @@ public class Player extends Character implements CharacterInterface {
 
         // Initialize size and start position
         getSprite().setSize(100, 100);
-        getStartPosition().set(100, 120);
+        getStartPosition().set(200, 120);
 
         // Set movement speeds
         setRunningSpeed(200);
@@ -75,19 +76,19 @@ public class Player extends Character implements CharacterInterface {
 
         // Initialize Projectile
         playerProjectile = new Projectile("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3");
-        playerProjectile.getProjectileSprite().setSize(20, 10);
+        playerProjectile.getProjectileSprite().setSize(15, 5);
         playerProjectile.getProjectileSprite().flip(true, false);
 
-        // Set the projectile to the players start position
-        playerProjectile.getProjectileStartPosition().x = getSprite().getX();
-        playerProjectile.getProjectileStartPosition().y = getSprite().getY();
-        // Offset the projectile so that it emits from the correct spot on the player
-        playerProjectile.getOffset().set(105, 65);
-        playerProjectile.getProjectileSprite().setPosition(playerProjectile.getProjectileStartWithOffset().x, playerProjectile.getProjectileStartWithOffset().y);
+        // Initialize the starting position of the projectile to the players start position. The offset amount is added to the start position.
+        // This is the final position that the projectile is set to so that it emits from the correct spot on the player.
+        // The start position is updated in player.act() so that when the player moves the projectile keeps up.
+        // The offset is added to the start position in the projectiles reset state, keeping the correct emission position.
+        playerProjectile.getProjectileStartPosition().x = getStartPosition().x;
+        playerProjectile.getProjectileStartPosition().y = getStartPosition().y;
+        playerProjectile.getOffset().set(100, 43);
 
-
-        playerProjectile.setMovementSpeedX(350f);
-        playerProjectile.setMovementSpeedY(-50f);
+//        playerProjectile.setMovementSpeedY(-30f);
+//        playerProjectile.setMovementSpeedX(350f);
 
 
         // Load all animation frames into animation objects using Game Helper.
@@ -136,15 +137,29 @@ public class Player extends Character implements CharacterInterface {
 
     @Override
     public void draw(Batch batch, float alpha) {
-        // Flips the sprite according to the correct direction
-        if(getDirection() == Direction.LEFT && !getCurrentFrame().isFlipX()) {
-            getCurrentFrame().flip(true, false);
-//            playerProjectile.getProjectileSprite().flip(true, false);
-        }
-        if(getDirection() == Direction.RIGHT && getCurrentFrame().isFlipX()) {
-            getCurrentFrame().flip(true, false);
-//            playerProjectile.getProjectileSprite().flip(true, false);
 
+        // Flips the sprite according to the correct direction. Reverses the offset and speed accordingly.
+        // Only flips when drawing is needed to conserve processing power
+        if(getDirection() == Direction.LEFT) {
+            playerProjectile.getOffset().set(-10, 43);
+            if(playerProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
+                playerProjectile.setMovementSpeedX(-350f);
+            }
+            if (!getCurrentFrame().isFlipX()) {
+                getCurrentFrame().flip(true, false);
+                // CAN'T GET THIS TO WORK!! METHOD DOESN'T APPEAR TO DO WHAT I EXPECT.
+                // SEEMS LIKE MAYBE IT'S FLIPPING THE SPRITE BUT NOT THE UNDERLYING TEXTURE. CAN'T FLIP TEXTURE DIRECTLY.
+                playerProjectile.getProjectileSprite().flip(false, true);
+            }
+        }
+        if(getDirection() == Direction.RIGHT) {
+            playerProjectile.getOffset().set(100, 43);
+            if(playerProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
+                playerProjectile.setMovementSpeedX(350f);
+            }
+            if(getCurrentFrame().isFlipX()) {
+                getCurrentFrame().flip(true, false);
+            }
         }
         batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
         playerProjectile.draw(batch, alpha);
@@ -153,8 +168,7 @@ public class Player extends Character implements CharacterInterface {
     @Override
     public void act(float delta) {
 
-        stateTime = getStateTime();
-        setStateTime(stateTime += delta);
+        stateTime += delta;
 
         // Updates the projectile to emit from wherever the player is.
         playerProjectile.getProjectileStartPosition().x = getSprite().getX();
@@ -162,7 +176,6 @@ public class Player extends Character implements CharacterInterface {
 
         playerProjectile.act(delta);
 
-        Gdx.app.log("Move", "afteract: " + playerProjectile.getProjectileSprite());
         switchStates();
     }
 
@@ -179,6 +192,8 @@ public class Player extends Character implements CharacterInterface {
             attackingAnimation = attackingRifleAnimation;
             hurtAnimation = hurtRifleAnimation;
             dyingAnimation = dyingRifleAnimation;
+
+            setDamage(100);
         }
         else {
             idleAnimation = idleHandgunAnimation;
@@ -188,6 +203,8 @@ public class Player extends Character implements CharacterInterface {
             attackingAnimation = attackingHandgunAnimation;
             hurtAnimation = hurtHandgunAnimation;
             dyingAnimation = dyingHandgunAnimation;
+
+            setDamage(20);
         }
 
 
@@ -195,12 +212,12 @@ public class Player extends Character implements CharacterInterface {
         switch (playerState) {
             case IDLE:
                 setCURRENT_MOVEMENT_SPEED(0);
-                setCurrentFrame(idleAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case RUNNING:
                 setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
-                setCurrentFrame(runningAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(runningAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case JUMPING:

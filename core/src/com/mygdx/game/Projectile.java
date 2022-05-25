@@ -33,6 +33,7 @@ public class Projectile extends Actor {
 
         texture = new Texture(texturePath);
         projectileSprite = new Sprite(texture);
+        projectileSprite.flip(true, false);
         projectileStartPosition = new Vector2();
         offset = new Vector2();
         projectileStartWithOffset = new Vector2();
@@ -64,19 +65,17 @@ public class Projectile extends Actor {
 
     public void switchState() {
 
-
-        switch (getProjectileState()) {
+        switch (projectileState) {
             case RESET:
-                Gdx.app.log("Move", "Reset");
-                getProjectileSprite().setPosition(getProjectileStartWithOffset().x, getProjectileStartWithOffset().y);
+                projectileSprite.setPosition(getProjectileStartWithOffset().x, getProjectileStartWithOffset().y);
                 playFiringSound = true;
 //                playExplodingSound = true;
                 break;
+
             case FIRING:
-                Gdx.app.log("Move", "Firing");
-                getPROJECTILE_MOVEMENT().x = GameScreen.getInstance().getHelper().setMovement(movementSpeedX);
-                getPROJECTILE_MOVEMENT().y = GameScreen.getInstance().getHelper().setMovement(movementSpeedY);
-                getProjectileSprite().translate(getPROJECTILE_MOVEMENT().x, getPROJECTILE_MOVEMENT().y);
+                PROJECTILE_MOVEMENT.x = GameScreen.getInstance().getHelper().setMovement(movementSpeedX);
+                PROJECTILE_MOVEMENT.y = GameScreen.getInstance().getHelper().setMovement(movementSpeedY);
+                projectileSprite.translate(PROJECTILE_MOVEMENT.x, PROJECTILE_MOVEMENT.y);
                 playFiringSound();
                 break;
 //            case EXPLODING:
@@ -125,10 +124,6 @@ public class Projectile extends Actor {
         projectileStartWithOffset.y = projectileStartPosition.y + offset.y;
         return projectileStartWithOffset;
     }
-
-    public Vector2 getPROJECTILE_MOVEMENT() { return PROJECTILE_MOVEMENT; }
-
-    public void setPROJECTILE_MOVEMENT(Vector2 PROJECTILE_MOVEMENT) { this.PROJECTILE_MOVEMENT = PROJECTILE_MOVEMENT; }
 
     public Vector2 getOffset() { return offset; }
 }

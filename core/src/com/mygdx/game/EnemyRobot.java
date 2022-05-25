@@ -18,6 +18,7 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
 
+    // The stateTime used for looping animations
     private float stateTime;
 
 
@@ -27,6 +28,7 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
         // Set stats
         setName("Robot");
         getSprite().setSize(100, 100);
+        // Start offscreen right
         getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
         setHasProjectile(false);
 
@@ -48,22 +50,10 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
     }
 
 
-    // Resets the enemy after it is killed.
-    @Override
-    public void reset() {
-        setIsAlive(true);
-        setHealth(getMax_Health());
-        setEnemyState(EnemyState.WALKING);
-        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-        Gdx.app.log("Move", "reset: ");
-    }
-
-
     @Override
     public void act(float delta) {
 
-        stateTime = getStateTime();
-        setStateTime(stateTime += delta);
+        stateTime += delta;
         switchStates();
     }
 
@@ -75,19 +65,19 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
         switch (getEnemyState()) {
             case IDLE:
                 setCURRENT_MOVEMENT_SPEED(0);
-                setCurrentFrame(idleAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case WALKING:
                 setCURRENT_MOVEMENT_SPEED(getWalkingSpeed());
-                setCurrentFrame(walkingAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(walkingAnimation.getKeyFrame(stateTime, true));
                 getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
                 getSprite().translate(getPositionAmount().x, getPositionAmount().y);
                 break;
 
             case RUNNING:
                 setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
-                setCurrentFrame(runningAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(runningAnimation.getKeyFrame(stateTime, true));
                 getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
                 getSprite().translate(getPositionAmount().x, getPositionAmount().y);
                 break;
@@ -102,11 +92,12 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
             case HURT:
                 setCURRENT_MOVEMENT_SPEED(0);
                 if(setAnimationFrame(hurtAnimation)) {
-                    setEnemyState(EnemyState.IDLE);
+                    setEnemyState(EnemyState.WALKING);
                 }
                 break;
 
             case DYING:
+//                Gdx.app.log("MyDebug_MAIN", "RobotDying");
                 setCURRENT_MOVEMENT_SPEED(0);
                 if (setAnimationFrame(dyingAnimation)) {
                     setIsAlive(false);

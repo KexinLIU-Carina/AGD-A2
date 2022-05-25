@@ -15,7 +15,7 @@ public class Enemy extends Character implements CharacterInterface {
     // ---- CHARACTER STATS -------------------------
     public enum EnemyState { IDLE, WALKING, RUNNING, ATTACKING, THROWING, HURT, DYING, DEAD }
 
-    private EnemyState enemyState;
+    private EnemyState enemyState = EnemyState.WALKING;
 
     private String name;
 
@@ -25,19 +25,21 @@ public class Enemy extends Character implements CharacterInterface {
     private boolean hasProjectile = false;
 
 
-
-    // Draws enemy sprite facing left
+    // The default drawing method for Enemies. Enemies with projectiles override this method.
     @Override
     public void draw(Batch batch, float alpha) {
-        if(!getCurrentFrame().isFlipX()) {
+        // Draws enemy sprite facing left
+        if (!getCurrentFrame().isFlipX()) {
             getCurrentFrame().flip(true, false);
         }
+
         batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
     }
 
     // Checks to see if the enemy is still alive after getting damaged. If still alive it enters the hurt state
     // otherwise it enters the dying state
     public void healthCheck(int damage) {
+
         if((getHealth() - damage) > 0) {
             enemyState = EnemyState.HURT;
             setHealth(getHealth() - damage);
@@ -48,7 +50,14 @@ public class Enemy extends Character implements CharacterInterface {
         }
     }
 
-    public void reset() {}
+    // Resets the enemy after it is killed.
+    @Override
+    public void reset() {
+        setIsAlive(true);
+        setHealth(getMax_Health());
+        setEnemyState(EnemyState.WALKING);
+        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+    }
 
     public void switchStates() {}
 
@@ -74,4 +83,5 @@ public class Enemy extends Character implements CharacterInterface {
     public boolean getHasProjectile() { return hasProjectile; }
 
     public void setHasProjectile(boolean hasProjectile) { this.hasProjectile = hasProjectile; }
+
 }

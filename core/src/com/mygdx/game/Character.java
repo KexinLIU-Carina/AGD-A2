@@ -1,8 +1,8 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -36,8 +36,11 @@ public class Character extends Actor {
 
 
     // ---- ANIMATION -------------------------
-    private float stateTime = 0;
     private TextureRegion currentFrame;
+    // The stateTime used for animations that do not loop
+    private float nonLoopingStateTime = 0;
+    private float deltaTime = Gdx.graphics.getDeltaTime();
+
 
 
 
@@ -52,15 +55,18 @@ public class Character extends Actor {
 
 
     // This method is used for animations that are not looped and have to be reset at the end of the animation.
-    // The animation is loaded into the current frame and played untill it is finished, when the statetime is reset to 0.
-    public boolean setAnimationFrame(Animation<TextureRegion> animationFrame) {
+    // The animation is loaded into the current frame and played untill it is finished, when the non looping statetime is reset to 0.
+    public boolean setAnimationFrame(Animation<TextureRegion> animation) {
 
-        if (animationFrame.isAnimationFinished(getStateTime())) {
-            setStateTime(0);
+        nonLoopingStateTime += deltaTime;
+
+        if (animation.isAnimationFinished(nonLoopingStateTime)) {
+
+            nonLoopingStateTime = 0;
             return true;
         }
         else {
-            currentFrame = animationFrame.getKeyFrame(getStateTime(), false);
+            currentFrame = animation.getKeyFrame(nonLoopingStateTime, false);
             return false;
         }
     }
@@ -107,10 +113,6 @@ public class Character extends Actor {
     public Vector2 getStartPosition() { return startPosition; }
 
     public Vector2 getPositionAmount() { return positionAmount; }
-
-    public float getStateTime() { return stateTime; }
-
-    public void setStateTime(float stateTime) { this.stateTime = stateTime; }
 
     public TextureRegion getCurrentFrame() { return currentFrame; }
 

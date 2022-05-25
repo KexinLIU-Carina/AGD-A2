@@ -21,6 +21,7 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
 
+    // The stateTime used for looping animations
     private float stateTime;
 
 
@@ -30,7 +31,9 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
         // Set stats
         setName("Dragon");
         getSprite().setSize(100, 100);
+        // Start offscreen right
         getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
         setHasProjectile(true);
 
         setWalkingSpeed(-50);
@@ -44,13 +47,13 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
         dragonProjectile.getOffset().set(105, 65);
         dragonProjectile.getProjectileSprite().setPosition(dragonProjectile.getProjectileStartWithOffset().x, dragonProjectile.getProjectileStartWithOffset().y);
 
-        dragonProjectile.setMovementSpeedX(350f);
+        dragonProjectile.setMovementSpeedX(-350f);
         dragonProjectile.setMovementSpeedY(-50f);
 
 
         // Load all animation frames into animation objects using Game Helper.
         idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Idle.png", 3, 6, 18);
-        walkingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Walking.png", 3, 6, 18);
+        walkingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Walking.png", 3, 6, 9);
         attackingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Attacking.png", 3, 6, 18);
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Hurt.png", 3, 6, 18);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Dying.png", 3, 3, 9);
@@ -61,19 +64,10 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
     }
 
 
-
-    // Resets the enemy after it is killed.
-    @Override
-    public void reset() {
-        setIsAlive(true);
-        setHealth(getMax_Health());
-        setEnemyState(EnemyState.WALKING);
-        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-    }
-
+    // Dragon has projectile so overrides draw method inherited from Enemy super class.
     @Override
     public void draw(Batch batch, float alpha) {
-        // // Draws enemy sprite facing left
+        // Draws enemy sprite facing left
         if(!getCurrentFrame().isFlipX()) {
             getCurrentFrame().flip(true, false);
         }
@@ -89,8 +83,7 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
     @Override
     public void act(float delta) {
 
-        stateTime = getStateTime();
-        setStateTime(stateTime += delta);
+        stateTime += delta;
         switchStates();
     }
 
@@ -102,12 +95,13 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
         switch (getEnemyState()) {
             case IDLE:
                 setCURRENT_MOVEMENT_SPEED(0);
-                setCurrentFrame(idleAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case WALKING:
+//                Gdx.app.log("MyDebug_MAIN", "Walk ");
                 setCURRENT_MOVEMENT_SPEED(getWalkingSpeed());
-                setCurrentFrame(walkingAnimation.getKeyFrame(getStateTime(), true));
+                setCurrentFrame(walkingAnimation.getKeyFrame(stateTime, true));
                 getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
                 getSprite().translate(getPositionAmount().x, getPositionAmount().y);
                 break;
@@ -120,13 +114,15 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
                 break;
 
             case HURT:
+//                Gdx.app.log("MyDebug_MAIN", "DragonHurt ");
                 setCURRENT_MOVEMENT_SPEED(0);
                 if(setAnimationFrame(hurtAnimation)) {
-                    setEnemyState(EnemyState.IDLE);
+                    setEnemyState(EnemyState.WALKING);
                 }
                 break;
 
             case DYING:
+//                Gdx.app.log("MyDebug_MAIN", "DragonDying");
                 setCURRENT_MOVEMENT_SPEED(0);
                 if (setAnimationFrame(dyingAnimation)) {
                     setIsAlive(false);
