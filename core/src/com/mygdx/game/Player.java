@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
@@ -60,9 +61,23 @@ public class Player extends Character implements CharacterInterface {
     float stateTime = 0;
 
 
+    // Player HP
+    private Sprite playerHPBackground;
+    private  Sprite playerHP;
+    private Texture HPimage;
+
 
 
     public Player() {
+
+        // Player HP
+        Texture HPBimage = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
+        playerHPBackground = new Sprite( HPBimage);
+        HPimage = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Green.png");
+        playerHP = new Sprite(HPimage);
+        // TODO: need a better way to set the position
+        playerHP.setPosition(150,Gdx.graphics.getHeight() - HPimage.getHeight()-40);
+        playerHPBackground.setPosition(0,Gdx.graphics.getHeight() - HPBimage.getHeight());
 
         // Initialize size and start position
         getSprite().setSize(100, 100);
@@ -128,15 +143,26 @@ public class Player extends Character implements CharacterInterface {
         if((getHealth() - damage) > 0) {
             playerState = PlayerState.HURT;
             setHealth(getHealth() - damage);
+
+            // TODO: need to test this code
+            playerHP.setSize(HPimage.getWidth() * getHealth()/100, HPimage.getHeight());
         }
         else {
             playerState = PlayerState.DYING;
+
+            playerHP.setSize(HPimage.getWidth() * getHealth()/100, HPimage.getHeight());
             setHealth(0);
         }
     }
 
     @Override
     public void draw(Batch batch, float alpha) {
+
+        // Player HP
+        playerHPBackground.draw(batch);
+        playerHP.draw(batch);
+
+
 
         // Flips the sprite according to the correct direction. Reverses the offset and speed accordingly.
         // Only flips when drawing is needed to conserve processing power
