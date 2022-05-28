@@ -28,13 +28,13 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
 
 
 
-    public EnemyYeti() {
+    public EnemyYeti(float X,float Y) {
 
         // Set stats
         setName("Yeti");
         getSprite().setSize(100, 100);
         // Start offscreen right
-        getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getStartPosition().set(X,Y);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
         setHasProjectile(true);
 

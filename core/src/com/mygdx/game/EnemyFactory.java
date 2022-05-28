@@ -8,6 +8,13 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class EnemyFactory {
 
+
+
+    // Enemy X and Y positions
+    private final float X = Gdx.graphics.getWidth() + 100;
+    private final float Y = 120;
+
+
     private Enemy[] enemyArray;
 
 
@@ -24,11 +31,11 @@ public class EnemyFactory {
         enemyArray = new Enemy[5];
 
 
-        enemy1 = new EnemyDragon();
-        enemy2 = new EnemyYeti();
-        enemy3 = new EnemyDevilGuy();
-        enemy4 = new EnemyRobot();
-        enemy5 = new EnemyWolf();
+        enemy1 = new EnemyDragon(X,Y);
+        enemy2 = new EnemyYeti(X,Y);
+        enemy3 = new EnemyDevilGuy(X,Y);
+        enemy4 = new EnemyRobot(X, Y);
+        enemy5 = new EnemyWolf(X,Y);
 
         enemyArray[0] = enemy1;
         enemyArray[1] = enemy2;

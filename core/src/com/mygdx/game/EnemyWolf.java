@@ -23,13 +23,13 @@ public class EnemyWolf extends Enemy implements CharacterInterface {
 
 
 
-    public EnemyWolf() {
+    public EnemyWolf(float X, float Y) {
 
         // Set stats
         setName("Wolf");
         getSprite().setSize(100, 100);
         // Start offscreen right
-        getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getStartPosition().set(X,Y);
         setHasProjectile(false);
 
         setWalkingSpeed(-100);

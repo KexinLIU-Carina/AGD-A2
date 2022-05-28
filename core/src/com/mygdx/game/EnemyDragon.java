@@ -26,13 +26,13 @@ public class EnemyDragon extends Enemy implements CharacterInterface {
 
 
 
-    public EnemyDragon() {
+    public EnemyDragon(float X, float Y) {
 
         // Set stats
         setName("Dragon");
         getSprite().setSize(100, 100);
         // Start offscreen right
-        getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getStartPosition().set(X,Y);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
         setHasProjectile(true);
 

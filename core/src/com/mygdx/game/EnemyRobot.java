@@ -23,13 +23,13 @@ public class EnemyRobot extends Enemy implements CharacterInterface {
 
 
 
-    public EnemyRobot() {
+    public EnemyRobot(float X, float Y) {
 
         // Set stats
         setName("Robot");
         getSprite().setSize(100, 100);
         // Start offscreen right
-        getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getStartPosition().set( X, Y);
         setHasProjectile(false);
 
         setWalkingSpeed(-100);

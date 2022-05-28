@@ -23,13 +23,13 @@ public class EnemyDevilGuy extends Enemy implements CharacterInterface {
 
 
 
-    public EnemyDevilGuy() {
+    public EnemyDevilGuy(float X, float Y) {
 
         // Set stats
         setName("DevilGuy");
         getSprite().setSize(100, 100);
         // Start offscreen right
-        getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getStartPosition().set(X,Y);
         getSprite().setPosition(getStartPosition().x, getStartPosition().y);
         setHasProjectile(false);
 
