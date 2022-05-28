@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
@@ -87,6 +88,7 @@ public class GameScreen implements Screen {
         // Enemy
         enemyFactory = new EnemyFactory();
         randomEnemy = enemyFactory.spawnRandomEnemy();
+//        randomEnemy = enemyFactory.createEnemyYeti();
 
         // SpriteBatches
         uiBatch = new SpriteBatch();
@@ -137,13 +139,13 @@ public class GameScreen implements Screen {
 
     // This method sets the player to be killed and the game restarted.
     // ---COMMENT OUT THIS METHOD FOR GOD MODE ----
-//    public void killPlayer() {
-//        player.setPlayerState(Player.PlayerState.DYING);
-//        gameState = GameState.RESTART;
-//    }
+    public void killPlayer() {
+        player.setPlayerState(Player.PlayerState.DYING);
+        gameState = GameState.RESTART;
+    }
 
 
-    private void update() {
+    private void update(float delta) {
 
         boolean checkTouch = Gdx.input.isTouched();
         int touchX = Gdx.input.getX();
@@ -174,9 +176,7 @@ public class GameScreen implements Screen {
                     if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
                         player.setDirection(Player.Direction.LEFT);
                         player.setPlayerState(Player.PlayerState.RUNNING);
-
-                        player.getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(-player.getCURRENT_MOVEMENT_SPEED());
-                        player.getSprite().translate(player.getPositionAmount().x, player.getPositionAmount().y);
+                        player.moveCharacter();
 
                         foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
                     }
@@ -207,24 +207,28 @@ public class GameScreen implements Screen {
 
                 // -- ENEMY -------
 
+                randomEnemy.setAIStates(player);
+
                 // If the missile hits the enemies bounding box
                 if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle().overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
                     // The enemy may have just walked into the projectile bounding box located on the player, which means the player did not shoot anything.
                     // In this case it is the player who should die, not the enemy.
                     if(randomEnemy.getSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
                         if (randomEnemy.getIsAlive()) {
-//                            killPlayer();
+                            player.healthCheck(randomEnemy.getDamage());
+                            killPlayer();
                         }
                     }
-                    // The player has shot a missile and it has hit the enemy. If it is alive it should die, otherwise it is already dead.
+                    // The player has attacked the enemy. If it is alive it should die, otherwise it is already dead.
                     else {
                         if (randomEnemy.getIsAlive()) {
                             player.getPlayerProjectile().setProjectileState(Projectile.ProjectileState.RESET);
-                            randomEnemy.healthCheck(randomEnemy.getDamage());
+                            randomEnemy.healthCheck(player.getDamage());
                         }
                     }
                 }
                 if(randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
+
                     randomEnemy.remove();
                     randomEnemy = enemyFactory.spawnRandomEnemy();
                     randomEnemy.reset();
@@ -245,7 +249,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        update();
+        update(delta);
         stage.act();
 
         // Render the map

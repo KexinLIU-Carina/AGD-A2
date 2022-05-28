@@ -3,6 +3,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,19 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Character extends Actor {
 
+    public enum Direction { LEFT, RIGHT }
+
 
     // ---- CHARACTER STATS -------------------------
     private boolean isAlive = true;
+    private Direction direction;
 
     private int Max_Health = 100;
     private int health = Max_Health;
     private int CURRENT_MOVEMENT_SPEED;
     private int damage = 20;
-
-    private int walkingSpeed = 100;
-    private int runningSpeed = 200;
-    private int jumpingSpeed = 100;
-    private int fallingSpeed = 100;
 
 
     // ---- SPRITES -------------------------
@@ -37,10 +36,11 @@ public class Character extends Actor {
 
     // ---- ANIMATION -------------------------
     private TextureRegion currentFrame;
-    // The stateTime used for animations that do not loop
-    private float nonLoopingStateTime = 0;
-    private float deltaTime = Gdx.graphics.getDeltaTime();
 
+    private float loopingStateTime;
+    private float nonLoopingStateTime;
+
+    private float deltaTime = Gdx.graphics.getDeltaTime();
 
 
 
@@ -53,22 +53,62 @@ public class Character extends Actor {
     }
 
 
+    // The default drawing method.
+    @Override
+    public void draw(Batch batch, float alpha) {
 
-    // This method is used for animations that are not looped and have to be reset at the end of the animation.
-    // The animation is loaded into the current frame and played untill it is finished, when the non looping statetime is reset to 0.
-    public boolean setAnimationFrame(Animation<TextureRegion> animation) {
+        // Flips the sprite according to the correct direction.
+        if (direction == Direction.LEFT) {
+            if(!currentFrame.isFlipX()) {
+                currentFrame.flip(true, false);
+            }
+        }
+
+        if (getDirection() == Direction.RIGHT) {
+            if(currentFrame.isFlipX()) {
+                currentFrame.flip(true, false);
+            }
+        }
+        batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+    }
+
+
+    public boolean nonLoopingAnimation(Animation<TextureRegion> animation) {
 
         nonLoopingStateTime += deltaTime;
 
         if (animation.isAnimationFinished(nonLoopingStateTime)) {
-
             nonLoopingStateTime = 0;
             return true;
         }
         else {
-            currentFrame = animation.getKeyFrame(nonLoopingStateTime, false);
+            setCurrentFrame(animation.getKeyFrame(nonLoopingStateTime, false));
             return false;
         }
+    }
+
+    public void loopingAnimation(Animation<TextureRegion> animation) {
+        loopingStateTime += deltaTime;
+        setCurrentFrame(animation.getKeyFrame(loopingStateTime, true));
+    }
+
+
+    public Vector2 getCenteredSpritePosition() {
+        float x = getSprite().getX() + (getSprite().getWidth() / 2);
+        float y = getSprite().getY() + (getSprite().getHeight() / 2);
+
+        return new Vector2(x, y);
+    }
+
+
+    public void moveCharacter() {
+        if(direction == Direction.LEFT) {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+        }
+        else {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        }
+        sprite.translate(positionAmount.x, positionAmount.y);
     }
 
 
@@ -77,6 +117,10 @@ public class Character extends Actor {
     public boolean getIsAlive() { return isAlive; }
 
     public void setIsAlive(boolean alive) { isAlive = alive; }
+
+    public Direction getDirection() { return direction; }
+
+    public void setDirection(Direction direction) { this.direction = direction; }
 
     public int getHealth() { return health; }
 
@@ -88,22 +132,6 @@ public class Character extends Actor {
 
     public void setCURRENT_MOVEMENT_SPEED(int CURRENT_MOVEMENT_SPEED) { this.CURRENT_MOVEMENT_SPEED = CURRENT_MOVEMENT_SPEED; }
 
-    public int getWalkingSpeed() { return walkingSpeed; }
-
-    public void setWalkingSpeed(int walkingSpeed) { this.walkingSpeed = walkingSpeed; }
-
-    public int getRunningSpeed() { return runningSpeed; }
-
-    public void setRunningSpeed(int runningSpeed) { this.runningSpeed = runningSpeed; }
-
-    public int getJumpingSpeed() { return jumpingSpeed; }
-
-    public void setJumpingSpeed(int jumpingSpeed) { this.jumpingSpeed = jumpingSpeed; }
-
-    public int getFallingSpeed() { return fallingSpeed; }
-
-    public void setFallingSpeed(int fallingSpeed) { this.fallingSpeed = fallingSpeed; }
-
     public int getDamage() { return damage; }
 
     public void setDamage(int damage) { this.damage = damage; }
@@ -114,7 +142,6 @@ public class Character extends Actor {
 
     public Vector2 getPositionAmount() { return positionAmount; }
 
-    public TextureRegion getCurrentFrame() { return currentFrame; }
-
     public void setCurrentFrame(TextureRegion currentFrame) { this.currentFrame = currentFrame; }
+
 }

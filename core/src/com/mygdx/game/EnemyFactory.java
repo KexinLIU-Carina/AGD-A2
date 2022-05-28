@@ -1,49 +1,85 @@
 package com.mygdx.game;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-
 
 
 public class EnemyFactory {
 
-    private Enemy[] enemyArray;
+
+    private String[] enemyArray = {
+            "Dragon",
+            "DevilGuy",
+            "Yeti",
+            "Robot",
+            "Wolf"
+    };
 
 
-    private Enemy enemy1;
-    private Enemy enemy2;
-    private Enemy enemy3;
-    private Enemy enemy4;
-    private Enemy enemy5;
-
-
-
-
-    public EnemyFactory() {
-        enemyArray = new Enemy[5];
-
-
-        enemy1 = new EnemyDragon();
-        enemy2 = new EnemyYeti();
-        enemy3 = new EnemyDevilGuy();
-        enemy4 = new EnemyRobot();
-        enemy5 = new EnemyWolf();
-
-        enemyArray[0] = enemy1;
-        enemyArray[1] = enemy2;
-        enemyArray[2] = enemy3;
-        enemyArray[3] = enemy4;
-        enemyArray[4] = enemy5;
-    }
+    public EnemyFactory() {}
 
 
 
 
+    /*
+    Selects a random enemy name from the enemyArray and then creates that enemy.
+    This approach creates the enemy only when it is actually needed to save on processing, as opposed to creating and preloading all enemies at the start
+     */
     public Enemy spawnRandomEnemy() {
-        int randomIndex = MathUtils.random(0, 4);
-        Gdx.app.log("Move", "Enemy: " + enemyArray[randomIndex].getName());
-        return enemyArray[randomIndex];
+
+        Enemy enemy = new Enemy();
+
+        int randomIndex = MathUtils.random(0, enemyArray.length - 1);
+        String selectedEnemy = enemyArray[randomIndex];
+
+        switch(selectedEnemy) {
+            case "Dragon":
+                enemy = createEnemyDragon();
+                break;
+            case "DevilGuy":
+                enemy = createEnemyDevilGuy();
+                break;
+            case "Wolf":
+                enemy = createEnemyWolf();
+                break;
+            case "Yeti":
+                enemy = createEnemyYeti();
+                break;
+            case "Robot":
+                enemy = createEnemyRobot();
+                break;
+        }
+        return enemy;
     }
+
+
+
+    // --- CREATE ENEMIES ----------------------------
+    public Enemy createEnemyDragon() {
+        return new EnemyDragon();
+    }
+
+    public Enemy createEnemyDevilGuy() {
+        return new EnemyDevilGuy();
+    }
+
+    public Enemy createEnemyYeti() {
+        return new EnemyYeti();
+    }
+
+    public Enemy createEnemyRobot() {
+        return new EnemyRobot();
+    }
+
+    public Enemy createEnemyWolf() {
+        return new EnemyWolf();
+    }
+
+
+
+
+
+
+
 
 }

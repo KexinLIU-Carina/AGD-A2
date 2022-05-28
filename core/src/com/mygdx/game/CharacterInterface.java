@@ -6,7 +6,7 @@ public interface CharacterInterface {
 
 
     void reset();
-    void switchStates();
 
+    void healthCheck(int damage);
 
 }
