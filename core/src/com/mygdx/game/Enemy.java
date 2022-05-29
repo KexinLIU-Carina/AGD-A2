@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+/*
+The parent class for all enemies. Inherits from the Character super class.
+ */
+public class Enemy extends Character {
 
-public class Enemy extends Character implements CharacterInterface {
 
-
-    // ---- CHARACTER STATS -------------------------
+    // ---- STATES -------------------------
     public enum EnemyState { IDLE, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD }
     public enum MovingState { WALKING, RUNNING }
     public enum AttackState { MELEE, PROJECTILE }
@@ -20,6 +22,7 @@ public class Enemy extends Character implements CharacterInterface {
     private MovingState movingState = MovingState.WALKING;
     private AttackState attackState = AttackState.MELEE;
 
+    // Stats
     private String name;
 
     private int walkingSpeed = 50;
@@ -30,12 +33,13 @@ public class Enemy extends Character implements CharacterInterface {
     private boolean hasRunningState;
     private boolean hasProjectile;
 
+
     private boolean projectile = true;
 
 
     public Enemy() {
 
-        // Default
+        // Default states as a backup. Individual enemies should override these.
         super.setDirection(Direction.LEFT);
         super.getSprite().setSize(100, 100);
         super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
@@ -43,19 +47,8 @@ public class Enemy extends Character implements CharacterInterface {
     }
 
 
-
-
-    // The default drawing method for Enemies. Enemies with projectiles override this method.
-    @Override
-    public void draw(Batch batch, float alpha) {
-        super.draw(batch, alpha);
-
-    }
-
-
     // Checks to see if the enemy is still alive after getting damaged. If still alive it enters the hurt state
     // otherwise it enters the dying state
-    @Override
     public void healthCheck(int damage) {
 
         if((getHealth() - damage) > 0) {
@@ -77,6 +70,7 @@ public class Enemy extends Character implements CharacterInterface {
     }
 
 
+    // Sets the conditions to enact if an enemy has been killed by the player.
     public void killEnemy() {
         super.setIsAlive(false);
         enemyState = EnemyState.DEAD;
@@ -119,7 +113,10 @@ public class Enemy extends Character implements CharacterInterface {
     }
 
 
-
+    // -----------------------------------------------------------
+    /*
+    Set of methods to help with AI states for enemies.
+     */
     public float getAngle(Vector2 target) {
         float angle = (float) Math.toDegrees(Math.atan2(target.y - getCenteredSpritePosition().y, target.x - getCenteredSpritePosition().x));
 
@@ -129,62 +126,83 @@ public class Enemy extends Character implements CharacterInterface {
         return angle;
     }
 
-
     public boolean canSeePlayer(Player player) {
         float angle = getAngle(player.getCenteredSpritePosition());
         return angle > 170 && angle < 190;
     }
 
-
+    // Finds out how far away the player is from the enemy sprite.
     public float distanceFromPlayer(Player player) {
         return super.getCenteredSpritePosition().dst(player.getCenteredSpritePosition());
     }
 
+    // -----------------------------------------------------------
 
 
+    // For enemies with melee attacks, this method is only triggered when the enemy is in an attacking state.
+    public void checkDamage() {
+        // If the enemy has overlapped the players bounding box while attacking, it has attacked the player.
+        if(getSprite().getBoundingRectangle().overlaps(GameScreen.getInstance().player.getSprite().getBoundingRectangle())) {
+            if (GameScreen.getInstance().player.getIsAlive()) {
+                GameScreen.getInstance().player.healthCheck(getDamage());
+            }
+        }
+    }
+
+    /*
+    A set of default AI states that all enemies will share.
+    More specific AI states can be added to in individual enemies by overriding completely or with a call to super
+     */
     public void setAIStates(Player player) {
 
-        if(canSeePlayer(player)) {
+        if (player.getIsAlive()) {
+            if (canSeePlayer(player)) {
 
-            if(hasRunningState) {
-                movingState = MovingState.RUNNING;
-            }
-            else {
-                movingState = MovingState.WALKING;
-            }
+                if (hasRunningState) {
+                    movingState = MovingState.RUNNING;
+                } else {
+                    movingState = MovingState.WALKING;
+                }
 
-            if(distanceFromPlayer(player) < 400 && distanceFromPlayer(player) > 390) {
-                if (hasProjectile) {
-                    if(projectile) {
-                        enemyState = EnemyState.ATTACKING;
-                        projectile = false;
+                /*
+                 A potential trigger for when an enemy with projectiles starts firing at the player.
+                 Boolean projectile is a guard that prevents the enemy from constantly firing as it wil still be in the attack zone.
+                 Better trigger is likely needed.
+                 */
+                if (distanceFromPlayer(player) < 400 && distanceFromPlayer(player) > 390) {
+                    if (hasProjectile) {
+                        if (projectile) {
+                            enemyState = EnemyState.ATTACKING;
+                            projectile = false;
+                        }
                     }
                 }
-            }
 
-            // If the enemy is close enough to melee attack.
-            if(distanceFromPlayer(player) < 50) {
-                if(attackState == AttackState.MELEE) {
-                    enemyState = EnemyState.ATTACKING;
+                // If the enemy is close enough to melee attack.
+                if (distanceFromPlayer(player) < 50) {
+                    if (attackState == AttackState.MELEE) {
+                        enemyState = EnemyState.ATTACKING;
+                    }
                 }
 
-                if(player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
+                // The enemy is meant to turn around if the player goes past it.
+                // ** Bugs ** At the moment with the camera movement this is prevented from happening
+                if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
                     setDirection(Direction.RIGHT);
-                }
-                else {
+                } else {
                     setDirection(Direction.LEFT);
                 }
             }
-        }
 
-        // If the enemy cant see the play it starts walking to the left
-        if(!canSeePlayer(player)) {
-            super.setDirection(Direction.LEFT);
-            enemyState = EnemyState.IDLE;
+            // If the enemy cant see the play it starts walking to the left
+            if (!canSeePlayer(player)) {
+                super.setDirection(Direction.LEFT);
+                enemyState = EnemyState.IDLE;
 
-            // If the enemy goes off screen it is reset.
-            if(super.getCenteredSpritePosition().x < -100) {
-                reset();
+                // If the enemy goes off screen it is reset.
+                if (super.getCenteredSpritePosition().x < -100) {
+                    reset();
+                }
             }
         }
     }

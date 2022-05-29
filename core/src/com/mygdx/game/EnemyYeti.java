@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 
-public class EnemyYeti extends Enemy implements CharacterInterface {
+public class EnemyYeti extends Enemy {
 
 
     private Projectile yetiProjectile;
@@ -92,7 +92,7 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
     @Override
     public void act(float delta) {
 
-        applyCustomStates();
+        setCustomStates();
 
         // Updates the projectile to emit from wherever the character is.
         yetiProjectile.getProjectileStartPosition().x = getSprite().getX();
@@ -105,7 +105,7 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
      Calls switchStates in Enemy class to handle default states then provides the ability to specify custom states.
      These states might be unique to the enemy or require more functionality than the default..
      */
-    public void applyCustomStates() {
+    public void setCustomStates() {
 
         // Switch states in Enemy class has a set of default behaviours for standard animations.
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
@@ -116,41 +116,54 @@ public class EnemyYeti extends Enemy implements CharacterInterface {
                 super.moveCharacter();
                 super.loopingAnimation(runningAnimation);
             }
+        }
+        if(super.getEnemyState() == EnemyState.ATTACKING) {
+            super.setCURRENT_MOVEMENT_SPEED(0);
 
-            if(super.getEnemyState() == EnemyState.ATTACKING) {
-                super.setCURRENT_MOVEMENT_SPEED(0);
-
-                if (super.getAttackState() == AttackState.MELEE) {
-                    // If the animation has finished
-                    if (super.nonLoopingAnimation(meleeAnimation)) {
-                        // Set the state to enter into after animation has played.
-                        setEnemyState(EnemyState.MOVING);
-                    }
+            if (super.getAttackState() == AttackState.MELEE) {
+                // If the animation has finished
+                if (super.nonLoopingAnimation(meleeAnimation)) {
+                    checkDamage();
+                    // Set the state to enter into after animation has played.
+                    setEnemyState(EnemyState.MOVING);
                 }
-                if (super.getAttackState() == AttackState.PROJECTILE) {
-                    // If the animation has finished
-                    if (super.nonLoopingAnimation(throwingAnimation)) {
-                        // Set the state to enter into after animation has played.
-                        setEnemyState(EnemyState.MOVING);
-                    }
-                    yetiProjectile.setProjectileState(Projectile.ProjectileState.FIRING);
+            }
+            if (super.getAttackState() == AttackState.PROJECTILE) {
+                // If the animation has finished
+                if (super.nonLoopingAnimation(throwingAnimation)) {
+                    // Set the state to enter into after animation has played.
+                    setEnemyState(EnemyState.MOVING);
                 }
+                yetiProjectile.setProjectileState(Projectile.ProjectileState.FIRING);
             }
         }
     }
 
 
+    // Adds additional AI states specific to this enemy, primarily its Attack state
     @Override
     public void setAIStates(Player player) {
 
         super.setAIStates(player);
 
+        if(distanceFromPlayer(player) > 100) {
+            setAttackState(AttackState.PROJECTILE);
+        }
+
         if(distanceFromPlayer(player) < 50) {
             setAttackState(AttackState.MELEE);
         }
 
+
+
+        // If the projectile has overlapped the players bounding box while attacking, it has hit the player.
         if(yetiProjectile.getProjectileSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
-            player.healthCheck(getDamage());
+            if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
+                if(player.getIsAlive()) {
+                    yetiProjectile.setProjectileState(Projectile.ProjectileState.RESET);
+                    player.healthCheck(getDamage());
+                }
+            }
         }
     }
 }

@@ -6,17 +6,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 
-
+/*
+The screen that contains the actual game. It is a singleton in case other classes need to access its elements.
+ */
 public class GameScreen implements Screen {
 
 
@@ -53,6 +55,7 @@ public class GameScreen implements Screen {
     private FitViewport backgroundViewport;
 
     private Rectangle collisionRectangle;
+    private ShapeRenderer shapeRenderer;
 
 
 
@@ -88,7 +91,6 @@ public class GameScreen implements Screen {
         // Enemy
         enemyFactory = new EnemyFactory();
         randomEnemy = enemyFactory.spawnRandomEnemy();
-//        randomEnemy = enemyFactory.createEnemyYeti();
 
         // SpriteBatches
         uiBatch = new SpriteBatch();
@@ -106,10 +108,14 @@ public class GameScreen implements Screen {
 //            collisionRectangle = rmo.getRectangle();
 //        }
 
-        // Camera
+        // Shape renderer to draw bounding boxes.
+        shapeRenderer = new ShapeRenderer();
+
+        // Convenient to set up getWidth() and getHeight() here so the are easier to use.
         graphicsWidth = Gdx.graphics.getWidth();
         graphicsHeight = Gdx.graphics.getHeight();
 
+        // Cameras. Separate cameras setup for potential to implement parallax scrolling
         OrthographicCamera foregroundCamera = new OrthographicCamera();
         foregroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
         foregroundViewport = new FitViewport(graphicsWidth, graphicsHeight, foregroundCamera);
@@ -118,13 +124,14 @@ public class GameScreen implements Screen {
         backgroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
         backgroundViewport = new FitViewport(graphicsWidth, graphicsHeight, backgroundCamera);
 
-        // Stage
+        // ----- STAGE ----------
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(player);
         stage.addActor(randomEnemy);
 
+        // --- START NEW GAME ---------
         newGame();
     }
 
@@ -137,10 +144,8 @@ public class GameScreen implements Screen {
     }
 
 
-    // This method sets the player to be killed and the game restarted.
-    // ---COMMENT OUT THIS METHOD FOR GOD MODE ----
-    public void killPlayer() {
-        player.setPlayerState(Player.PlayerState.DYING);
+    // If the player is killed the game is restarted.
+    public void playerDied() {
         gameState = GameState.RESTART;
     }
 
@@ -151,9 +156,11 @@ public class GameScreen implements Screen {
         int touchX = Gdx.input.getX();
         int touchY = Gdx.input.getY();
 
+
         switch (gameState) {
             case PLAYING:
 
+                Gdx.app.log("Main", "playing");
                 // If all lives are lost it is game over
                 if (player.getNumberOfLives() <= 0) {
                     gameState = GameState.GAMEOVER;
@@ -170,24 +177,30 @@ public class GameScreen implements Screen {
                 }
 
 
-                // -- CONTROLS --
+                // ----------- CONTROLS ----------
+                /*
+                 Divides the screen into quadrants. Tap bottom left or bottom right to move left or right. Tap top left to jump, top right to shoot
+                 ** Jump yet to be implemented **
+                 */
                 if (checkTouch) {
                     // Move Left
                     if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
+                        // Set the player to running and move the player to the new position.
                         player.setDirection(Player.Direction.LEFT);
                         player.setPlayerState(Player.PlayerState.RUNNING);
                         player.moveCharacter();
 
+                        // Move the camera with the player
                         foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
                     }
                     // Move Right
                     if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
+                        // Set the player to running and move the player to the new position.
                         player.setDirection(Player.Direction.RIGHT);
                         player.setPlayerState(Player.PlayerState.RUNNING);
+                        player.moveCharacter();
 
-                        player.getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(player.getCURRENT_MOVEMENT_SPEED());
-                        player.getSprite().translate(player.getPositionAmount().x, player.getPositionAmount().y);
-
+                        // Move the camera with the player
                         foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
                     }
                     // Shoot
@@ -205,42 +218,45 @@ public class GameScreen implements Screen {
                     }
                 }
 
-                // -- ENEMY -------
+
+                // ------- ENEMY ------------------------------------------------------------
 
                 randomEnemy.setAIStates(player);
 
-                // If the missile hits the enemies bounding box
+                // If the player projectile hits the enemies bounding box and the player is attacking, the player has attacked the enemy.
                 if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle().overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
-                    // The enemy may have just walked into the projectile bounding box located on the player, which means the player did not shoot anything.
-                    // In this case it is the player who should die, not the enemy.
-                    if(randomEnemy.getSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
-                        if (randomEnemy.getIsAlive()) {
-                            player.healthCheck(randomEnemy.getDamage());
-                            killPlayer();
-                        }
-                    }
-                    // The player has attacked the enemy. If it is alive it should die, otherwise it is already dead.
-                    else {
+                    if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.FIRING) {
                         if (randomEnemy.getIsAlive()) {
                             player.getPlayerProjectile().setProjectileState(Projectile.ProjectileState.RESET);
                             randomEnemy.healthCheck(player.getDamage());
                         }
                     }
                 }
-                if(randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
 
+                // If the enemy has dies, remove from the stage and respawn a new enemy.
+                if(randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
                     randomEnemy.remove();
                     randomEnemy = enemyFactory.spawnRandomEnemy();
                     randomEnemy.reset();
                     stage.addActor(randomEnemy);
                 }
 
+                if(!player.getIsAlive()) {
+                    playerDied();
+                }
+
+                break;
+                //-------------------------------------------------------------------------------------
+
+
+
             case RESTART:
-                //Poll for input
+                newGame();
                 break;
 
             case GAMEOVER:
                 MyGdxGame.startScreen.setStartScreen();
+                break;
         }
     }
 
@@ -259,6 +275,14 @@ public class GameScreen implements Screen {
         foregroundViewport.update(graphicsWidth, graphicsHeight);
         foregroundTiledMapRenderer.setView((OrthographicCamera) foregroundViewport.getCamera());
         foregroundTiledMapRenderer.render(foregroundMapLayers);
+
+        // Render the bounding boxes.
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
+        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
+        shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(), randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
+        shapeRenderer.end();
+
 
         // Render the stage actors
         stage.draw();

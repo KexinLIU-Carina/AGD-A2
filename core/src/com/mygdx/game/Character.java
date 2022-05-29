@@ -10,7 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-
+/*
+The parent superclass.
+Both Player and Enemies inherit from it and it provides the basic template that both of them require.
+ */
 public class Character extends Actor {
 
     public enum Direction { LEFT, RIGHT }
@@ -53,7 +56,10 @@ public class Character extends Actor {
     }
 
 
-    // The default drawing method.
+    /*
+    The default drawing method. It flips the sprites to face the correct direction.
+    Child classes that may need to override this will still have a call to super to access this method.
+     */
     @Override
     public void draw(Batch batch, float alpha) {
 
@@ -73,6 +79,10 @@ public class Character extends Actor {
     }
 
 
+    /*
+     Processes animations for both looping and non looping versions. Non looping resets the statetime so that it only plays once.
+     Applies separate statetime to each version so that they don't interfere with each other when the non looping resets.
+     */
     public boolean nonLoopingAnimation(Animation<TextureRegion> animation) {
 
         nonLoopingStateTime += deltaTime;
@@ -86,13 +96,13 @@ public class Character extends Actor {
             return false;
         }
     }
-
     public void loopingAnimation(Animation<TextureRegion> animation) {
         loopingStateTime += deltaTime;
         setCurrentFrame(animation.getKeyFrame(loopingStateTime, true));
     }
 
 
+    // Finds and returns the centre of the sprite for when this is needed.
     public Vector2 getCenteredSpritePosition() {
         float x = getSprite().getX() + (getSprite().getWidth() / 2);
         float y = getSprite().getY() + (getSprite().getHeight() / 2);
@@ -100,6 +110,11 @@ public class Character extends Actor {
         return new Vector2(x, y);
     }
 
+
+    /*
+     Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
+     Can then apply this to find the new position for the sprite which is then translated to that position.
+     */
 
     public void moveCharacter() {
         if(direction == Direction.LEFT) {

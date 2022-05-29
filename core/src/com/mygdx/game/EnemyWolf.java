@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 
-public class EnemyWolf extends Enemy implements CharacterInterface {
+public class EnemyWolf extends Enemy {
 
 
     // ---- ANIMATIONS -------------------------
@@ -70,6 +70,7 @@ public class EnemyWolf extends Enemy implements CharacterInterface {
         if(super.getEnemyState() == EnemyState.ATTACKING) {
             super.setCURRENT_MOVEMENT_SPEED(0);
             if (super.nonLoopingAnimation(attackingAnimation)) {
+                checkDamage();
                 setEnemyState(EnemyState.MOVING);
             }
         }

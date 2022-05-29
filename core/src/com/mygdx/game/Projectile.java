@@ -10,7 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-
+/*
+A class for projectiles that need to be fired around by player and enemies. It manages the states, sounds and behaviour of projectiles.
+Each instance of a projectile is owned by the character that fires it.
+ */
 public class Projectile extends Actor {
 
     public enum ProjectileState {FIRING, EXPLODING, RESET}
@@ -85,6 +88,7 @@ public class Projectile extends Actor {
             case FIRING:
                 moveProjectile();
                 playFiringSound();
+                setProjectileBounds();
                 break;
 //            case EXPLODING:
 //                currentFrame = currentExplodingFrame;
@@ -107,6 +111,19 @@ public class Projectile extends Actor {
 //        }
 //    }
 
+    public void setProjectileBounds() {
+        if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
+            projectileState = ProjectileState.RESET;
+        }
+        if(getProjectileSprite().getX() < 0) {
+            projectileState = ProjectileState.RESET;
+        }
+    }
+
+    /*
+     Takes the movement speeds and direction, uses Game Helper to apply deltaTime, then finds the new position for the sprite to move to
+     and translates to the new position.
+     */
     public void moveProjectile() {
         if(direction == Character.Direction.LEFT) {
             PROJECTILE_MOVEMENT.x = GameScreen.getInstance().getHelper().setMovement(-movementSpeedX);

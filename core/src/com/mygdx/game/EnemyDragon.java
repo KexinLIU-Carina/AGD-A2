@@ -83,7 +83,7 @@ public class EnemyDragon extends Enemy {
     @Override
     public void act(float delta) {
 
-        applyCustomStates();
+        setCustomStates();
 
         // Updates the projectile to emit from wherever the character is.
         dragonProjectile.getProjectileStartPosition().x = getSprite().getX();
@@ -96,7 +96,7 @@ public class EnemyDragon extends Enemy {
      Calls switchStates in Enemy class to handle default states then provides the ability to specify custom states.
      These states might be unique to the enemy or require more functionality than the default..
      */
-    public void applyCustomStates() {
+    public void setCustomStates() {
 
         // Switch states in Enemy class has a set of default behaviours for standard animations.
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
@@ -116,7 +116,12 @@ public class EnemyDragon extends Enemy {
         super.setAIStates(player);
 
         if(dragonProjectile.getProjectileSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
-            player.healthCheck(getDamage());
+            if(dragonProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
+                if(player.getIsAlive()) {
+                    dragonProjectile.setProjectileState(Projectile.ProjectileState.RESET);
+                    player.healthCheck(getDamage());
+                }
+            }
         }
     }
 

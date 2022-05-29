@@ -1,13 +1,16 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-
-public class Player extends Character implements CharacterInterface {
+/*
+The player class. Inherits from the Character super class.
+ */
+public class Player extends Character {
 
 
     // ---- PLAYER STATS -------------------------
@@ -28,8 +31,6 @@ public class Player extends Character implements CharacterInterface {
     private int fallingSpeed = 100;
 
     private Projectile playerProjectile;
-    private Projectile handgunProjectile;
-    private Projectile rifleProjectile;
 
 
 
@@ -58,9 +59,6 @@ public class Player extends Character implements CharacterInterface {
     private Animation<TextureRegion> dyingHandgunAnimation;
     private Animation<TextureRegion> dyingRifleAnimation;
 
-    // The stateTime used for looping animations
-    float stateTime = 0;
-
 
 
 
@@ -76,14 +74,13 @@ public class Player extends Character implements CharacterInterface {
         playerProjectile = new Projectile("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3");
         playerProjectile.getProjectileSprite().setSize(15, 5);
 
-        // Initialize the starting position of the projectile to the players start position. The offset amount is added to the start position.
-        // This is the final position that the projectile is set to so that it emits from the correct spot on the player.
-        // The start position is updated in player.act() so that when the player moves the projectile keeps up.
-        // The offset is added to the start position in the projectiles reset state, keeping the correct emission position.
-//        playerProjectile.getProjectileStartPosition().x = getStartPosition().x;
-//        playerProjectile.getProjectileStartPosition().y = getStartPosition().y;
+        Gdx.app.log("Main", "health " + getHealth());
+        /*
+        Projectiles have a starting position. This is updated in act() to equal the players start position so that it emits from the players position.
+        The offset amount is added to the start position in the projectiles reset state. This maintains the projectile will emit from the correct
+        spot on the player.
+         */
         playerProjectile.getOffset().set(100, 43);
-
         playerProjectile.setMovementSpeedX(350f);
 //        playerProjectile.setMovementSpeedY(-30f);
 
@@ -107,8 +104,7 @@ public class Player extends Character implements CharacterInterface {
 
     }
 
-
-    @Override
+    // Resets the player if it has lost a life.
     public void reset() {
         // Player is alive again
         super.setIsAlive(true);
@@ -122,7 +118,7 @@ public class Player extends Character implements CharacterInterface {
 
     // Checks to see if the player is still alive after getting damaged. If still alive it enters the hurt state
     // otherwise it enters the dying state
-    @Override
+    // *** COMMENT OUT THIS METHOD FOR GOD MODE ***
     public void healthCheck(int damage) {
         if((super.getHealth() - damage) > 0) {
             playerState = PlayerState.HURT;
@@ -139,8 +135,13 @@ public class Player extends Character implements CharacterInterface {
 
         super.draw(batch, alpha);
 
+        /*
+         Once a projectile has been reset this is polled to find out the direction the player is facing and apply that direction to the projectile.
+         Once a projectile has been fired, the projectile direction has already been locked in, so it maintains the correct direction once it has been fired.
+         Otherwise you see the projectile change direction mid flight if the player does.
+         */
         if(playerProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
-            // Set the projectile to be launched in the same direction the character is facing. Reverses the offset and speed accordingly.
+            // Set the projectile to be launched in the same direction the character is facing. Reverses the offset accordingly.
             if (super.getDirection() == Direction.LEFT) {
                 playerProjectile.getOffset().set(-10, 43);
                 playerProjectile.setDirection(Direction.LEFT);
@@ -168,6 +169,7 @@ public class Player extends Character implements CharacterInterface {
     }
 
 
+    // A state machine. Applies the correct animations, movement and other conditions to the various player states.
     public void switchStates() {
 
         // Normal player animations have a handgun equipped, but if a power up is enabled, all the animations are set to the more powerful rifle weapon.
@@ -199,6 +201,7 @@ public class Player extends Character implements CharacterInterface {
         // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
         switch (playerState) {
             case IDLE:
+                // If idle the speed is zero
                 super.setCURRENT_MOVEMENT_SPEED(0);
                 super.loopingAnimation(idleAnimation);
                 break;
@@ -240,6 +243,7 @@ public class Player extends Character implements CharacterInterface {
             case DYING:
                 super.setCURRENT_MOVEMENT_SPEED(0);
                 if (super.nonLoopingAnimation(dyingAnimation)) {
+                    Gdx.app.log("Main", "player dead " + getHealth());
                     super.setIsAlive(false);
                     playerState = PlayerState.DEAD;
                     numberOfLives -= 1;
