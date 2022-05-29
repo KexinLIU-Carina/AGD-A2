@@ -1,85 +1,56 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+
 
 
 public class EnemyFactory {
 
 
-    private String[] enemyArray = {
-            "Dragon",
-            "DevilGuy",
-            "Yeti",
-            "Robot",
-            "Wolf"
-    };
+
+    // Enemy X and Y positions
+    private final float X = Gdx.graphics.getWidth() + 100;
+    private final float Y = 120;
 
 
-    public EnemyFactory() {}
+    private Enemy[] enemyArray;
+
+
+    private Enemy enemy1;
+    private Enemy enemy2;
+    private Enemy enemy3;
+    private Enemy enemy4;
+    private Enemy enemy5;
 
 
 
 
-    /*
-    Selects a random enemy name from the enemyArray and then creates that enemy.
-    This approach creates the enemy only when it is actually needed to save on processing, as opposed to creating and preloading all enemies at the start
-     */
+    public EnemyFactory() {
+        enemyArray = new Enemy[5];
+
+
+        enemy1 = new EnemyDragon(X,Y);
+        enemy2 = new EnemyYeti(X,Y);
+        enemy3 = new EnemyDevilGuy(X,Y);
+        enemy4 = new EnemyRobot(X, Y);
+        enemy5 = new EnemyWolf(X,Y);
+
+        enemyArray[0] = enemy1;
+        enemyArray[1] = enemy2;
+        enemyArray[2] = enemy3;
+        enemyArray[3] = enemy4;
+        enemyArray[4] = enemy5;
+    }
+
+
+
+
     public Enemy spawnRandomEnemy() {
-
-        Enemy enemy = new Enemy();
-
-        int randomIndex = MathUtils.random(0, enemyArray.length - 1);
-        String selectedEnemy = enemyArray[randomIndex];
-
-        switch(selectedEnemy) {
-            case "Dragon":
-                enemy = createEnemyDragon();
-                break;
-            case "DevilGuy":
-                enemy = createEnemyDevilGuy();
-                break;
-            case "Wolf":
-                enemy = createEnemyWolf();
-                break;
-            case "Yeti":
-                enemy = createEnemyYeti();
-                break;
-            case "Robot":
-                enemy = createEnemyRobot();
-                break;
-        }
-        return enemy;
+        int randomIndex = MathUtils.random(0, 4);
+        Gdx.app.log("Move", "Enemy: " + enemyArray[randomIndex].getName());
+        return enemyArray[randomIndex];
     }
-
-
-
-    // --- CREATE ENEMIES ----------------------------
-    public Enemy createEnemyDragon() {
-        return new EnemyDragon();
-    }
-
-    public Enemy createEnemyDevilGuy() {
-        return new EnemyDevilGuy();
-    }
-
-    public Enemy createEnemyYeti() {
-        return new EnemyYeti();
-    }
-
-    public Enemy createEnemyRobot() {
-        return new EnemyRobot();
-    }
-
-    public Enemy createEnemyWolf() {
-        return new EnemyWolf();
-    }
-
-
-
-
-
-
-
 
 }

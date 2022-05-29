@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 
-public class EnemyDevilGuy extends Enemy {
+public class EnemyDevilGuy extends Enemy implements CharacterInterface {
 
 
     // ---- ANIMATIONS -------------------------
@@ -18,62 +18,93 @@ public class EnemyDevilGuy extends Enemy {
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
 
+    // The stateTime used for looping animations
+    private float stateTime;
 
 
-    public EnemyDevilGuy() {
 
-        super.setName("DevilGuy");
+    public EnemyDevilGuy(float X, float Y) {
 
+        // Set stats
+        setName("DevilGuy");
+        getSprite().setSize(100, 100);
         // Start offscreen right
-        super.getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
-        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        getStartPosition().set(X,Y);
+        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        setHasProjectile(false);
 
-        super.setHasRunningState(true);
-        super.setRunningSpeed(100);
+        setWalkingSpeed(-50);
+        setRunningSpeed(-100);
 
 
-
-        // ---- ANIMATIONS -------------------------
+        // Load all animation frames into animation objects using Game Helper.
         idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Idle.png", 3, 6, 18);
         walkingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Walking.png", 4, 6, 24);
         runningAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Running.png", 4, 3, 12);
-        attackingAnimation = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Devil Masked Guy/Attacking.png", 3, 4, 12);
+        attackingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Attacking.png", 3, 4, 12);
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Hurt.png", 4, 3, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Dying.png", 3, 4, 12);
 
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(false);
     }
 
 
     @Override
     public void act(float delta) {
 
-        applyCustomStates();
+        stateTime += delta;
+        switchStates();
     }
 
 
-    /*
-     Calls switchStates in Enemy class to handle default states then provides the ability to specify custom states.
-     These states might be unique to the enemy or require more functionality than the default..
-     */
-    public void applyCustomStates() {
+    // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
+    @Override
+    public void switchStates() {
 
-        // Switch states in Enemy class has a set of default behaviours for standard animations.
-        super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
+        switch (getEnemyState()) {
+            case IDLE:
+                setCURRENT_MOVEMENT_SPEED(0);
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
+                break;
 
-        if(super.getEnemyState() == EnemyState.MOVING) {
-            if (super.getMovingState() == MovingState.RUNNING) {
-                super.setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
-                super.moveCharacter();
-                super.loopingAnimation(runningAnimation);
-            }
-        }
+            case WALKING:
+                setCURRENT_MOVEMENT_SPEED(getWalkingSpeed());
+                setCurrentFrame(walkingAnimation.getKeyFrame(stateTime, true));
+                getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+                getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+                break;
 
-        if(super.getEnemyState() == EnemyState.ATTACKING) {
-            super.setCURRENT_MOVEMENT_SPEED(0);
-            if (super.nonLoopingAnimation(attackingAnimation)) {
-                checkDamage();
-                setEnemyState(EnemyState.MOVING);
-            }
+            case RUNNING:
+                setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
+                setCurrentFrame(runningAnimation.getKeyFrame(stateTime, true));
+                getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+                getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+                break;
+
+            case ATTACKING:
+                setCURRENT_MOVEMENT_SPEED(0);
+                if(setAnimationFrame(attackingAnimation)) {
+                    setEnemyState(EnemyState.IDLE);
+                }
+                break;
+
+            case HURT:
+                setCURRENT_MOVEMENT_SPEED(0);
+                if(setAnimationFrame(hurtAnimation)) {
+                    setEnemyState(EnemyState.WALKING);
+                }
+                break;
+
+            case DYING:
+//                Gdx.app.log("MyDebug_MAIN", "DevilDying");
+                setCURRENT_MOVEMENT_SPEED(0);
+                if (setAnimationFrame(dyingAnimation)) {
+                    setIsAlive(false);
+                    setEnemyState(EnemyState.DEAD);
+                }
+                break;
         }
     }
 }

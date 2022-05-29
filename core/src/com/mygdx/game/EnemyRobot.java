@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 
-public class EnemyRobot extends Enemy {
+public class EnemyRobot extends Enemy implements CharacterInterface {
 
 
     // ---- ANIMATIONS -------------------------
@@ -18,21 +18,24 @@ public class EnemyRobot extends Enemy {
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
 
+    // The stateTime used for looping animations
+    private float stateTime;
 
 
-    public EnemyRobot() {
 
-        super.setName("Robot");
+    public EnemyRobot(float X, float Y) {
 
-        super.getSprite().setSize(100f, 100f);
+        // Set stats
+        setName("Robot");
+        getSprite().setSize(100, 100);
         // Start offscreen right
-        super.getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        getStartPosition().set( X, Y);
+        setHasProjectile(false);
 
-        super.setHasRunningState(true);
-        super.setRunningSpeed(100);
+        setWalkingSpeed(-100);
+        setRunningSpeed(-100);
 
 
-        // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
         idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Idle.png", 6, 3, 18);
         walkingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Walking.png", 6, 4, 24);
@@ -41,41 +44,66 @@ public class EnemyRobot extends Enemy {
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Hurt.png", 3, 4, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Dying.png", 3, 4, 12);
 
-
+        // Set which states that the enemy has
+        setHasRunningState(true);
+        setHasThrowingState(false);
     }
 
 
     @Override
     public void act(float delta) {
 
-        applyCustomStates();
+        stateTime += delta;
+        switchStates();
     }
 
 
-    /*
-     Calls switchStates in Enemy class to handle default states then provides the ability to specify custom states.
-     These states might be unique to the enemy or require more functionality than the default..
-     */
-    public void applyCustomStates() {
+    // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
+    @Override
+    public void switchStates() {
 
-        // Switch states in Enemy class has a set of default behaviours for standard animations.
-        super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
+        switch (getEnemyState()) {
+            case IDLE:
+                setCURRENT_MOVEMENT_SPEED(0);
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
+                break;
 
-        // Custom states for this Enemy are specified
-        if(super.getEnemyState() == EnemyState.MOVING) {
-            if (super.getMovingState() == MovingState.RUNNING) {
-                super.setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
-                super.moveCharacter();
-                super.loopingAnimation(runningAnimation);
-            }
-        }
+            case WALKING:
+                setCURRENT_MOVEMENT_SPEED(getWalkingSpeed());
+                setCurrentFrame(walkingAnimation.getKeyFrame(stateTime, true));
+                getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+                getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+                break;
 
-        if(super.getEnemyState() == EnemyState.ATTACKING) {
-            super.setCURRENT_MOVEMENT_SPEED(0);
-            if (super.nonLoopingAnimation(attackingAnimation)) {
-                checkDamage();
-                setEnemyState(EnemyState.MOVING);
-            }
+            case RUNNING:
+                setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
+                setCurrentFrame(runningAnimation.getKeyFrame(stateTime, true));
+                getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+                getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+                break;
+
+            case ATTACKING:
+                setCURRENT_MOVEMENT_SPEED(0);
+                if(setAnimationFrame(attackingAnimation)) {
+                    setEnemyState(EnemyState.IDLE);
+                }
+                break;
+
+            case HURT:
+                setCURRENT_MOVEMENT_SPEED(0);
+                if(setAnimationFrame(hurtAnimation)) {
+                    setEnemyState(EnemyState.WALKING);
+                }
+                break;
+
+            case DYING:
+//                Gdx.app.log("MyDebug_MAIN", "RobotDying");
+                setCURRENT_MOVEMENT_SPEED(0);
+                if (setAnimationFrame(dyingAnimation)) {
+                    setIsAlive(false);
+                    setEnemyState(EnemyState.DEAD);
+                }
+                break;
         }
     }
 

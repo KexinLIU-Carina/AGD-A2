@@ -2,19 +2,20 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-/*
-The player class. Inherits from the Character super class.
- */
-public class Player extends Character {
+
+public class Player extends Character implements CharacterInterface {
 
 
     // ---- PLAYER STATS -------------------------
     public enum PlayerState { IDLE, RUNNING, JUMPING, FALLING, ATTACKING, HURT, DYING, DEAD }
+    public enum Direction { LEFT, RIGHT }
 
     private PlayerState playerState = PlayerState.IDLE;
     private int numberOfLives = 3;
@@ -25,12 +26,9 @@ public class Player extends Character {
     private int numberOfTreasures = 0;
     private int score = 0;
 
-    // Set movement speeds
-    private int runningSpeed = 200;
-    private int jumpingSpeed = 100;
-    private int fallingSpeed = 100;
-
     private Projectile playerProjectile;
+    private Projectile handgunProjectile;
+    private Projectile rifleProjectile;
 
 
 
@@ -59,33 +57,55 @@ public class Player extends Character {
     private Animation<TextureRegion> dyingHandgunAnimation;
     private Animation<TextureRegion> dyingRifleAnimation;
 
+    // The stateTime used for looping animations
+    float stateTime = 0;
+
+
+    // Player HP
+    private Sprite playerHPBackground;
+    private  Sprite playerHP;
+    private Texture HPimage;
 
 
 
     public Player() {
 
+        // Player HP
+        Texture HPBimage = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
+        playerHPBackground = new Sprite( HPBimage);
+        HPimage = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Green.png");
+        playerHP = new Sprite(HPimage);
+        // TODO: need a better way to set the position
+        playerHP.setPosition(150,Gdx.graphics.getHeight() - HPimage.getHeight()-40);
+        playerHPBackground.setPosition(0,Gdx.graphics.getHeight() - HPBimage.getHeight());
+
         // Initialize size and start position
         getSprite().setSize(100, 100);
         getStartPosition().set(200, 120);
 
+        // Set movement speeds
+        setRunningSpeed(200);
+        setJumpingSpeed(100);
+        setFallingSpeed(100);
 
-        // ---- PROJECTILE -------------------------
+
         // Initialize Projectile
         playerProjectile = new Projectile("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3");
         playerProjectile.getProjectileSprite().setSize(15, 5);
+        playerProjectile.getProjectileSprite().flip(true, false);
 
-        Gdx.app.log("Main", "health " + getHealth());
-        /*
-        Projectiles have a starting position. This is updated in act() to equal the players start position so that it emits from the players position.
-        The offset amount is added to the start position in the projectiles reset state. This maintains the projectile will emit from the correct
-        spot on the player.
-         */
+        // Initialize the starting position of the projectile to the players start position. The offset amount is added to the start position.
+        // This is the final position that the projectile is set to so that it emits from the correct spot on the player.
+        // The start position is updated in player.act() so that when the player moves the projectile keeps up.
+        // The offset is added to the start position in the projectiles reset state, keeping the correct emission position.
+        playerProjectile.getProjectileStartPosition().x = getStartPosition().x;
+        playerProjectile.getProjectileStartPosition().y = getStartPosition().y;
         playerProjectile.getOffset().set(100, 43);
-        playerProjectile.setMovementSpeedX(350f);
+
 //        playerProjectile.setMovementSpeedY(-30f);
+//        playerProjectile.setMovementSpeedX(350f);
 
 
-        // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
         idleHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle - Handgun.png", 9, 2, 18);
         idleRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle - Rifle.png", 6, 3, 18);
@@ -104,72 +124,89 @@ public class Player extends Character {
 
     }
 
-    // Resets the player if it has lost a life.
+
+    @Override
     public void reset() {
         // Player is alive again
-        super.setIsAlive(true);
+        setIsAlive(true);
         // Health back to full health
-        super.setHealth(getMax_Health());
+        setHealth(getMax_Health());
         // Back to start position and idle
-        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
         playerState = PlayerState.IDLE;
     }
 
 
     // Checks to see if the player is still alive after getting damaged. If still alive it enters the hurt state
     // otherwise it enters the dying state
-    // *** COMMENT OUT THIS METHOD FOR GOD MODE ***
     public void healthCheck(int damage) {
-        if((super.getHealth() - damage) > 0) {
+        if((getHealth() - damage) > 0) {
             playerState = PlayerState.HURT;
-            super.setHealth(getHealth() - damage);
+            setHealth(getHealth() - damage);
+
+            // TODO: need to test this code
+            playerHP.setSize(HPimage.getWidth() * getHealth()/100, HPimage.getHeight());
         }
         else {
             playerState = PlayerState.DYING;
-            super.setHealth(0);
+
+            playerHP.setSize(HPimage.getWidth() * getHealth()/100, HPimage.getHeight());
+            setHealth(0);
         }
     }
 
     @Override
     public void draw(Batch batch, float alpha) {
 
-        super.draw(batch, alpha);
+        // Player HP
+        playerHPBackground.draw(batch);
+        playerHP.draw(batch);
 
-        /*
-         Once a projectile has been reset this is polled to find out the direction the player is facing and apply that direction to the projectile.
-         Once a projectile has been fired, the projectile direction has already been locked in, so it maintains the correct direction once it has been fired.
-         Otherwise you see the projectile change direction mid flight if the player does.
-         */
-        if(playerProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
-            // Set the projectile to be launched in the same direction the character is facing. Reverses the offset accordingly.
-            if (super.getDirection() == Direction.LEFT) {
-                playerProjectile.getOffset().set(-10, 43);
-                playerProjectile.setDirection(Direction.LEFT);
+
+
+        // Flips the sprite according to the correct direction. Reverses the offset and speed accordingly.
+        // Only flips when drawing is needed to conserve processing power
+        if(getDirection() == Direction.LEFT) {
+            playerProjectile.getOffset().set(-10, 43);
+            if(playerProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
+                playerProjectile.setMovementSpeedX(-350f);
             }
-            if (super.getDirection() == Direction.RIGHT) {
-                playerProjectile.getOffset().set(100, 43);
-                playerProjectile.setDirection(Direction.RIGHT);
+            if (!getCurrentFrame().isFlipX()) {
+                getCurrentFrame().flip(true, false);
+                // CAN'T GET THIS TO WORK!! METHOD DOESN'T APPEAR TO DO WHAT I EXPECT.
+                // SEEMS LIKE MAYBE IT'S FLIPPING THE SPRITE BUT NOT THE UNDERLYING TEXTURE. CAN'T FLIP TEXTURE DIRECTLY.
+                playerProjectile.getProjectileSprite().flip(false, true);
             }
         }
-        // Draw the projectile if it has been fired.
-        if(playerProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
-            playerProjectile.draw(batch, alpha);
+        if(getDirection() == Direction.RIGHT) {
+            playerProjectile.getOffset().set(100, 43);
+            if(playerProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
+                playerProjectile.setMovementSpeedX(350f);
+            }
+            if(getCurrentFrame().isFlipX()) {
+                getCurrentFrame().flip(true, false);
+            }
         }
+        batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+        playerProjectile.draw(batch, alpha);
     }
 
     @Override
     public void act(float delta) {
 
-        // Updates the projectile to emit from wherever the character is.
+        stateTime += delta;
+
+        // Updates the projectile to emit from wherever the player is.
         playerProjectile.getProjectileStartPosition().x = getSprite().getX();
         playerProjectile.getProjectileStartPosition().y = getSprite().getY();
+
         playerProjectile.act(delta);
 
         switchStates();
     }
 
 
-    // A state machine. Applies the correct animations, movement and other conditions to the various player states.
+    @Override
     public void switchStates() {
 
         // Normal player animations have a handgun equipped, but if a power up is enabled, all the animations are set to the more powerful rifle weapon.
@@ -182,8 +219,7 @@ public class Player extends Character {
             hurtAnimation = hurtRifleAnimation;
             dyingAnimation = dyingRifleAnimation;
 
-            // The rifle does more damage
-            super.setDamage(100);
+            setDamage(100);
         }
         else {
             idleAnimation = idleHandgunAnimation;
@@ -194,57 +230,53 @@ public class Player extends Character {
             hurtAnimation = hurtHandgunAnimation;
             dyingAnimation = dyingHandgunAnimation;
 
-            super.setDamage(20);
+            setDamage(20);
         }
 
 
         // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
         switch (playerState) {
             case IDLE:
-                // If idle the speed is zero
-                super.setCURRENT_MOVEMENT_SPEED(0);
-                super.loopingAnimation(idleAnimation);
+                setCURRENT_MOVEMENT_SPEED(0);
+                setCurrentFrame(idleAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case RUNNING:
-                super.setCURRENT_MOVEMENT_SPEED(runningSpeed);
-                super.loopingAnimation(runningAnimation);
+                setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
+                setCurrentFrame(runningAnimation.getKeyFrame(stateTime, true));
                 break;
 
             case JUMPING:
-                super.setCURRENT_MOVEMENT_SPEED(jumpingSpeed);
-                if (super.nonLoopingAnimation(jumpingStartAnimation)) {
+                setCURRENT_MOVEMENT_SPEED(getJumpingSpeed());
+                if(setAnimationFrame(jumpingStartAnimation)) {
                     playerState = PlayerState.FALLING;
                 }
                 break;
 
             case FALLING:
-                super.setCURRENT_MOVEMENT_SPEED(fallingSpeed);
-                if (super.nonLoopingAnimation(jumpingEndAnimation)) {
-                    playerState = PlayerState.IDLE;
-                }
+                setCURRENT_MOVEMENT_SPEED(getFallingSpeed());
+                setAnimationFrame(jumpingEndAnimation);
                 break;
 
             case ATTACKING:
-                super.setCURRENT_MOVEMENT_SPEED(0);
+                setCURRENT_MOVEMENT_SPEED(0);
                 playerProjectile.setProjectileState(Projectile.ProjectileState.FIRING);
-                if (super.nonLoopingAnimation(attackingAnimation)) {
+                if(setAnimationFrame(attackingAnimation)) {
                     playerState = PlayerState.IDLE;
                 }
                 break;
 
             case HURT:
-                super.setCURRENT_MOVEMENT_SPEED(0);
-                if (super.nonLoopingAnimation(hurtAnimation)) {
+                setCURRENT_MOVEMENT_SPEED(0);
+                if(setAnimationFrame(hurtAnimation)) {
                     playerState = PlayerState.IDLE;
                 }
                 break;
 
             case DYING:
-                super.setCURRENT_MOVEMENT_SPEED(0);
-                if (super.nonLoopingAnimation(dyingAnimation)) {
-                    Gdx.app.log("Main", "player dead " + getHealth());
-                    super.setIsAlive(false);
+                setCURRENT_MOVEMENT_SPEED(0);
+                if (setAnimationFrame(dyingAnimation)) {
+                    setIsAlive(false);
                     playerState = PlayerState.DEAD;
                     numberOfLives -= 1;
                 }
@@ -258,6 +290,10 @@ public class Player extends Character {
 
     public void setPlayerState(PlayerState playerState) { this.playerState = playerState; }
 
+    public Direction getDirection() { return direction; }
+
+    public void setDirection(Direction direction) { this.direction = direction; }
+
     public int getNumberOfLives() { return numberOfLives; }
 
     public void setNumberOfLives(int numberOfLives) { this.numberOfLives = numberOfLives; }
@@ -267,4 +303,6 @@ public class Player extends Character {
     public void setPowerUp(boolean powerUp) { this.powerUp = powerUp; }
 
     public Projectile getPlayerProjectile() { return playerProjectile; }
+
+    public void setPlayerProjectile(Projectile playerProjectile) { this.playerProjectile = playerProjectile; }
 }
