@@ -11,7 +11,7 @@ public class LevelEnd extends Character {
     public enum GoalType { PRINCESS, BABY }
     public enum GoalState { IDLE, SPELL }
 
-    private GoalType goalType = GoalType.PRINCESS;
+    private GoalType goalType = GoalType.BABY;
     private GoalState goalState = GoalState.IDLE;
 
     private Direction direction = Direction.LEFT;
@@ -73,8 +73,8 @@ public class LevelEnd extends Character {
         }
 
         if (goalType == GoalType.BABY) {
-            idleAnimation = princessIdleAnimation;
-            spellAnimation = princessSpellAnimation;
+            idleAnimation = babyIdleAnimation;
+            spellAnimation = babySpellAnimation;
         }
 
         if(goalState == GoalState.IDLE) {

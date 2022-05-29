@@ -225,8 +225,10 @@ public class GameScreen implements Screen {
 
                     // Shoot - Touch Top Right quadrant to shoot
                     if (touchY < (graphicsHeight / 2) && touchX > (graphicsWidth / 2)) {
-                        if(player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
-                            player.setPlayerState(Player.PlayerState.ATTACKING);
+                        if(player.getIsGrounded()) {
+                            if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
+                                player.setPlayerState(Player.PlayerState.ATTACKING);
+                            }
                         }
                     }
                 }

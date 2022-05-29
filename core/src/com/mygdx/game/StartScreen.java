@@ -44,14 +44,14 @@ public class StartScreen implements Screen {
         music.setLooping(true);
         music.setVolume(0.2f);
         // Sets the music to play depending on the selection in the options menu
-//        if(MyGdxGame.optionsScreen.getState()) {
-//            music.play();
-//        }
+        if(MyGdxGame.optionsScreen.getState()) {
+            music.play();
+        }
 
         // Buttons
         Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
 
-        Label gameTitle = new Label("Space Battles", skin);
+        Label gameTitle = new Label("Some Adventures", skin);
         final TextButton playButton = new TextButton("Play", skin, "default");
         final TextButton optionsButton = new TextButton("Options", skin, "default");
         final TextButton exitButton = new TextButton("Exit", skin, "default");

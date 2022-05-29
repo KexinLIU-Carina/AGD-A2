@@ -33,7 +33,7 @@ public class OptionsScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Skin skin = new Skin(Gdx.files.internal("gui/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
 
         final TextButton musicToggleButton = new TextButton(setButtonText(), skin, "default");
         final TextButton backButton = new TextButton("Back", skin, "default");
