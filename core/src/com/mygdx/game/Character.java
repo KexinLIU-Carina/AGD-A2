@@ -83,6 +83,7 @@ public class Character extends Actor {
      Processes animations for both looping and non looping versions. Non looping resets the statetime so that it only plays once.
      Applies separate statetime to each version so that they don't interfere with each other when the non looping resets.
      */
+
     public boolean nonLoopingAnimation(Animation<TextureRegion> animation) {
 
         nonLoopingStateTime += deltaTime;
