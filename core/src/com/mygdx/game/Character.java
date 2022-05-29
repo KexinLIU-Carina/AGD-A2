@@ -70,7 +70,7 @@ public class Character extends Actor {
             }
         }
 
-        if (getDirection() == Direction.RIGHT) {
+        if (direction == Direction.RIGHT) {
             if(currentFrame.isFlipX()) {
                 currentFrame.flip(true, false);
             }
@@ -93,20 +93,20 @@ public class Character extends Actor {
             return true;
         }
         else {
-            setCurrentFrame(animation.getKeyFrame(nonLoopingStateTime, false));
+            currentFrame = animation.getKeyFrame(nonLoopingStateTime, false);
             return false;
         }
     }
     public void loopingAnimation(Animation<TextureRegion> animation) {
         loopingStateTime += deltaTime;
-        setCurrentFrame(animation.getKeyFrame(loopingStateTime, true));
+        currentFrame = animation.getKeyFrame(loopingStateTime, true);
     }
 
 
     // Finds and returns the centre of the sprite for when this is needed.
     public Vector2 getCenteredSpritePosition() {
-        float x = getSprite().getX() + (getSprite().getWidth() / 2);
-        float y = getSprite().getY() + (getSprite().getHeight() / 2);
+        float x = sprite.getX() + (sprite.getWidth() / 2);
+        float y = sprite.getY() + (sprite.getHeight() / 2);
 
         return new Vector2(x, y);
     }
@@ -120,10 +120,37 @@ public class Character extends Actor {
     public void moveCharacter() {
         if(direction == Direction.LEFT) {
             positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+            positionAmount.y = 0;
+        }
+        else {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+            positionAmount.y = 0;
+        }
+        sprite.translate(positionAmount.x, positionAmount.y);
+    }
+
+
+    // Same as moveCharacter but applied to jumping. Adds the jumping speed to the Y axis.
+    public void jumpCharacter() {
+
+        if(direction == Direction.LEFT) {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
         }
         else {
             positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
         }
+        positionAmount.y = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        sprite.translate(positionAmount.x, positionAmount.y);
+    }
+
+    public void fallCharacter() {
+        if(direction == Direction.LEFT) {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+        }
+        else {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        }
+        positionAmount.y = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
         sprite.translate(positionAmount.x, positionAmount.y);
     }
 
@@ -157,7 +184,5 @@ public class Character extends Actor {
     public Vector2 getStartPosition() { return startPosition; }
 
     public Vector2 getPositionAmount() { return positionAmount; }
-
-    public void setCurrentFrame(TextureRegion currentFrame) { this.currentFrame = currentFrame; }
 
 }

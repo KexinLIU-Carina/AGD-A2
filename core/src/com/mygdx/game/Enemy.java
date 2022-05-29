@@ -163,7 +163,6 @@ public class Enemy extends Character {
                 } else {
                     movingState = MovingState.WALKING;
                 }
-
                 /*
                  A potential trigger for when an enemy with projectiles starts firing at the player.
                  Boolean projectile is a guard that prevents the enemy from constantly firing as it wil still be in the attack zone.
@@ -177,14 +176,12 @@ public class Enemy extends Character {
                         }
                     }
                 }
-
                 // If the enemy is close enough to melee attack.
                 if (distanceFromPlayer(player) < 50) {
                     if (attackState == AttackState.MELEE) {
                         enemyState = EnemyState.ATTACKING;
                     }
                 }
-
                 // The enemy is meant to turn around if the player goes past it.
                 // ** Bugs ** At the moment with the camera movement this is prevented from happening
                 if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
@@ -193,12 +190,18 @@ public class Enemy extends Character {
                     setDirection(Direction.LEFT);
                 }
             }
-
             // If the enemy cant see the play it starts walking to the left
             if (!canSeePlayer(player)) {
-                super.setDirection(Direction.LEFT);
-                enemyState = EnemyState.IDLE;
-
+                if (distanceFromPlayer(player) < 100) {
+                    if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
+                        setDirection(Direction.RIGHT);
+                    } else {
+                        setDirection(Direction.LEFT);
+                    }
+                }
+                else {
+                    super.setDirection(Direction.LEFT);
+                }
                 // If the enemy goes off screen it is reset.
                 if (super.getCenteredSpritePosition().x < -100) {
                     reset();

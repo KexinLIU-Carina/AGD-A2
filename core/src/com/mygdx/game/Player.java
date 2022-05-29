@@ -20,15 +20,21 @@ public class Player extends Character {
     private int numberOfLives = 3;
     private Direction direction = Direction.RIGHT;
 
-    private boolean powerUp = false;
+    private boolean powerUp = true;
     private int numberOfCoins = 0;
     private int numberOfTreasures = 0;
     private int score = 0;
 
     // Set movement speeds
     private int runningSpeed = 200;
-    private int jumpingSpeed = 100;
-    private int fallingSpeed = 100;
+    private int jumpingSpeed = 300;
+    private int fallingSpeed = 300;
+
+    // Point where the state switches from jumping to falling
+    private int terminal_Velocity = 230;
+
+    // Guard that acts as a check to prevent other states from being enacted before the jump has finished.
+    private boolean grounded = true;
 
     private Projectile playerProjectile;
 
@@ -38,6 +44,7 @@ public class Player extends Character {
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> runningAnimation;
     private Animation<TextureRegion> jumpingStartAnimation;
+    private Animation<TextureRegion> jumpingLoopAnimation;
     private Animation<TextureRegion> jumpingEndAnimation;
     private Animation<TextureRegion> attackingAnimation;
     private Animation<TextureRegion> hurtAnimation;
@@ -59,6 +66,8 @@ public class Player extends Character {
     private Animation<TextureRegion> dyingHandgunAnimation;
     private Animation<TextureRegion> dyingRifleAnimation;
 
+    private Animation<TextureRegion> jumpingLoopHandgunAnimation;
+    private Animation<TextureRegion> jumpingLoopRifleAnimation;
 
 
 
@@ -74,7 +83,6 @@ public class Player extends Character {
         playerProjectile = new Projectile("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3");
         playerProjectile.getProjectileSprite().setSize(15, 5);
 
-        Gdx.app.log("Main", "health " + getHealth());
         /*
         Projectiles have a starting position. This is updated in act() to equal the players start position so that it emits from the players position.
         The offset amount is added to the start position in the projectiles reset state. This maintains the projectile will emit from the correct
@@ -93,6 +101,8 @@ public class Player extends Character {
         runningRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Rifle.png", 6, 3, 18);
         jumpingStartHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Handgun.png", 3, 2, 6);
         jumpingStartRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Rifle.png", 3, 2, 6);
+        jumpingLoopHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Handgun.png", 3, 2, 6);
+        jumpingLoopRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Rifle.png", 3, 2, 6);
         jumpingEndHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump End - Handgun.png", 3, 2, 6);
         jumpingEndRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump End - Rifle.png", 3, 2, 6);
         attackingHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Handgun.png", 3, 3, 9);
@@ -101,6 +111,8 @@ public class Player extends Character {
         hurtRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Rifle.png", 4, 3, 12);
         dyingHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Handgun.png", 3, 4, 12);
         dyingRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Rifle.png", 4, 3, 12);
+
+
 
     }
 
@@ -177,6 +189,7 @@ public class Player extends Character {
             idleAnimation = idleRifleAnimation;
             runningAnimation = runningRifleAnimation;
             jumpingStartAnimation = jumpingStartRifleAnimation;
+            jumpingLoopAnimation = jumpingLoopRifleAnimation;
             jumpingEndAnimation = jumpingEndRifleAnimation;
             attackingAnimation = attackingRifleAnimation;
             hurtAnimation = hurtRifleAnimation;
@@ -189,6 +202,7 @@ public class Player extends Character {
             idleAnimation = idleHandgunAnimation;
             runningAnimation = runningHandgunAnimation;
             jumpingStartAnimation = jumpingStartHandgunAnimation;
+            jumpingLoopAnimation = jumpingLoopHandgunAnimation;
             jumpingEndAnimation = jumpingEndHandgunAnimation;
             attackingAnimation = attackingHandgunAnimation;
             hurtAnimation = hurtHandgunAnimation;
@@ -212,17 +226,36 @@ public class Player extends Character {
                 break;
 
             case JUMPING:
+                grounded = false;
                 super.setCURRENT_MOVEMENT_SPEED(jumpingSpeed);
-                if (super.nonLoopingAnimation(jumpingStartAnimation)) {
-                    playerState = PlayerState.FALLING;
+                if(!grounded) {
+                    jumpCharacter();
+                    Gdx.app.log("Main", "jump " + getSprite().getX());
+                    if (super.nonLoopingAnimation(jumpingStartAnimation)) {
+                        if (getSprite().getY() > terminal_Velocity) {
+                            playerState = PlayerState.FALLING;
+                        }
+                    }
                 }
                 break;
 
             case FALLING:
                 super.setCURRENT_MOVEMENT_SPEED(fallingSpeed);
+                setCURRENT_MOVEMENT_SPEED(fallingSpeed);
+                super.nonLoopingAnimation(jumpingLoopAnimation);
+                fallCharacter();
+
                 if (super.nonLoopingAnimation(jumpingEndAnimation)) {
-                    playerState = PlayerState.IDLE;
+                    Gdx.app.log("Main", "jump " + getSprite().getX());
+                    if (getSprite().getY() < getStartPosition().y) {
+//                        Gdx.app.log("Main", "on ground ");
+                        getSprite().setPosition(getSprite().getX(), getStartPosition().y);
+                        grounded = true;
+//                        Gdx.app.log("Main", "grounded " + grounded);
+                        playerState = PlayerState.IDLE;
+                    }
                 }
+
                 break;
 
             case ATTACKING:
@@ -243,7 +276,6 @@ public class Player extends Character {
             case DYING:
                 super.setCURRENT_MOVEMENT_SPEED(0);
                 if (super.nonLoopingAnimation(dyingAnimation)) {
-                    Gdx.app.log("Main", "player dead " + getHealth());
                     super.setIsAlive(false);
                     playerState = PlayerState.DEAD;
                     numberOfLives -= 1;
@@ -267,4 +299,32 @@ public class Player extends Character {
     public void setPowerUp(boolean powerUp) { this.powerUp = powerUp; }
 
     public Projectile getPlayerProjectile() { return playerProjectile; }
+
+    public int getNumberOfCoins() { return numberOfCoins; }
+
+    public void setNumberOfCoins(int numberOfCoins) { this.numberOfCoins = numberOfCoins; }
+
+    public int getNumberOfTreasures() { return numberOfTreasures; }
+
+    public void setNumberOfTreasures(int numberOfTreasures) { this.numberOfTreasures = numberOfTreasures; }
+
+    public int getScore() { return score; }
+
+    public void setScore(int score) { this.score = score; }
+
+    public int getRunningSpeed() { return runningSpeed; }
+
+    public void setRunningSpeed(int runningSpeed) { this.runningSpeed = runningSpeed; }
+
+    public int getJumpingSpeed() { return jumpingSpeed; }
+
+    public void setJumpingSpeed(int jumpingSpeed) { this.jumpingSpeed = jumpingSpeed; }
+
+    public int getFallingSpeed() { return fallingSpeed; }
+
+    public void setFallingSpeed(int fallingSpeed) { this.fallingSpeed = fallingSpeed; }
+
+    public boolean getIsGrounded() { return grounded; }
+
+    public void setGrounded(boolean grounded) { this.grounded = grounded; }
 }

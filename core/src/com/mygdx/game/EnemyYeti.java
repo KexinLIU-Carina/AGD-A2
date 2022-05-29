@@ -92,7 +92,7 @@ public class EnemyYeti extends Enemy {
     @Override
     public void act(float delta) {
 
-        setCustomStates();
+        switchCustomStates();
 
         // Updates the projectile to emit from wherever the character is.
         yetiProjectile.getProjectileStartPosition().x = getSprite().getX();
@@ -105,7 +105,7 @@ public class EnemyYeti extends Enemy {
      Calls switchStates in Enemy class to handle default states then provides the ability to specify custom states.
      These states might be unique to the enemy or require more functionality than the default..
      */
-    public void setCustomStates() {
+    public void switchCustomStates() {
 
         // Switch states in Enemy class has a set of default behaviours for standard animations.
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
