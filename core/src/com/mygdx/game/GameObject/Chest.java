@@ -43,8 +43,8 @@ public abstract class Chest {
 
 
     // TODO: need to rename
-    private int i;
-    private int j;
+    private int i = 100;
+    private int j = 100;
 
 
     // Chest animations
@@ -74,17 +74,22 @@ if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
         return 0;
     }
 
-    public void draw(final Batch batch){
+    public void draw(Batch batch){
         if (state == ChestState.CLOSE){
             animations[0].draw(batch);
 
         }else{
+
+
+            // if the chest is opened
 
             if (count < 4){
                 if (j == 0){
                     j = i;
                 }
               animations[count].draw(batch);
+
+                // wait for 30 times to go next animation
                 if (j == i){
 
                     count++;

@@ -39,8 +39,5 @@ public class Chest01 extends Chest{
             i.setSize(200, 200);
         }
 
-        Yhelper = 25;
-        Xhelper = 25;
-
     }
 }
