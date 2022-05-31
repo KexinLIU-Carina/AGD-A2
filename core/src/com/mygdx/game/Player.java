@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
+import com.mygdx.game.GameObject.Chest;
+import com.mygdx.game.GameObject.Chest01;
 
 
 public class Player extends Character implements CharacterInterface {
@@ -66,10 +67,13 @@ public class Player extends Character implements CharacterInterface {
     private  Sprite playerHP;
     private Texture HPimage;
 
+    // Treasure
+    private Chest chest;
 
 
     public Player() {
-
+// chest
+        chest = new Chest01(100, 120);
         // Player HP
         Texture HPBimage = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
         playerHPBackground = new Sprite( HPBimage);
@@ -189,6 +193,10 @@ public class Player extends Character implements CharacterInterface {
         }
         batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
         playerProjectile.draw(batch, alpha);
+
+
+//        chest.checkCollided();
+        chest.draw(batch);
     }
 
     @Override

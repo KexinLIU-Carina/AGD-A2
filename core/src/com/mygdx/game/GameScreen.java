@@ -2,9 +2,12 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -32,6 +35,7 @@ public class GameScreen implements Screen {
 
     // Player
     public Player player;
+
 
     // Enemies
     private EnemyFactory enemyFactory;
@@ -84,6 +88,9 @@ public class GameScreen implements Screen {
         // Player
         player = new Player();
 
+
+
+
         // Enemy
         enemyFactory = new EnemyFactory();
         randomEnemy = enemyFactory.spawnRandomEnemy();
@@ -93,9 +100,8 @@ public class GameScreen implements Screen {
 
         // Map
         level1 = new TmxMapLoader().load("Levels/Level1/Level1.tmx");
-        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.5f);
+        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1);
         backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.7f);
-
         // Map Collision Layer
 //        collisionRectangle = new Rectangle();
 //        MapObject collisionObject = level1.getLayers().get("Collision").getObjects().get("GroundCollision");
@@ -191,7 +197,7 @@ public class GameScreen implements Screen {
                         foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
                     }
                     // Shoot
-                    if (touchY < (graphicsHeight / 2)) {
+                    if (touchY < (graphicsHeight / 2) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                         if(player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
                             player.setPlayerState(Player.PlayerState.ATTACKING);
                         }
@@ -255,6 +261,7 @@ public class GameScreen implements Screen {
         foregroundViewport.update(graphicsWidth, graphicsHeight);
         foregroundTiledMapRenderer.setView((OrthographicCamera) foregroundViewport.getCamera());
         foregroundTiledMapRenderer.render(foregroundMapLayers);
+
 
         // Render the stage actors
         stage.draw();
