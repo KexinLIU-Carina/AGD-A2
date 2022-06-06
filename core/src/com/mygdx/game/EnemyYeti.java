@@ -33,11 +33,10 @@ public class EnemyYeti extends Enemy {
         super.setName("Yeti");
 
         // Start offscreen right
-        super.getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
-        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        super.getStartPosition().x = Gdx.graphics.getWidth() + 100f;
+        super.getSprite().setX(getStartPosition().x);
 
         super.setHasRunningState(true);
-        super.setRunningSpeed(100);
 
         setHasProjectile(true);
         super.setAttackState(AttackState.PROJECTILE);
@@ -46,7 +45,7 @@ public class EnemyYeti extends Enemy {
         // ---- PROJECTILE -------------------------
         // Initialize Projectile
         yetiProjectile = new Projectile("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3");
-        yetiProjectile.getProjectileSprite().setSize(40, 20);
+        yetiProjectile.getProjectileSprite().setSize(70f, 50f);
 
         yetiProjectile.setMovementSpeedX(300f);
 //        yetiProjectile.setMovementSpeedY(-50f);
@@ -75,11 +74,11 @@ public class EnemyYeti extends Enemy {
         if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
             // Set the projectile to be launched in the same direction the character is facing. Reverses the offset and speed accordingly.
             if (super.getDirection() == Direction.LEFT) {
-                yetiProjectile.getOffset().set(-10, 50);
+                yetiProjectile.getOffset().set(0f, 150f);
                 yetiProjectile.setDirection(Direction.LEFT);
             }
             if (super.getDirection() == Direction.RIGHT) {
-                yetiProjectile.getOffset().set(100, 50);
+                yetiProjectile.getOffset().set(200f, 150f);
                 yetiProjectile.setDirection(Direction.RIGHT);
             }
         }
@@ -146,17 +145,23 @@ public class EnemyYeti extends Enemy {
 
         super.setAIStates(player);
 
-        if(distanceFromPlayer(player) > 100) {
+
+        // The yeti has a projectile attack and a melee attack. If it is far enough away from the player it uses the projectile attack.
+        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500) {
             setAttackState(AttackState.PROJECTILE);
+            if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
+                setEnemyState(EnemyState.ATTACKING);
+            }
         }
 
-        if(distanceFromPlayer(player) < 50) {
+        // If it is close enough to the player, it uses the melee attack
+        if(distanceFromPlayer(player) < 500) {
             setAttackState(AttackState.MELEE);
         }
 
 
 
-        // If the projectile has overlapped the players bounding box while attacking, it has hit the player.
+        // If the projectile has overlapped the players bounding box, it has hit the player and does damage.
         if(yetiProjectile.getProjectileSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
             if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
                 if(player.getIsAlive()) {

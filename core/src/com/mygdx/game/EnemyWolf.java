@@ -23,12 +23,11 @@ public class EnemyWolf extends Enemy {
     public EnemyWolf() {
 
         super.setName("Wolf");
-        // Set the size of the sprite if it should be different to the default size (100, 100)
-//        getSprite().setSize(100, 100);
-        super.getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+
+        super.getStartPosition().x = Gdx.graphics.getWidth() + 100f;
+        super.getSprite().setX(getStartPosition().x);
 
         super.setHasRunningState(true);
-        super.setRunningSpeed(100);
 
 
 

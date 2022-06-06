@@ -1,11 +1,8 @@
 package com.mygdx.game;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 
 /*
 The parent class for all enemies. Inherits from the Character super class.
@@ -25,24 +22,20 @@ public class Enemy extends Character {
     // Stats
     private String name;
 
-    private int walkingSpeed = 50;
-    private int runningSpeed = 100;
-    private int jumpingSpeed = 100;
-    private int fallingSpeed = 100;
+    private int walkingSpeed = 100;
+    private int runningSpeed = 200;
+    private int jumpingSpeed = 200;
+    private int fallingSpeed = 200;
 
     private boolean hasRunningState;
     private boolean hasProjectile;
 
-
-    private boolean projectile = true;
 
 
     public Enemy() {
 
         // Default states as a backup. Individual enemies should override these.
         super.setDirection(Direction.LEFT);
-        super.getSprite().setSize(100, 100);
-        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
 
     }
 
@@ -72,8 +65,8 @@ public class Enemy extends Character {
 
     // Sets the conditions to enact if an enemy has been killed by the player.
     public void killEnemy() {
-        super.setIsAlive(false);
         enemyState = EnemyState.DEAD;
+        super.setIsAlive(false);
     }
 
     // A default set of states for every enemy that sets movement and applies animations
@@ -114,22 +107,6 @@ public class Enemy extends Character {
 
 
     // -----------------------------------------------------------
-    /*
-    Set of methods to help with AI states for enemies.
-     */
-    public float getAngle(Vector2 target) {
-        float angle = (float) Math.toDegrees(Math.atan2(target.y - getCenteredSpritePosition().y, target.x - getCenteredSpritePosition().x));
-
-        if(angle < 0) {
-            angle += 360;
-        }
-        return angle;
-    }
-
-    public boolean canSeePlayer(Player player) {
-        float angle = getAngle(player.getCenteredSpritePosition());
-        return angle > 170 && angle < 190;
-    }
 
     // Finds out how far away the player is from the enemy sprite.
     public float distanceFromPlayer(Player player) {
@@ -156,56 +133,30 @@ public class Enemy extends Character {
     public void setAIStates(Player player) {
 
         if (player.getIsAlive()) {
-            if (canSeePlayer(player)) {
 
-                if (hasRunningState) {
-                    movingState = MovingState.RUNNING;
-                } else {
-                    movingState = MovingState.WALKING;
-                }
-                /*
-                 A potential trigger for when an enemy with projectiles starts firing at the player.
-                 Boolean projectile is a guard that prevents the enemy from constantly firing as it wil still be in the attack zone.
-                 Better trigger is likely needed.
-                 */
-                if (distanceFromPlayer(player) < 400 && distanceFromPlayer(player) > 390) {
-                    if (hasProjectile) {
-                        if (projectile) {
-                            enemyState = EnemyState.ATTACKING;
-                            projectile = false;
-                        }
-                    }
-                }
-                // If the enemy is close enough to melee attack.
-                if (distanceFromPlayer(player) < 50) {
-                    if (attackState == AttackState.MELEE) {
-                        enemyState = EnemyState.ATTACKING;
-                    }
-                }
-                // The enemy is meant to turn around if the player goes past it.
-                // ** Bugs ** At the moment with the camera movement this is prevented from happening
-                if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
-                    setDirection(Direction.RIGHT);
-                } else {
-                    setDirection(Direction.LEFT);
-                }
+            if (hasRunningState && distanceFromPlayer(player) < 900) {
+                movingState = MovingState.RUNNING;
+            } else {
+                movingState = MovingState.WALKING;
             }
-            // If the enemy cant see the play it starts walking to the left
-            if (!canSeePlayer(player)) {
-                if (distanceFromPlayer(player) < 100) {
-                    if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
-                        setDirection(Direction.RIGHT);
-                    } else {
-                        setDirection(Direction.LEFT);
-                    }
-                }
-                else {
-                    super.setDirection(Direction.LEFT);
-                }
-                // If the enemy goes off screen it is reset.
-                if (super.getCenteredSpritePosition().x < -100) {
-                    reset();
-                }
+
+            // If the enemy is close enough to melee attack.
+//            if (distanceFromPlayer(player) < 200) {
+//                if (attackState == AttackState.MELEE) {
+//                    enemyState = EnemyState.ATTACKING;
+//                }
+//            }
+            // The enemy is meant to turn around if the player goes past it.
+            // ** Bugs ** At the moment with the camera movement this is prevented from happening
+            if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
+                setDirection(Direction.RIGHT);
+            } else {
+                setDirection(Direction.LEFT);
+            }
+
+            // If the enemy goes off screen it is reset.
+            if (super.getCenteredSpritePosition().x < -100) {
+                reset();
             }
         }
     }

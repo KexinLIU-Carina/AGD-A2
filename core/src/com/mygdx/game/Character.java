@@ -45,14 +45,19 @@ public class Character extends Actor {
 
     private float deltaTime = Gdx.graphics.getDeltaTime();
 
+    private int groundLevel = 240;
+
 
 
     public Character() {
 
         sprite = new Sprite();
+        sprite.setSize(250, 250);
         currentFrame = new TextureRegion();
         startPosition = new Vector2();
         positionAmount = new Vector2();
+
+        startPosition.y = groundLevel;
     }
 
 
@@ -97,10 +102,12 @@ public class Character extends Actor {
             return false;
         }
     }
+
     public void loopingAnimation(Animation<TextureRegion> animation) {
         loopingStateTime += deltaTime;
         currentFrame = animation.getKeyFrame(loopingStateTime, true);
     }
+
 
 
     // Finds and returns the centre of the sprite for when this is needed.
@@ -120,12 +127,11 @@ public class Character extends Actor {
     public void moveCharacter() {
         if(direction == Direction.LEFT) {
             positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
-            positionAmount.y = 0;
         }
         else {
             positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
-            positionAmount.y = 0;
         }
+        positionAmount.y = 0;
         sprite.translate(positionAmount.x, positionAmount.y);
     }
 
@@ -185,4 +191,9 @@ public class Character extends Actor {
 
     public Vector2 getPositionAmount() { return positionAmount; }
 
+    public int getGroundLevel() { return groundLevel; }
+
+    public void setNonLoopingStateTime(float nonLoopingStateTime) {
+        this.nonLoopingStateTime = nonLoopingStateTime;
+    }
 }

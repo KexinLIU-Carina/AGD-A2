@@ -25,11 +25,10 @@ public class EnemyDevilGuy extends Enemy {
         super.setName("DevilGuy");
 
         // Start offscreen right
-        super.getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
-        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        super.getStartPosition().x = Gdx.graphics.getWidth() + 100;
+        super.getSprite().setX(getStartPosition().x);
 
         super.setHasRunningState(true);
-        super.setRunningSpeed(100);
 
 
 

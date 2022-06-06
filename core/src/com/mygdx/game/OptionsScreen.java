@@ -38,8 +38,8 @@ public class OptionsScreen implements Screen {
         final TextButton musicToggleButton = new TextButton(setButtonText(), skin, "default");
         final TextButton backButton = new TextButton("Back", skin, "default");
 
-        musicToggleButton.getLabel().setFontScale(1.5f);
-        backButton.getLabel().setFontScale(1.5f);
+        musicToggleButton.getLabel().setFontScale(2f);
+        backButton.getLabel().setFontScale(2f);
 
 
         Table root = new Table();
@@ -49,10 +49,10 @@ public class OptionsScreen implements Screen {
         Table table = new Table();
 
 
-        table.add(musicToggleButton).height(75).width(150).pad(20).space(50);
+        table.add(musicToggleButton).height(150).width(300).pad(20).space(100);
         table.row();
         table.row();
-        table.add(backButton).height(50).width(100).pad(20);
+        table.add(backButton).height(100).width(200).pad(20);
 
         root.add(table);
         table.setPosition((Gdx.graphics.getWidth() - table.getWidth()) / 2, (Gdx.graphics.getHeight() - table.getHeight()) / 2);
@@ -61,7 +61,7 @@ public class OptionsScreen implements Screen {
         musicToggleButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(state) {
+                if(MyGdxGame.startScreen.getMusic().isPlaying()) {
                     state = false;
                     musicToggleButton.setText(setButtonText());
                     MyGdxGame.startScreen.getMusic().stop();

@@ -33,8 +33,7 @@ public class LevelEnd extends Character {
 
         // Initialize size and start position
         super.setDirection(Direction.LEFT);
-        super.getSprite().setSize(100, 100);
-        super.getStartPosition().set(Gdx.graphics.getWidth() - 150, 120);
+        super.getStartPosition().x = Gdx.graphics.getWidth() - 150;
 
 
         // ---- ANIMATIONS -------------------------

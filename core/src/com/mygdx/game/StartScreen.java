@@ -42,10 +42,12 @@ public class StartScreen implements Screen {
         // Music
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Music/back.mp3"));
         music.setLooping(true);
-        music.setVolume(0.2f);
+        music.setVolume(0.5f);
         // Sets the music to play depending on the selection in the options menu
         if(MyGdxGame.optionsScreen.getState()) {
-            music.play();
+            if (!music.isPlaying()) {
+                music.play();
+            }
         }
 
         // Buttons
@@ -60,10 +62,10 @@ public class StartScreen implements Screen {
         optionsButton.setColor(Color.BLUE);
         exitButton.setColor(Color.RED);
 
-        gameTitle.setFontScale(1.5f);
-        playButton.getLabel().setFontScale(1.5f);
-        optionsButton.getLabel().setFontScale(1.5f);
-        exitButton.getLabel().setFontScale(1.5f);
+        gameTitle.setFontScale(3f);
+        playButton.getLabel().setFontScale(2f);
+        optionsButton.getLabel().setFontScale(2f);
+        exitButton.getLabel().setFontScale(2f);
 
         // Root table
         Table root = new Table();
@@ -75,16 +77,17 @@ public class StartScreen implements Screen {
 
         // Add the elements to the table
         gameTitle.setAlignment(Align.center);
-        table.add(gameTitle).width(300).height(100).expandX();
+        table.add(gameTitle).width(400).height(200).expandX();
         table.row();
-        table.add(playButton).height(75).width(150).pad(10).space(10);
+        table.add(playButton).height(150).width(300).pad(10).space(20);
         table.row();
-        table.add(optionsButton).height(75).width(150).pad(10).space(10);
+        table.add(optionsButton).height(150).width(300).pad(10).space(20);
         table.row();
-        table.add(exitButton).height(75).width(150).pad(10);
+        table.add(exitButton).height(150).width(300).pad(20);
 
         // Add the table to the root and the root to the stage.
         root.add(table);
+        // Set the table to the middle of the screen
         table.setPosition((Gdx.graphics.getWidth() - table.getWidth()) / 2, (Gdx.graphics.getHeight() - table.getHeight()) / 2);
         stage.addActor(root);
 

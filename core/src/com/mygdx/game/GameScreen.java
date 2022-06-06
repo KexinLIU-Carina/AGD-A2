@@ -94,6 +94,7 @@ public class GameScreen implements Screen {
 
         // Enemy
         enemyFactory = new EnemyFactory();
+        // Have to spawn an enemy at the start so that newEnemy() has something to remove from the stage
         randomEnemy = enemyFactory.spawnRandomEnemy();
 
         // Level End
@@ -104,8 +105,8 @@ public class GameScreen implements Screen {
 
         // Map
         level1 = new TmxMapLoader().load("Levels/Level1/Level1.tmx");
-        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.5f);
-        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.7f);
+        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1f);
+        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1f);
 
         // Map Collision Layer
 //        collisionRectangle = new Rectangle();
@@ -151,7 +152,7 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
 
         player.reset();
-        randomEnemy.reset();
+        newEnemy();
         levelEnd.reset();
     }
 
@@ -159,6 +160,15 @@ public class GameScreen implements Screen {
     // If the player is killed the game is restarted.
     public void playerDied() {
         gameState = GameState.RESTART;
+    }
+
+
+    public void newEnemy() {
+        randomEnemy.remove();
+//        randomEnemy = enemyFactory.spawnRandomEnemy();
+        randomEnemy = enemyFactory.createEnemyDragon();
+        randomEnemy.reset();
+        stage.addActor(randomEnemy);
     }
 
 
@@ -196,8 +206,8 @@ public class GameScreen implements Screen {
                 if (checkTouch) {
                     // Move Left - Touch Bottom Left quadrant to move
                     if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Set the player to running and move the player to the new position.
                         if(player.getIsGrounded()) {
+                            // Set the player to running and move the player to the new position.
                             player.setDirection(Player.Direction.LEFT);
                             player.setPlayerState(Player.PlayerState.RUNNING);
                             player.moveCharacter();
@@ -208,8 +218,8 @@ public class GameScreen implements Screen {
                     }
                     // Move Right - Touch Bottom Right quadrant to move
                     if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Set the player to running and move the player to the new position.
                         if(player.getIsGrounded()) {
+                            // Set the player to running and move the player to the new position.
                             player.setDirection(Player.Direction.RIGHT);
                             player.setPlayerState(Player.PlayerState.RUNNING);
                             player.moveCharacter();
@@ -254,12 +264,9 @@ public class GameScreen implements Screen {
                     }
                 }
 
-                // If the enemy has dies, remove from the stage and respawn a new enemy.
-                if(randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
-                    randomEnemy.remove();
-                    randomEnemy = enemyFactory.spawnRandomEnemy();
-                    randomEnemy.reset();
-                    stage.addActor(randomEnemy);
+                // If the enemy has died, remove from the stage and respawn a new enemy.
+                if(!randomEnemy.getIsAlive()) {
+                    newEnemy();
                 }
 
                 if(!player.getIsAlive()) {
@@ -276,6 +283,7 @@ public class GameScreen implements Screen {
                 break;
 
             case GAMEOVER:
+                MyGdxGame.startScreen.getMusic().stop();
                 MyGdxGame.startScreen.setStartScreen();
                 break;
         }
@@ -301,7 +309,7 @@ public class GameScreen implements Screen {
         // Render the bounding boxes. ** Very useful for debugging **
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
-        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
+//        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
         shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(), randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
         shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(), levelEnd.getSprite().getHeight());
         shapeRenderer.end();
@@ -334,7 +342,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        level1.dispose();
+        stage.dispose();
+        uiBatch.dispose();
     }
 
     public GameHelper getHelper() { return helper; }

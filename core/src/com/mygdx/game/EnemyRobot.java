@@ -24,12 +24,11 @@ public class EnemyRobot extends Enemy {
 
         super.setName("Robot");
 
-        super.getSprite().setSize(100f, 100f);
         // Start offscreen right
-        super.getStartPosition().set(Gdx.graphics.getWidth() + 100, 120);
+        super.getStartPosition().x = Gdx.graphics.getWidth() + 100f;
+        super.getSprite().setX(getStartPosition().x);
 
         super.setHasRunningState(true);
-        super.setRunningSpeed(100);
 
 
         // ---- ANIMATIONS -------------------------
