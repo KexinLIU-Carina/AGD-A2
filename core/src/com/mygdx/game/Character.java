@@ -3,28 +3,30 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-
+/*
+The parent superclass.
+Both Player and Enemies inherit from it and it provides the basic template that both of them require.
+ */
 public class Character extends Actor {
+
+    public enum Direction { LEFT, RIGHT }
 
 
     // ---- CHARACTER STATS -------------------------
     private boolean isAlive = true;
+    private Direction direction;
 
     private int Max_Health = 100;
     private int health = Max_Health;
     private int CURRENT_MOVEMENT_SPEED;
     private int damage = 20;
-
-    private int walkingSpeed = 100;
-    private int runningSpeed = 200;
-    private int jumpingSpeed = 100;
-    private int fallingSpeed = 100;
 
 
     // ---- SPRITES -------------------------
@@ -37,31 +39,61 @@ public class Character extends Actor {
 
     // ---- ANIMATION -------------------------
     private TextureRegion currentFrame;
-    // The stateTime used for animations that do not loop
-    private float nonLoopingStateTime = 0;
+
+    private float loopingStateTime;
+    private float nonLoopingStateTime;
+
     private float deltaTime = Gdx.graphics.getDeltaTime();
 
+    private int groundLevel = 240;
 
 
 
     public Character() {
 
         sprite = new Sprite();
+        sprite.setSize(250, 250);
         currentFrame = new TextureRegion();
         startPosition = new Vector2();
         positionAmount = new Vector2();
+
+        startPosition.y = groundLevel;
     }
 
 
+    /*
+    The default drawing method. It flips the sprites to face the correct direction.
+    Child classes that may need to override this will still have a call to super to access this method.
+     */
+    @Override
+    public void draw(Batch batch, float alpha) {
 
-    // This method is used for animations that are not looped and have to be reset at the end of the animation.
-    // The animation is loaded into the current frame and played untill it is finished, when the non looping statetime is reset to 0.
-    public boolean setAnimationFrame(Animation<TextureRegion> animation) {
+        // Flips the sprite according to the correct direction.
+        if (direction == Direction.LEFT) {
+            if(!currentFrame.isFlipX()) {
+                currentFrame.flip(true, false);
+            }
+        }
+
+        if (direction == Direction.RIGHT) {
+            if(currentFrame.isFlipX()) {
+                currentFrame.flip(true, false);
+            }
+        }
+        batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+    }
+
+
+    /*
+     Processes animations for both looping and non looping versions. Non looping resets the statetime so that it only plays once.
+     Applies separate statetime to each version so that they don't interfere with each other when the non looping resets.
+     */
+
+    public boolean nonLoopingAnimation(Animation<TextureRegion> animation) {
 
         nonLoopingStateTime += deltaTime;
 
         if (animation.isAnimationFinished(nonLoopingStateTime)) {
-
             nonLoopingStateTime = 0;
             return true;
         }
@@ -71,12 +103,73 @@ public class Character extends Actor {
         }
     }
 
+    public void loopingAnimation(Animation<TextureRegion> animation) {
+        loopingStateTime += deltaTime;
+        currentFrame = animation.getKeyFrame(loopingStateTime, true);
+    }
+
+
+
+    // Finds and returns the centre of the sprite for when this is needed.
+    public Vector2 getCenteredSpritePosition() {
+        float x = sprite.getX() + (sprite.getWidth() / 2);
+        float y = sprite.getY() + (sprite.getHeight() / 2);
+
+        return new Vector2(x, y);
+    }
+
+
+    /*
+     Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
+     Can then apply this to find the new position for the sprite which is then translated to that position.
+     */
+
+    public void moveCharacter() {
+        if(direction == Direction.LEFT) {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+        }
+        else {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        }
+        positionAmount.y = 0;
+        sprite.translate(positionAmount.x, positionAmount.y);
+    }
+
+
+    // Same as moveCharacter but applied to jumping. Adds the jumping speed to the Y axis.
+    public void jumpCharacter() {
+
+        if(direction == Direction.LEFT) {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+        }
+        else {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        }
+        positionAmount.y = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        sprite.translate(positionAmount.x, positionAmount.y);
+    }
+
+    public void fallCharacter() {
+        if(direction == Direction.LEFT) {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+        }
+        else {
+            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+        }
+        positionAmount.y = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+        sprite.translate(positionAmount.x, positionAmount.y);
+    }
+
 
 
     // ---------- GETTERS AND SETTERS -------------------------------------
     public boolean getIsAlive() { return isAlive; }
 
     public void setIsAlive(boolean alive) { isAlive = alive; }
+
+    public Direction getDirection() { return direction; }
+
+    public void setDirection(Direction direction) { this.direction = direction; }
 
     public int getHealth() { return health; }
 
@@ -88,22 +181,6 @@ public class Character extends Actor {
 
     public void setCURRENT_MOVEMENT_SPEED(int CURRENT_MOVEMENT_SPEED) { this.CURRENT_MOVEMENT_SPEED = CURRENT_MOVEMENT_SPEED; }
 
-    public int getWalkingSpeed() { return walkingSpeed; }
-
-    public void setWalkingSpeed(int walkingSpeed) { this.walkingSpeed = walkingSpeed; }
-
-    public int getRunningSpeed() { return runningSpeed; }
-
-    public void setRunningSpeed(int runningSpeed) { this.runningSpeed = runningSpeed; }
-
-    public int getJumpingSpeed() { return jumpingSpeed; }
-
-    public void setJumpingSpeed(int jumpingSpeed) { this.jumpingSpeed = jumpingSpeed; }
-
-    public int getFallingSpeed() { return fallingSpeed; }
-
-    public void setFallingSpeed(int fallingSpeed) { this.fallingSpeed = fallingSpeed; }
-
     public int getDamage() { return damage; }
 
     public void setDamage(int damage) { this.damage = damage; }
@@ -114,7 +191,9 @@ public class Character extends Actor {
 
     public Vector2 getPositionAmount() { return positionAmount; }
 
-    public TextureRegion getCurrentFrame() { return currentFrame; }
+    public int getGroundLevel() { return groundLevel; }
 
-    public void setCurrentFrame(TextureRegion currentFrame) { this.currentFrame = currentFrame; }
+    public void setNonLoopingStateTime(float nonLoopingStateTime) {
+        this.nonLoopingStateTime = nonLoopingStateTime;
+    }
 }

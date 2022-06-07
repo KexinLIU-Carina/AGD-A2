@@ -6,18 +6,23 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-
+/*
+A class for projectiles that need to be fired around by player and enemies. It manages the states, sounds and behaviour of projectiles.
+Each instance of a projectile is owned by the character that fires it.
+ */
 public class Projectile extends Actor {
 
     public enum ProjectileState { FIRING, EXPLODING, RESET }
 
     private ProjectileState projectileState = ProjectileState.RESET;
+    private Character.Direction direction;
 
-    private Texture texture;
+    private TextureRegion textureRegion;
     private Sprite projectileSprite;
     private float movementSpeedX = 0;
     private float movementSpeedY = 0;
@@ -31,9 +36,10 @@ public class Projectile extends Actor {
 
     public Projectile(String texturePath, String firingSoundPath) {
 
-        texture = new Texture(texturePath);
-        projectileSprite = new Sprite(texture);
-        projectileSprite.flip(true, false);
+        Texture texture = new Texture(texturePath);
+        textureRegion = new TextureRegion();
+        textureRegion.setRegion(texture);
+        projectileSprite = new Sprite(textureRegion);
         projectileStartPosition = new Vector2();
         offset = new Vector2();
         projectileStartWithOffset = new Vector2();
@@ -47,25 +53,38 @@ public class Projectile extends Actor {
     @Override
     public void draw(Batch batch, float alpha) {
 
-        if(getProjectileState() == ProjectileState.FIRING) {
-            batch.draw(projectileSprite.getTexture(), projectileSprite.getX(), projectileSprite.getY(),
-                    projectileSprite.getWidth(), projectileSprite.getHeight());
+        if (projectileState == ProjectileState.FIRING) {
+
+            if (direction == Character.Direction.LEFT) {
+                if (!textureRegion.isFlipX()) {
+                    textureRegion.flip(true, false);
+                }
+            }
+            if (direction == Character.Direction.RIGHT) {
+                if (textureRegion.isFlipX()) {
+                    textureRegion.flip(true,false);
+
+                }
+            }
+            batch.draw(textureRegion, projectileSprite.getX(), projectileSprite.getY(),
+                    projectileSprite.getWidth(),projectileSprite.getHeight());
+
         }
-//        if(getProjectileState() == ProjectileState.EXPLODING) {
-//            batch.draw(currentFrame, explodingPosition.x, explodingPosition.y, explodingSprite.getWidth(),explodingSprite.getHeight());
-//        }
     }
+
 
     @Override
     public void act(float delta) {
 
         switchState();
+        setProjectileBounds();
     }
 
 
     public void switchState() {
 
         switch (projectileState) {
+
             case RESET:
                 projectileSprite.setPosition(getProjectileStartWithOffset().x, getProjectileStartWithOffset().y);
                 playFiringSound = true;
@@ -73,9 +92,7 @@ public class Projectile extends Actor {
                 break;
 
             case FIRING:
-                PROJECTILE_MOVEMENT.x = GameScreen.getInstance().getHelper().setMovement(movementSpeedX);
-                PROJECTILE_MOVEMENT.y = GameScreen.getInstance().getHelper().setMovement(movementSpeedY);
-                projectileSprite.translate(PROJECTILE_MOVEMENT.x, PROJECTILE_MOVEMENT.y);
+                moveProjectile();
                 playFiringSound();
                 break;
 //            case EXPLODING:
@@ -98,6 +115,32 @@ public class Projectile extends Actor {
 //            playExplodingSound = false;
 //        }
 //    }
+
+    public void setProjectileBounds() {
+        if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
+            projectileState = ProjectileState.RESET;
+            switchState();
+        }
+        if(getProjectileSprite().getX() < 0) {
+            projectileState = ProjectileState.RESET;
+            switchState();
+        }
+    }
+
+    /*
+     Takes the movement speeds and direction, uses Game Helper to apply deltaTime, then finds the new position for the sprite to move to
+     and translates to the new position.
+     */
+    public void moveProjectile() {
+        if(direction == Character.Direction.LEFT) {
+            PROJECTILE_MOVEMENT.x = GameScreen.getInstance().getHelper().setMovement(-movementSpeedX);
+        }
+        else {
+            PROJECTILE_MOVEMENT.x = GameScreen.getInstance().getHelper().setMovement(movementSpeedX);
+        }
+        PROJECTILE_MOVEMENT.y = GameScreen.getInstance().getHelper().setMovement(movementSpeedY);
+        projectileSprite.translate(PROJECTILE_MOVEMENT.x, PROJECTILE_MOVEMENT.y);
+    }
 
 
 
@@ -126,4 +169,10 @@ public class Projectile extends Actor {
     }
 
     public Vector2 getOffset() { return offset; }
+
+    public Character.Direction getDirection() { return direction; }
+
+    public void setDirection(Character.Direction direction) { this.direction = direction; }
+
+
 }
