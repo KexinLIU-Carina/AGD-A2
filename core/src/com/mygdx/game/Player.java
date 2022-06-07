@@ -68,13 +68,16 @@ public class Player extends Character {
     private Animation<TextureRegion> jumpingLoopHandgunAnimation;
     private Animation<TextureRegion> jumpingLoopRifleAnimation;
 
-
+    PlayerHP playerHP;
 
     public Player() {
 
         // Initialize start position
         getStartPosition().x = 200;
         setDirection(Direction.RIGHT);
+
+        // HP
+        playerHP = new PlayerHP();
 
 
         // ---- PROJECTILE -------------------------
@@ -134,12 +137,13 @@ public class Player extends Character {
                 playerState = PlayerState.DYING;
                 super.setHealth(0);
             }
+            playerHP.modifyHP(getHealth());
         }
     }
 
     @Override
     public void draw(Batch batch, float alpha) {
-
+playerHP.draw(batch);
         super.draw(batch, alpha);
 
         /*
