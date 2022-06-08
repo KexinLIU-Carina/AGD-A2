@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public abstract class Chest {
 
 
     // TODO: need to rename
-    private int i = 100;
-    private int j = 100;
+    private int i = 0;
+    private int j = 0;
 
 
     // Chest animations
@@ -56,13 +57,15 @@ public abstract class Chest {
     public int checkCollided(float x, float y){
 
         // if the position within the scope
+        System.out.println(Xposition + Xhelper >= x);
+        System.out.println(x >= Xposition-Xhelper);
         if (Xposition + Xhelper >= x && x >= Xposition-Xhelper){
 
-if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
+            if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
 
-   state = ChestState.OPEN;
-   return value;
-}
+                state = ChestState.OPEN;
+                return value;
+            }
         }
 
 
@@ -103,9 +106,9 @@ if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
 
 
         // TODO: remove it
-        if (i > 90){
-            state = ChestState.OPEN;
-        }
+//        if (i > 90){
+//            state = ChestState.OPEN;
+//        }
 
 
     }
