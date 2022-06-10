@@ -117,6 +117,14 @@ public abstract class Chest {
 
     }
 
+    public void update(float x, float y){
+        for (Sprite sprite: animations){
+            sprite.setPosition(x, y);
+        }
+    }
+
+
+
 
 
 

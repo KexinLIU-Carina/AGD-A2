@@ -69,6 +69,7 @@ public class Player extends Character {
     private Animation<TextureRegion> jumpingLoopRifleAnimation;
 
     PlayerHP playerHP;
+    ScoreBar scoreBar;
 
     public Player() {
 
@@ -78,6 +79,8 @@ public class Player extends Character {
 
         // HP
         playerHP = new PlayerHP();
+
+        scoreBar = new ScoreBar();
 
 
         // ---- PROJECTILE -------------------------
@@ -113,6 +116,7 @@ public class Player extends Character {
 
     // Resets the player if it has lost a life.
     public void reset() {
+
         // Player is alive again
         super.setIsAlive(true);
         // Health back to full health
@@ -121,6 +125,8 @@ public class Player extends Character {
         super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
         grounded = true;
         playerState = PlayerState.IDLE;
+
+        playerHP.reset();
     }
 
 
@@ -143,6 +149,7 @@ public class Player extends Character {
 
     @Override
     public void draw(Batch batch, float alpha) {
+        scoreBar.draw(batch);
 playerHP.draw(batch);
         super.draw(batch, alpha);
 

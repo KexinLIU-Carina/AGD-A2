@@ -33,6 +33,10 @@ public class PlayerHP {
         playerHP.draw(batch);
     }
 
+    public void reset(){
+        playerHP.setSize(HPimage.getWidth() , HPimage.getHeight());
+    }
+
 
 
 

@@ -25,8 +25,17 @@ public class GameObjects extends Actor {
 
 
     public void checkCollided(float x, float y) {
-        System.out.println("X: "+ x +" Y: "+ y);
-        chest.checkCollided(x, y) ;
-        System.out.println(chest.state);
+       chest.checkCollided(x, y) ;
     }
+
+
+    public void leftUpdate(float x){
+        chest.update(chest.Xposition - x , chest.Yposition);
+
+    }
+
+    public void rightUpdate(float x){
+        chest.update(chest.Xposition + x, chest.Yposition);
+    }
+
 }
