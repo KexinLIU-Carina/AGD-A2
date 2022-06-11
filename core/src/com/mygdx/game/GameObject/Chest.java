@@ -29,7 +29,9 @@ public abstract class Chest {
     protected int Yhelper;
 
     // TODO: I just set this value will return something to player
-    private int value;
+    private int value = 100;
+
+    private boolean hasReturn =false;
 
 
 
@@ -122,6 +124,15 @@ public abstract class Chest {
             sprite.setPosition(x, y);
         }
     }
+
+    public int getValue(){
+        if (state == ChestState.OPEN && !hasReturn){
+            hasReturn = true;
+            return value;
+        }
+        return 0;
+    }
+
 
 
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.GameObject.ScoreBar;
 
 
 /*
@@ -69,7 +70,6 @@ public class Player extends Character {
     private Animation<TextureRegion> jumpingLoopRifleAnimation;
 
     PlayerHP playerHP;
-    ScoreBar scoreBar;
 
     public Player() {
 
@@ -80,7 +80,6 @@ public class Player extends Character {
         // HP
         playerHP = new PlayerHP();
 
-        scoreBar = new ScoreBar();
 
 
         // ---- PROJECTILE -------------------------
@@ -149,7 +148,6 @@ public class Player extends Character {
 
     @Override
     public void draw(Batch batch, float alpha) {
-        scoreBar.draw(batch);
 playerHP.draw(batch);
         super.draw(batch, alpha);
 

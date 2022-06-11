@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.GameObject.GameObjects;
+import com.mygdx.game.GameObject.ScoreBar;
 
 
 /*
@@ -31,7 +34,7 @@ public class GameScreen implements Screen {
 
     // Render
     private Stage stage;
-    private SpriteBatch uiBatch;
+    private Batch uiBatch;
 
     // Player
     public Player player;
@@ -62,6 +65,10 @@ public class GameScreen implements Screen {
     private ShapeRenderer shapeRenderer;
 
 
+    private GameObjects gameObjects;
+    private ScoreBar scoreBar;
+
+
 
     private static GameScreen INSTANCE = null;
 
@@ -86,6 +93,8 @@ public class GameScreen implements Screen {
 
 
     public void create() {
+        gameObjects = new GameObjects();
+
 
         helper = new GameHelper();
 
@@ -141,6 +150,8 @@ public class GameScreen implements Screen {
         stage.addActor(player);
         stage.addActor(randomEnemy);
         stage.addActor(levelEnd);
+        stage.addActor(gameObjects);
+
 
 
         // --- START NEW GAME ---------
@@ -178,6 +189,9 @@ public class GameScreen implements Screen {
         int touchX = Gdx.input.getX();
         int touchY = Gdx.input.getY();
 
+        gameObjects.checkCollided(player.getSprite().getX(), player.getSprite().getY());
+
+
 
         switch (gameState) {
             case PLAYING:
@@ -214,6 +228,8 @@ public class GameScreen implements Screen {
 
                             // Move the camera with the player
                             foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+
+                            gameObjects.leftUpdate(player.getPositionAmount().x);
                         }
                     }
                     // Move Right - Touch Bottom Right quadrant to move
@@ -226,6 +242,8 @@ public class GameScreen implements Screen {
 
                             // Move the camera with the player
                             foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+
+                            gameObjects.rightUpdate(player.getPositionAmount().x);
                         }
                     }
                     // Jump - Touch Top Left quadrant to jump

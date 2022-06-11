@@ -2,11 +2,14 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
-
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 public class MyGdxGame extends Game implements ApplicationListener {
 
+
+	public Batch batch;
 
 	public static StartScreen startScreen;
 	public static OptionsScreen optionsScreen;
@@ -15,6 +18,7 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 	@Override
 	public void create () {
+		batch = new SpriteBatch();
 
 		startScreen = new StartScreen(this);
 		optionsScreen = new OptionsScreen(this);

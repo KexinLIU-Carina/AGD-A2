@@ -7,8 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class GameObjects extends Actor {
     private Chest chest;
 
+    private ScoreBar scoreBar;
+
 
     public GameObjects() {
+        scoreBar = new ScoreBar();
         chest = new Chest01(1000,300);
 
     }
@@ -19,6 +22,8 @@ public class GameObjects extends Actor {
     public void draw(Batch batch, float alpha) {
 
 
+
+        scoreBar.draw(batch);
         chest.draw(batch);
     }
 
@@ -26,6 +31,9 @@ public class GameObjects extends Actor {
 
     public void checkCollided(float x, float y) {
        chest.checkCollided(x, y) ;
+
+
+       scoreBar.score += chest.getValue();
     }
 
 
