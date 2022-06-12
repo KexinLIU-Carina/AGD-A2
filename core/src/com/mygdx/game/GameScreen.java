@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.GameObject.GameObjects;
+import com.mygdx.game.GameObject.ScoreBar;
 
 
 /*
@@ -31,7 +34,7 @@ public class GameScreen implements Screen {
 
     // Render
     private Stage stage;
-    private SpriteBatch uiBatch;
+    private Batch uiBatch;
 
     // Player
     public Player player;
@@ -39,6 +42,9 @@ public class GameScreen implements Screen {
     // Enemies
     private EnemyFactory enemyFactory;
     private Enemy randomEnemy;
+
+    // LevelEnd
+    private LevelEnd levelEnd;
 
     // Map
     private TiledMap level1;
@@ -53,9 +59,14 @@ public class GameScreen implements Screen {
     // Camera
     private FitViewport foregroundViewport;
     private FitViewport backgroundViewport;
+    private FitViewport playerViewport;
 
     private Rectangle collisionRectangle;
     private ShapeRenderer shapeRenderer;
+
+
+    private GameObjects gameObjects;
+    private ScoreBar scoreBar;
 
 
 
@@ -82,6 +93,8 @@ public class GameScreen implements Screen {
 
 
     public void create() {
+        gameObjects = new GameObjects();
+
 
         helper = new GameHelper();
 
@@ -90,15 +103,19 @@ public class GameScreen implements Screen {
 
         // Enemy
         enemyFactory = new EnemyFactory();
+        // Have to spawn an enemy at the start so that newEnemy() has something to remove from the stage
         randomEnemy = enemyFactory.spawnRandomEnemy();
+
+        // Level End
+        levelEnd = new LevelEnd();
 
         // SpriteBatches
         uiBatch = new SpriteBatch();
 
         // Map
         level1 = new TmxMapLoader().load("Levels/Level1/Level1.tmx");
-        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.5f);
-        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.7f);
+        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1f);
+        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1f);
 
         // Map Collision Layer
 //        collisionRectangle = new Rectangle();
@@ -124,12 +141,18 @@ public class GameScreen implements Screen {
         backgroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
         backgroundViewport = new FitViewport(graphicsWidth, graphicsHeight, backgroundCamera);
 
+
+
         // ----- STAGE ----------
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(player);
         stage.addActor(randomEnemy);
+        stage.addActor(levelEnd);
+        stage.addActor(gameObjects);
+
+
 
         // --- START NEW GAME ---------
         newGame();
@@ -140,7 +163,8 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
 
         player.reset();
-        randomEnemy.reset();
+        newEnemy();
+        levelEnd.reset();
     }
 
 
@@ -150,17 +174,28 @@ public class GameScreen implements Screen {
     }
 
 
+    public void newEnemy() {
+        randomEnemy.remove();
+//        randomEnemy = enemyFactory.spawnRandomEnemy();
+        randomEnemy = enemyFactory.createEnemyDragon();
+        randomEnemy.reset();
+        stage.addActor(randomEnemy);
+    }
+
+
     private void update(float delta) {
 
         boolean checkTouch = Gdx.input.isTouched();
         int touchX = Gdx.input.getX();
         int touchY = Gdx.input.getY();
 
+        gameObjects.checkCollided(player.getSprite().getX(), player.getSprite().getY());
+
+
 
         switch (gameState) {
             case PLAYING:
 
-                Gdx.app.log("Main", "playing");
                 // If all lives are lost it is game over
                 if (player.getNumberOfLives() <= 0) {
                     gameState = GameState.GAMEOVER;
@@ -168,12 +203,12 @@ public class GameScreen implements Screen {
 
                 //-- RESTRICT PLAYER MOVEMENT ---------
                 // Prevent player from going off screen to the left
-                if (player.getSprite().getX() < 200) {
-                    player.getSprite().setX(200);
+                if (player.getSprite().getX() < 100) {
+                    player.getSprite().setX(100);
                 }
                 // Prevent player from going too far to the right
-                if (player.getSprite().getX() > (graphicsWidth / 2)) {
-                    player.getSprite().setX(graphicsWidth / 2);
+                if (player.getSprite().getX() > (graphicsWidth - 200)) {
+                    player.getSprite().setX(graphicsWidth - 200);
                 }
 
 
@@ -183,30 +218,45 @@ public class GameScreen implements Screen {
                  ** Jump yet to be implemented **
                  */
                 if (checkTouch) {
-                    // Move Left
+                    // Move Left - Touch Bottom Left quadrant to move
                     if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Set the player to running and move the player to the new position.
-                        player.setDirection(Player.Direction.LEFT);
-                        player.setPlayerState(Player.PlayerState.RUNNING);
-                        player.moveCharacter();
+                        if(player.getIsGrounded()) {
+                            // Set the player to running and move the player to the new position.
+                            player.setDirection(Player.Direction.LEFT);
+                            player.setPlayerState(Player.PlayerState.RUNNING);
+                            player.moveCharacter();
 
-                        // Move the camera with the player
-                        foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+                            // Move the camera with the player
+                            foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+
+                            gameObjects.leftUpdate(player.getPositionAmount().x);
+                        }
                     }
-                    // Move Right
+                    // Move Right - Touch Bottom Right quadrant to move
                     if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Set the player to running and move the player to the new position.
-                        player.setDirection(Player.Direction.RIGHT);
-                        player.setPlayerState(Player.PlayerState.RUNNING);
-                        player.moveCharacter();
+                        if(player.getIsGrounded()) {
+                            // Set the player to running and move the player to the new position.
+                            player.setDirection(Player.Direction.RIGHT);
+                            player.setPlayerState(Player.PlayerState.RUNNING);
+                            player.moveCharacter();
 
-                        // Move the camera with the player
-                        foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+                            // Move the camera with the player
+                            foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+
+                            gameObjects.rightUpdate(player.getPositionAmount().x);
+                        }
                     }
-                    // Shoot
-                    if (touchY < (graphicsHeight / 2)) {
-                        if(player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
-                            player.setPlayerState(Player.PlayerState.ATTACKING);
+                    // Jump - Touch Top Left quadrant to jump
+                    if (touchY < (graphicsHeight / 2) && touchX < (graphicsWidth / 2)) {
+                        player.setPlayerState(Player.PlayerState.JUMPING);
+                    }
+
+                    // Shoot - Touch Top Right quadrant to shoot
+                    if (touchY < (graphicsHeight / 2) && touchX > (graphicsWidth / 2)) {
+                        if(player.getIsGrounded()) {
+                            if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
+                                player.setPlayerState(Player.PlayerState.ATTACKING);
+                            }
                         }
                     }
                 }
@@ -220,7 +270,6 @@ public class GameScreen implements Screen {
 
 
                 // ------- ENEMY ------------------------------------------------------------
-
                 randomEnemy.setAIStates(player);
 
                 // If the player projectile hits the enemies bounding box and the player is attacking, the player has attacked the enemy.
@@ -233,12 +282,9 @@ public class GameScreen implements Screen {
                     }
                 }
 
-                // If the enemy has dies, remove from the stage and respawn a new enemy.
-                if(randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
-                    randomEnemy.remove();
-                    randomEnemy = enemyFactory.spawnRandomEnemy();
-                    randomEnemy.reset();
-                    stage.addActor(randomEnemy);
+                // If the enemy has died, remove from the stage and respawn a new enemy.
+                if(!randomEnemy.getIsAlive()) {
+                    newEnemy();
                 }
 
                 if(!player.getIsAlive()) {
@@ -255,6 +301,7 @@ public class GameScreen implements Screen {
                 break;
 
             case GAMEOVER:
+                MyGdxGame.startScreen.getMusic().stop();
                 MyGdxGame.startScreen.setStartScreen();
                 break;
         }
@@ -276,11 +323,13 @@ public class GameScreen implements Screen {
         foregroundTiledMapRenderer.setView((OrthographicCamera) foregroundViewport.getCamera());
         foregroundTiledMapRenderer.render(foregroundMapLayers);
 
-        // Render the bounding boxes.
+
+        // Render the bounding boxes. ** Very useful for debugging **
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
-        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
+//        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
         shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(), randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
+        shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(), levelEnd.getSprite().getHeight());
         shapeRenderer.end();
 
 
@@ -311,7 +360,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        level1.dispose();
+        stage.dispose();
+        uiBatch.dispose();
     }
 
     public GameHelper getHelper() { return helper; }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -16,12 +17,12 @@ Each instance of a projectile is owned by the character that fires it.
  */
 public class Projectile extends Actor {
 
-    public enum ProjectileState {FIRING, EXPLODING, RESET}
+    public enum ProjectileState { FIRING, EXPLODING, RESET }
 
     private ProjectileState projectileState = ProjectileState.RESET;
     private Character.Direction direction;
 
-    private Texture texture;
+    private TextureRegion textureRegion;
     private Sprite projectileSprite;
     private float movementSpeedX = 0;
     private float movementSpeedY = 0;
@@ -35,8 +36,10 @@ public class Projectile extends Actor {
 
     public Projectile(String texturePath, String firingSoundPath) {
 
-        texture = new Texture(texturePath);
-        projectileSprite = new Sprite(texture);
+        Texture texture = new Texture(texturePath);
+        textureRegion = new TextureRegion();
+        textureRegion.setRegion(texture);
+        projectileSprite = new Sprite(textureRegion);
         projectileStartPosition = new Vector2();
         offset = new Vector2();
         projectileStartWithOffset = new Vector2();
@@ -51,20 +54,21 @@ public class Projectile extends Actor {
     public void draw(Batch batch, float alpha) {
 
         if (projectileState == ProjectileState.FIRING) {
+
             if (direction == Character.Direction.LEFT) {
-                // CAN'T GET THIS TO WORK!! METHOD DOESN'T APPEAR TO DO WHAT I EXPECT.
-                // SEEMS LIKE MAYBE IT'S FLIPPING THE SPRITE BUT NOT THE UNDERLYING TEXTURE. CAN'T FLIP TEXTURE DIRECTLY.
-                if (!projectileSprite.isFlipX()) {
-                    projectileSprite.flip(true, false);
+                if (!textureRegion.isFlipX()) {
+                    textureRegion.flip(true, false);
                 }
             }
             if (direction == Character.Direction.RIGHT) {
-                if (projectileSprite.isFlipX()) {
-                    projectileSprite.flip(true, false);
+                if (textureRegion.isFlipX()) {
+                    textureRegion.flip(true,false);
+
                 }
             }
-            batch.draw(projectileSprite.getTexture(),projectileSprite.getX(),projectileSprite.getY(),
+            batch.draw(textureRegion, projectileSprite.getX(), projectileSprite.getY(),
                     projectileSprite.getWidth(),projectileSprite.getHeight());
+
         }
     }
 
@@ -73,12 +77,14 @@ public class Projectile extends Actor {
     public void act(float delta) {
 
         switchState();
+        setProjectileBounds();
     }
 
 
     public void switchState() {
 
         switch (projectileState) {
+
             case RESET:
                 projectileSprite.setPosition(getProjectileStartWithOffset().x, getProjectileStartWithOffset().y);
                 playFiringSound = true;
@@ -88,7 +94,6 @@ public class Projectile extends Actor {
             case FIRING:
                 moveProjectile();
                 playFiringSound();
-                setProjectileBounds();
                 break;
 //            case EXPLODING:
 //                currentFrame = currentExplodingFrame;
@@ -114,9 +119,11 @@ public class Projectile extends Actor {
     public void setProjectileBounds() {
         if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
             projectileState = ProjectileState.RESET;
+            switchState();
         }
         if(getProjectileSprite().getX() < 0) {
             projectileState = ProjectileState.RESET;
+            switchState();
         }
     }
 
@@ -166,4 +173,6 @@ public class Projectile extends Actor {
     public Character.Direction getDirection() { return direction; }
 
     public void setDirection(Character.Direction direction) { this.direction = direction; }
+
+
 }
