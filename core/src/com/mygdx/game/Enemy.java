@@ -2,86 +2,299 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+/*
+The parent class for all enemies. Inherits from the Character super class.
+ */
+public class Enemy extends Character {
 
 
-public class Enemy extends Character implements CharacterInterface {
+    // ---- STATES -------------------------
+    public enum EnemyState {IDLE,IDLE1, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD}
 
+    public enum MovingState {WALKING, RUNNING}
 
-    // ---- CHARACTER STATS -------------------------
-    public enum EnemyState { IDLE, WALKING, RUNNING, ATTACKING, THROWING, HURT, DYING, DEAD }
+    public enum AttackState {MELEE, PROJECTILE}
 
-    private EnemyState enemyState = EnemyState.WALKING;
+    private EnemyState enemyState = EnemyState.MOVING;
+    private MovingState movingState = MovingState.WALKING;
+    private AttackState attackState = AttackState.MELEE;
 
+    // Stats
     private String name;
 
-    // Not all enemies have the same states, these booleans act as a check to make sure that an enemy has the state before it accesses it.
+    private int walkingSpeed = 50;
+    private int runningSpeed = 100;
+    private int jumpingSpeed = 100;
+    private int fallingSpeed = 100;
+
     private boolean hasRunningState;
-    private boolean hasThrowingState;
-    private boolean hasProjectile = false;
+    private boolean hasProjectile;
 
 
-    // The default drawing method for Enemies. Enemies with projectiles override this method.
-    @Override
-    public void draw(Batch batch, float alpha) {
-        // Draws enemy sprite facing left
-        if (!getCurrentFrame().isFlipX()) {
-            getCurrentFrame().flip(true, false);
-        }
+    private boolean projectile = true;
 
-        batch.draw(getCurrentFrame(), getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+
+    public Enemy() {
+
+        // Default states as a backup. Individual enemies should override these.
+        super.setDirection(Direction.LEFT);
+        super.getSprite().setSize(100, 100);
+        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+
     }
+
 
     // Checks to see if the enemy is still alive after getting damaged. If still alive it enters the hurt state
     // otherwise it enters the dying state
     public void healthCheck(int damage) {
 
-        if((getHealth() - damage) > 0) {
+        if ((getHealth() - damage) > 0) {
             enemyState = EnemyState.HURT;
-            setHealth(getHealth() - damage);
-        }
-        else {
+            super.setHealth(getHealth() - damage);
+        } else {
             enemyState = EnemyState.DYING;
-            setHealth(0);
+            super.setHealth(0);
         }
     }
 
     // Resets the enemy after it is killed.
-    @Override
     public void reset() {
-        setIsAlive(true);
-        setHealth(getMax_Health());
-        setEnemyState(EnemyState.WALKING);
-        getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        super.setIsAlive(true);
+        super.setHealth(getMax_Health());
+        enemyState = EnemyState.MOVING;
+        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
     }
 
-    public void switchStates() {}
 
+    // Sets the conditions to enact if an enemy has been killed by the player.
+    public void killEnemy() {
+        super.setIsAlive(false);
+        enemyState = EnemyState.DEAD;
+    }
+
+    // A default set of states for every enemy that sets movement and applies animations
+    public void switchStates(Animation<TextureRegion> idleAnimation, Animation<TextureRegion> walkingAnimation,
+                             Animation<TextureRegion> hurtAnimation, Animation<TextureRegion> dyingAnimation) {
+
+        switch (enemyState) {
+
+            case IDLE:
+                super.setCURRENT_MOVEMENT_SPEED(0);
+                super.moveCharacter();
+                super.loopingAnimation(idleAnimation);
+
+                break;
+            case IDLE1:
+                enemyState = EnemyState.MOVING;
+                movingState=MovingState.WALKING;
+                break;
+
+            case MOVING:
+                if (movingState == MovingState.WALKING) {
+                    super.setCURRENT_MOVEMENT_SPEED(walkingSpeed);
+                    super.moveCharacter();
+                    super.loopingAnimation(walkingAnimation);
+                }
+                break;
+
+            case HURT:
+                super.setCURRENT_MOVEMENT_SPEED(0);
+                if (super.nonLoopingAnimation(hurtAnimation)) {
+                    enemyState = EnemyState.MOVING;
+                }
+                break;
+
+            case DYING:
+                super.setCURRENT_MOVEMENT_SPEED(0);
+                if (super.nonLoopingAnimation(dyingAnimation)) {
+                    killEnemy();
+                }
+                break;
+        }
+    }
+
+
+    // -----------------------------------------------------------
+    /*
+    Set of methods to help with AI states for enemies.
+     */
+    public float getAngle(Vector2 target) {
+        float angle = (float) Math.toDegrees(Math.atan2(target.y - getCenteredSpritePosition().y, target.x - getCenteredSpritePosition().x));
+
+        if (angle < 0) {
+            angle += 360;
+        }
+        return angle;
+    }
+
+    public boolean canSeePlayer(Player player) {
+        float angle = getAngle(player.getCenteredSpritePosition());
+        return angle > 170 && angle < 190;
+    }
+
+    // Finds out how far away the player is from the enemy sprite.
+    public float distanceFromPlayer(Player player) {
+        return super.getCenteredSpritePosition().dst(player.getCenteredSpritePosition());
+    }
+
+    // -----------------------------------------------------------
+
+
+    // For enemies with melee attacks, this method is only triggered when the enemy is in an attacking state.
+    public void checkDamage() {
+        // If the enemy has overlapped the players bounding box while attacking, it has attacked the player.
+        if (getSprite().getBoundingRectangle().overlaps(GameScreen.getInstance().player.getSprite().getBoundingRectangle())) {
+            if (GameScreen.getInstance().player.getIsAlive()) {
+                GameScreen.getInstance().player.healthCheck(getDamage());
+            }
+        }
+    }
+
+    /*
+    A set of default AI states that all enemies will share.
+    More specific AI states can be added to in individual enemies by overriding completely or with a call to super
+     */
+    public void setAIStates(Player player) {
+
+        if (player.getIsAlive()) {
+            if (canSeePlayer(player)) {
+
+                if (hasRunningState) {
+                    movingState = MovingState.RUNNING;
+                } else {
+                    movingState = MovingState.WALKING;
+                }
+                /*
+                 A potential trigger for when an enemy with projectiles starts firing at the player.
+                 Boolean projectile is a guard that prevents the enemy from constantly firing as it wil still be in the attack zone.
+                 Better trigger is likely needed.
+                 */
+                if (distanceFromPlayer(player) < 400 && distanceFromPlayer(player) > 390) {
+                    if (hasProjectile) {
+                        if (projectile) {
+                            enemyState = EnemyState.ATTACKING;
+                            projectile = false;
+                        }
+                    }
+                }
+                // If the enemy is close enough to melee attack.
+                if (distanceFromPlayer(player) < 50) {
+                    if (attackState == AttackState.MELEE) {
+                        enemyState = EnemyState.ATTACKING;
+
+                    }
+                }
+                // The enemy is meant to turn around if the player goes past it.
+                // ** Bugs ** At the moment with the camera movement this is prevented from happening
+                if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
+                    setDirection(Direction.RIGHT);
+                } else {
+                    setDirection(Direction.LEFT);
+                }
+            }
+            // If the enemy cant see the play it starts walking to the left
+            if (!canSeePlayer(player)) {
+                if (distanceFromPlayer(player) < 100) {
+                    if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x) {
+                        setDirection(Direction.RIGHT);
+                    } else {
+                        setDirection(Direction.LEFT);
+                    }
+                } else {
+                    super.setDirection(Direction.LEFT);
+                }
+                // If the enemy goes off screen it is reset.
+                if (super.getCenteredSpritePosition().x < -100) {
+                    reset();
+                }
+            }
+        }
+    }
 
 
     // ---------- GETTERS AND SETTERS -------------------------------------
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public EnemyState getEnemyState() { return enemyState; }
+    public EnemyState getEnemyState() {
+        return enemyState;
+    }
 
-    public void setEnemyState(EnemyState enemyState) { this.enemyState = enemyState; }
+    public void setEnemyState(EnemyState enemyState) {
+        this.enemyState = enemyState;
+    }
 
-    public boolean getHasRunningState() { return hasRunningState; }
+    public MovingState getMovingState() {
+        return movingState;
+    }
 
-    public void setHasRunningState(boolean hasRunningState) { this.hasRunningState = hasRunningState; }
+    public void setMovingState(MovingState movingState) {
+        this.movingState = movingState;
+    }
 
-    public boolean getHasThrowingState() { return hasThrowingState; }
+    public AttackState getAttackState() {
+        return attackState;
+    }
 
-    public void setHasThrowingState(boolean hasThrowingState) { this.hasThrowingState = hasThrowingState; }
+    public void setAttackState(AttackState attackState) {
+        this.attackState = attackState;
+    }
 
-    public boolean getHasProjectile() { return hasProjectile; }
+    public int getWalkingSpeed() {
+        return walkingSpeed;
+    }
 
-    public void setHasProjectile(boolean hasProjectile) { this.hasProjectile = hasProjectile; }
+    public void setWalkingSpeed(int walkingSpeed) {
+        this.walkingSpeed = walkingSpeed;
+    }
 
+    public int getRunningSpeed() {
+        return runningSpeed;
+    }
+
+    public void setRunningSpeed(int runningSpeed) {
+        this.runningSpeed = runningSpeed;
+    }
+
+    public int getJumpingSpeed() {
+        return jumpingSpeed;
+    }
+
+    public void setJumpingSpeed(int jumpingSpeed) {
+        this.jumpingSpeed = jumpingSpeed;
+    }
+
+    public int getFallingSpeed() {
+        return fallingSpeed;
+    }
+
+    public void setFallingSpeed(int fallingSpeed) {
+        this.fallingSpeed = fallingSpeed;
+    }
+
+    public boolean getHasRunningState() {
+        return hasRunningState;
+    }
+
+    public void setHasRunningState(boolean hasRunningState) {
+        this.hasRunningState = hasRunningState;
+    }
+
+    public boolean getHasProjectile() {
+        return hasProjectile;
+    }
+
+    public void setHasProjectile(boolean hasProjectile) {
+        this.hasProjectile = hasProjectile;
+    }
 }

@@ -4,6 +4,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
-
 public class StartScreen implements Screen {
 
 
@@ -27,11 +27,12 @@ public class StartScreen implements Screen {
 
     private Music music;
 
+    private Sound sound;
 
 
-
-    public StartScreen(MyGdxGame game) { this.game = game; }
-
+    public StartScreen(MyGdxGame game) {
+        this.game = game;
+    }
 
 
     public void create() {
@@ -44,14 +45,14 @@ public class StartScreen implements Screen {
         music.setLooping(true);
         music.setVolume(0.2f);
         // Sets the music to play depending on the selection in the options menu
-//        if(MyGdxGame.optionsScreen.getState()) {
-//            music.play();
-//        }
+        if (MyGdxGame.optionsScreen.getState()) {
+            music.play();
+        }
 
         // Buttons
         Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
 
-        Label gameTitle = new Label("Space Battles", skin);
+        Label gameTitle = new Label("Some Adventures", skin);
         final TextButton playButton = new TextButton("Play", skin, "default");
         final TextButton optionsButton = new TextButton("Options", skin, "default");
         final TextButton exitButton = new TextButton("Exit", skin, "default");
@@ -59,6 +60,7 @@ public class StartScreen implements Screen {
         playButton.setColor(Color.GREEN);
         optionsButton.setColor(Color.BLUE);
         exitButton.setColor(Color.RED);
+
 
         gameTitle.setFontScale(1.5f);
         playButton.getLabel().setFontScale(1.5f);
@@ -119,7 +121,15 @@ public class StartScreen implements Screen {
     }
 
     public void setStartScreen() {
-        game.setScreen(MyGdxGame.startScreen);
+        game.setScreen(MyGdxGame.restartScreen);
+    }
+
+    public void setStartScreen1() {
+        game.setScreen(MyGdxGame.victoryScreen);
+    }
+
+    public void setStartScreen2() {
+        game.setScreen(MyGdxGame.victoryScreen1);
     }
 
 
@@ -132,8 +142,6 @@ public class StartScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
         stage.draw();
     }
 
