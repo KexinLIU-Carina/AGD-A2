@@ -35,6 +35,7 @@ public class Character extends Actor {
     // The amount that a sprite will be translated by to reach its new position
     private Vector2 positionAmount;
 
+    float[] bounds;
 
 
     // ---- ANIMATION -------------------------
@@ -45,7 +46,8 @@ public class Character extends Actor {
 
     private float deltaTime = Gdx.graphics.getDeltaTime();
 
-    private int groundLevel = 240;
+
+    private float groundLevel;
 
 
 
@@ -57,7 +59,10 @@ public class Character extends Actor {
         startPosition = new Vector2();
         positionAmount = new Vector2();
 
+        groundLevel = GameScreen.getInstance().getLevel().getGroundLevel();
+        Gdx.app.log("Main", "groundLevel  " + groundLevel);
         startPosition.y = groundLevel;
+
     }
 
 
@@ -141,9 +146,27 @@ public class Character extends Actor {
         }
     }
 
-    public void compensateCamera(float x) {
+    public void compensateCamera(float cameraPositionAmount) {
 
-        sprite.translate(x, positionAmount.y);
+        sprite.translate(cameraPositionAmount, positionAmount.y);
+
+    }
+
+
+    public float[] getBounds() {
+
+        bounds = new float[4];
+
+        // Left side
+        bounds[0] = getCenteredSpritePosition().x - (getSprite().getBoundingRectangle().getWidth() / 2);
+        // Right side
+        bounds[1] = getCenteredSpritePosition().x + (getSprite().getBoundingRectangle().getWidth() / 2);
+        // Bottom side
+        bounds[2] = getCenteredSpritePosition().x - (getSprite().getBoundingRectangle().getHeight() / 2);
+        // Top side
+        bounds[3] = getCenteredSpritePosition().x + (getSprite().getBoundingRectangle().getHeight() / 2);
+
+        return bounds;
 
     }
 
@@ -177,5 +200,8 @@ public class Character extends Actor {
 
     public Vector2 getPositionAmount() { return positionAmount; }
 
-    public int getGroundLevel() { return groundLevel; }
+    public float getGroundLevel() { return groundLevel; }
+
+
+
 }

@@ -40,7 +40,6 @@ public class EnemyDragon extends Enemy {
         dragonProjectile.getProjectileSprite().setSize(70f, 50f);
 
         dragonProjectile.setMovementSpeedX(350f);
-//        dragonProjectile.setMovementSpeedY(-50f);
 
 
 
@@ -131,6 +130,11 @@ public class EnemyDragon extends Enemy {
                 }
             }
         }
+    }
+
+    @Override
+    public Projectile getEnemyProjectile() {
+        return dragonProjectile;
     }
 
 }

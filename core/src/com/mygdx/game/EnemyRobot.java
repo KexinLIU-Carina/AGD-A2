@@ -28,6 +28,7 @@ public class EnemyRobot extends Enemy {
         super.getStartPosition().x = Gdx.graphics.getWidth() + 100f;
         super.getSprite().setX(getStartPosition().x);
 
+        super.setAttackState(AttackState.MELEE);
         super.setHasRunningState(true);
 
 

@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -11,7 +12,7 @@ public class Enemy extends Character {
 
 
     // ---- STATES -------------------------
-    public enum EnemyState { IDLE, IDLE1, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD }
+    public enum EnemyState { IDLE, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD }
     public enum MovingState { WALKING, RUNNING }
     public enum AttackState { MELEE, PROJECTILE }
 
@@ -30,6 +31,7 @@ public class Enemy extends Character {
     private boolean hasRunningState;
     private boolean hasProjectile;
 
+    private Projectile enemyProjectile;
 
 
     public Enemy() {
@@ -38,6 +40,10 @@ public class Enemy extends Character {
         super.setDirection(Direction.LEFT);
 
     }
+
+
+    public Projectile getEnemyProjectile() { return enemyProjectile; }
+
 
 
     // Checks to see if the enemy is still alive after getting damaged. If still alive it enters the hurt state
@@ -138,6 +144,7 @@ public class Enemy extends Character {
                     enemyState = EnemyState.ATTACKING;
                 }
             }
+
             // The enemy is meant to turn around if the player goes past it.
             // ** Bugs ** At the moment with the camera movement this is prevented from happening
             if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
@@ -150,6 +157,23 @@ public class Enemy extends Character {
             if (super.getCenteredSpritePosition().x < -100) {
                 reset();
             }
+
+//            Gdx.app.log("Main", "player.getBounds " + player.getBounds()[1]);
+//            Gdx.app.log("Main", "getBounds " + getBounds()[0]);
+//
+//            if(getSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
+//                // if player right side meets enemy left side
+//                Gdx.app.log("Main", "                  -----------true   " + player.getBounds()[1] + "   " + getBounds()[0]);
+//                if(player.getBounds()[1] >= getBounds()[0]) {
+//                    Gdx.app.log("Main", "                  -----------right side meets left");
+//                   getSprite().setX(player.getCenteredSpritePosition().x);
+//                }
+//                // if player left side meets enemy right side
+//                else if(player.getBounds()[0] <= getBounds()[1]) {
+//                    Gdx.app.log("Main", "                  -----------left side meets right");
+//                    getSprite().setX(player.getBounds()[0]);
+//                }
+//            }
         }
     }
 

@@ -143,6 +143,13 @@ public class Projectile extends Actor {
     }
 
 
+    public void compensateCamera(float cameraPositionAmount) {
+
+        projectileSprite.translate(cameraPositionAmount, 0);
+
+    }
+
+
 
     // ------ GETTERS AND SETTERS --------------------------------
 

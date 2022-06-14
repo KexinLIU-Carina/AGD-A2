@@ -33,7 +33,6 @@ public class GameObjects extends Actor {
     public void checkCollided(float x, float y) {
        chest.checkCollided(x, y) ;
 
-
        scoreBar.score += chest.getValue();
     }
 

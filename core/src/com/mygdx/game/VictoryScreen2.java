@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
-public class VictoryScreen1 implements Screen {
+public class VictoryScreen2 implements Screen {
     Texture texture;
     Texture texture1;
     Texture texture2;
@@ -25,7 +25,7 @@ public class VictoryScreen1 implements Screen {
 
     private MyGdxGame game;
 
-    public VictoryScreen1(MyGdxGame game) {
+    public VictoryScreen2(MyGdxGame game) {
         this.game = game;
     }
 
@@ -33,12 +33,12 @@ public class VictoryScreen1 implements Screen {
     private void init() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        texture=new Texture(Gdx.files.internal("player/victory1.jpg"));
-        texture1=new Texture(Gdx.files.internal("player/next.jpg"));
+        texture=new Texture(Gdx.files.internal("player/victory.jpg"));
+        texture1=new Texture(Gdx.files.internal("player/restart.jpg"));
         texture2=new Texture(Gdx.files.internal("player/exit.jpg"));
         back=new Image(texture);
         back.setSize(1920,1080);
-        textureRegion=new TextureRegion(texture1,0,80,636,200);
+        textureRegion=new TextureRegion(texture1,0,80,1024,400);
         textureRegion1=new TextureRegion(texture2,0,40,600,250);
         begin=new Image(textureRegion);
         exit=new Image(textureRegion1);

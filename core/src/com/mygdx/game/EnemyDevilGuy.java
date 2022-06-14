@@ -28,7 +28,7 @@ public class EnemyDevilGuy extends Enemy {
         super.getStartPosition().x = Gdx.graphics.getWidth() + 100;
         super.getSprite().setX(getStartPosition().x);
 
-        super.setAttackState(AttackState.PROJECTILE);
+        super.setAttackState(AttackState.MELEE);
         super.setHasRunningState(true);
 
 

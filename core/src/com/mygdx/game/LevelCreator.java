@@ -3,8 +3,9 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -30,7 +31,6 @@ public class LevelCreator {
     private TiledMapRenderer foregroundTiledMapRenderer;
     private TiledMapRenderer backgroundTiledMapRenderer;
 
-
     // Viewports
     private FitViewport foregroundViewport1;
     private FitViewport foregroundViewport2;
@@ -40,23 +40,25 @@ public class LevelCreator {
     private int[] foregroundMapLayers;
     private int[] backgroundMapLayers;
 
+    Rectangle groundRectangle;
+    Rectangle[] collisionRectangle;
+    Sprite[] collisionSprites;
 
 //    private levelStart;
 //    private LevelEnd levelEnd;
 
+    private float groundLevel;
 
 
     public LevelCreator() {
-
 
         // Convenient to set up getWidth() and getHeight() here so the are easier to use.
         graphicsWidth = Gdx.graphics.getWidth();
         graphicsHeight = Gdx.graphics.getHeight();
 
-
     }
 
-    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers) {
+    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects) {
 
         loadedMap = new TmxMapLoader().load(filePath);
 
@@ -99,13 +101,55 @@ public class LevelCreator {
         backgroundViewport2 = new FitViewport(graphicsWidth, graphicsHeight, backgroundCamera2);
 
 
-        // Map Collision Layer
-//        collisionRectangle = new Rectangle();
-//        MapObject collisionObject = loadedMap.getLayers().get("Collision").getObjects().get("GroundCollision");
-//        if(collisionObject instanceof RectangleMapObject) {
-//            RectangleMapObject rmo = (RectangleMapObject) collisionObject;
-//            collisionRectangle = rmo.getRectangle();
-//        }
+        // ---------- Ground Collision ------------------------
+        groundRectangle = new Rectangle();
+        MapObject groundCollision = loadedMap.getLayers().get("GroundCollision").getObjects().get("GroundLevel");
+        if(groundCollision instanceof RectangleMapObject) {
+            RectangleMapObject rmo = (RectangleMapObject) groundCollision;
+            groundRectangle = rmo.getRectangle();
+        }
+
+        groundLevel = groundRectangle.getY() + groundRectangle.getHeight();
+
+
+        // ----  Platform Collision  --------------------------------
+        collisionSprites = new Sprite[numberOfCollisionObjects];
+        collisionRectangle = new Rectangle[numberOfCollisionObjects];
+        MapLayer collisionLayer = loadedMap.getLayers().get("Collision");
+        for(int i = 0; i < collisionLayer.getObjects().getCount(); i++) {
+            if(collisionLayer.getObjects().get(i) instanceof RectangleMapObject) {
+                RectangleMapObject rmo = (RectangleMapObject) collisionLayer.getObjects().get(i);
+                collisionRectangle[i] = rmo.getRectangle();
+                collisionSprites[i] = new Sprite();
+                collisionSprites[i].setBounds(collisionRectangle[i].getX(), collisionRectangle[i].getY(), collisionRectangle[i].getWidth(), collisionRectangle[i].getHeight());
+            }
+        }
+    }
+
+
+    public void checkMapPlatformCollision(Player player) {
+
+        for (Sprite collisionSprite : collisionSprites) {
+            if (player.getSprite().getBoundingRectangle().overlaps(collisionSprite.getBoundingRectangle())) {
+                if (player.getBounds()[0] >= collisionSprite.getY() + collisionSprite.getHeight()) {
+
+                    player.getSprite().setY(collisionSprite.getY() + collisionSprite.getHeight());
+                    player.setPlayerLevel(collisionSprite.getY() + collisionSprite.getHeight());
+                    player.setIsGrounded(true);
+                    player.setPlayerState(Player.PlayerState.IDLE);
+
+                }
+            }
+//            else {
+//                if(player.getPlayerLevel() > getGroundLevel()) {
+//                    // If the player moves off the platform to the left or right
+//                    if(player.getBounds()[0] < collisionSprites[i].getX() ||
+//                            player.getBounds()[0] > collisionSprites[i].getX() + collisionSprites[i].getWidth()) {
+//                        player.setPlayerState(Player.PlayerState.FALLING);
+//                    }
+//                }
+//            }
+        }
     }
 
 
@@ -125,7 +169,12 @@ public class LevelCreator {
         }
     }
 
+    public void collisionCompensateCamera(float cameraPositionAmount) {
 
+        for (Sprite collisionSprite : collisionSprites) {
+            collisionSprite.translate(cameraPositionAmount, 0);
+        }
+    }
 
     public void renderMap(Player player) {
 
@@ -246,4 +295,8 @@ public class LevelCreator {
 
 
     public TiledMap getLoadedMap() { return loadedMap; }
+
+    public float getGroundLevel() { return groundLevel; }
+
+    public Sprite[] getCollisionSprites() { return collisionSprites; }
 }

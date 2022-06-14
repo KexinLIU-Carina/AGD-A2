@@ -28,6 +28,8 @@ public class StartScreen implements Screen {
     private Music music;
 
 
+    private VictoryScreen1 victoryScreen1;
+    private VictoryScreen2 victoryScreen2;
 
 
     public StartScreen(MyGdxGame game) { this.game = game; }
@@ -125,6 +127,9 @@ public class StartScreen implements Screen {
         game.setScreen(MyGdxGame.startScreen);
     }
 
+    public void setVictoryScreen1() { game.setScreen(MyGdxGame.startScreen.victoryScreen1); }
+    public void setVictoryScreen2() { game.setScreen(MyGdxGame.startScreen.victoryScreen2); }
+
 
     @Override
     public void show() {
@@ -165,6 +170,5 @@ public class StartScreen implements Screen {
         music.dispose();
         stage.dispose();
     }
-
 
 }

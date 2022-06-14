@@ -48,7 +48,6 @@ public class EnemyYeti extends Enemy {
         yetiProjectile.getProjectileSprite().setSize(70f, 50f);
 
         yetiProjectile.setMovementSpeedX(300f);
-//        yetiProjectile.setMovementSpeedY(-50f);
 
 
 
@@ -166,10 +165,15 @@ public class EnemyYeti extends Enemy {
         if(yetiProjectile.getProjectileSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
             if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
                 if(player.getIsAlive()) {
-                    yetiProjectile.setProjectileState(Projectile.ProjectileState.RESET);
                     player.healthCheck(getDamage());
+                    yetiProjectile.setProjectileState(Projectile.ProjectileState.RESET);
                 }
             }
         }
+    }
+
+    @Override
+    public Projectile getEnemyProjectile() {
+        return yetiProjectile;
     }
 }

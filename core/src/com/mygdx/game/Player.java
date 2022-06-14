@@ -15,7 +15,7 @@ public class Player extends Character {
 
 
     // ---- PLAYER STATS -------------------------
-    public enum PlayerState { IDLE, IDLE1, RUNNING, JUMPING, JUMPING1, FALLING, ATTACKING, HURT, DYING, DEAD }
+    public enum PlayerState { IDLE, RUNNING, JUMPING, FALLING, ATTACKING, HURT, DYING, DEAD }
 
     private PlayerState playerState = PlayerState.IDLE;
     private int numberOfLives = 3;
@@ -26,15 +26,17 @@ public class Player extends Character {
     private int score = 0;
 
     // Set movement speeds
-    private int runningSpeed = 400;
-    private int jumpingSpeed = 550;
-    private int fallingSpeed = 550;
+    private int runningSpeed = 500;
+    private int jumpingSpeed = 600;
+    private int fallingSpeed = 600;
 
     // Point where the state switches from jumping to falling
-    private int terminal_Velocity = 520;
+    private int terminal_Velocity = 500;
 
     // Guard that acts as a check to prevent other states from being enacted before the jump has finished.
     private boolean grounded = true;
+
+    private float playerLevel;
 
     private Projectile playerProjectile;
 
@@ -71,15 +73,18 @@ public class Player extends Character {
 
     PlayerHP playerHP;
 
+
+
     public Player() {
 
         // Initialize start position
         getStartPosition().x = 200;
+        playerLevel = getGroundLevel();
+        getStartPosition().y = playerLevel;
         setDirection(Direction.RIGHT);
 
         // Player Health Bar
         playerHP = new PlayerHP();
-
 
 
         // ---- PROJECTILE -------------------------
@@ -258,8 +263,9 @@ public class Player extends Character {
                 if (super.nonLoopingAnimation(jumpingEndAnimation)) {
                     // If the player has fallen back to ground level then stop falling
                     if (getSprite().getY() < getGroundLevel()) {
-                        getSprite().setPosition(getSprite().getX(), getStartPosition().y);
+                        getSprite().setPosition(getSprite().getX(), getGroundLevel());
                         grounded = true;
+                        playerLevel = getGroundLevel();
                         playerState = PlayerState.IDLE;
                     }
                 }
@@ -368,4 +374,10 @@ public class Player extends Character {
     public void setScore(int score) { this.score = score; }
 
     public boolean getIsGrounded() { return grounded;}
+
+    public void setIsGrounded(boolean grounded) { this.grounded = grounded; }
+
+    public float getPlayerLevel() { return playerLevel; }
+
+    public void setPlayerLevel(float playerLevel) { this.playerLevel = playerLevel; }
 }
