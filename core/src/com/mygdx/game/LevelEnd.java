@@ -34,6 +34,8 @@ public class LevelEnd extends Character {
         // Initialize size and start position
         super.setDirection(Direction.LEFT);
         super.getStartPosition().x = 5000;
+        super.getSprite().setSize(100, 100);
+        super.getStartPosition().set(Gdx.graphics.getWidth() - 150, 120);
 
 
         // ---- ANIMATIONS -------------------------
@@ -56,6 +58,7 @@ public class LevelEnd extends Character {
     public void act(float delta) {
 
         switchStates();
+        endLevelCondition();
     }
 
     public void reset() {
@@ -103,6 +106,10 @@ public class LevelEnd extends Character {
         // ----- End Level Condition -------------------
         // If the players reaches the endGoal, so that the bounding boxes intersect then the level end goal has been reached.
         if(GameScreen.getInstance().getPlayer().getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
+    public void endLevelCondition() {
+
+        // If the players reaches the endGoal, so that the bounding boxes intersect then the level end goal has been reached.
+        if(GameScreen.getInstance().player.getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
             goalState = GoalState.SPELL;
         }
     }
