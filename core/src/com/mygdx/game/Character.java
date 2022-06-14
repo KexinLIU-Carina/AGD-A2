@@ -118,48 +118,34 @@ public class Character extends Actor {
         return new Vector2(x, y);
     }
 
+    // -----------------------------------------------------------
 
-    /*
-     Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
-     Can then apply this to find the new position for the sprite which is then translated to that position.
-     */
+    // Finds out how far away the player is from the enemy sprite.
+    public float distanceFromPlayer(Player player) {
+        return getCenteredSpritePosition().dst(player.getCenteredSpritePosition());
+    }
+
+    // -----------------------------------------------------------
+
 
     public void moveCharacter() {
-        if(direction == Direction.LEFT) {
-            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
-        }
-        else {
-            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
-        }
+
+        positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
         positionAmount.y = 0;
-        sprite.translate(positionAmount.x, positionAmount.y);
-    }
-
-
-    // Same as moveCharacter but applied to jumping. Adds the jumping speed to the Y axis.
-    public void jumpCharacter() {
 
         if(direction == Direction.LEFT) {
-            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
+            sprite.translate(-positionAmount.x, positionAmount.y);
         }
         else {
-            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
+            sprite.translate(positionAmount.x, positionAmount.y);
         }
-        positionAmount.y = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
-        sprite.translate(positionAmount.x, positionAmount.y);
     }
 
-    public void fallCharacter() {
-        if(direction == Direction.LEFT) {
-            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
-        }
-        else {
-            positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
-        }
-        positionAmount.y = GameScreen.getInstance().getHelper().setMovement(-CURRENT_MOVEMENT_SPEED);
-        sprite.translate(positionAmount.x, positionAmount.y);
-    }
+    public void compensateCamera(float x) {
 
+        sprite.translate(x, positionAmount.y);
+
+    }
 
 
     // ---------- GETTERS AND SETTERS -------------------------------------
@@ -192,8 +178,4 @@ public class Character extends Actor {
     public Vector2 getPositionAmount() { return positionAmount; }
 
     public int getGroundLevel() { return groundLevel; }
-
-    public void setNonLoopingStateTime(float nonLoopingStateTime) {
-        this.nonLoopingStateTime = nonLoopingStateTime;
-    }
 }

@@ -1,13 +1,9 @@
 package com.mygdx.game.GameObject;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
+
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Chest01 extends Chest{
 

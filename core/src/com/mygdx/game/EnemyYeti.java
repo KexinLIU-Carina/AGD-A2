@@ -110,6 +110,7 @@ public class EnemyYeti extends Enemy {
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
 
         if(super.getEnemyState() == EnemyState.MOVING) {
+
             if (super.getMovingState() == MovingState.RUNNING) {
                 super.setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
                 super.moveCharacter();
@@ -117,6 +118,7 @@ public class EnemyYeti extends Enemy {
             }
         }
         if(super.getEnemyState() == EnemyState.ATTACKING) {
+
             super.setCURRENT_MOVEMENT_SPEED(0);
 
             if (super.getAttackState() == AttackState.MELEE) {
@@ -147,18 +149,16 @@ public class EnemyYeti extends Enemy {
 
 
         // The yeti has a projectile attack and a melee attack. If it is far enough away from the player it uses the projectile attack.
-        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500) {
+        if (distanceFromPlayer(player) > 700 && distanceFromPlayer(player) < 1000) {
             setAttackState(AttackState.PROJECTILE);
             if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.RESET) {
                 setEnemyState(EnemyState.ATTACKING);
             }
         }
-
-        // If it is close enough to the player, it uses the melee attack
-        if(distanceFromPlayer(player) < 500) {
+        else {
+            // If it is close enough to the player, it uses the melee attack
             setAttackState(AttackState.MELEE);
         }
-
 
 
         // If the projectile has overlapped the players bounding box, it has hit the player and does damage.

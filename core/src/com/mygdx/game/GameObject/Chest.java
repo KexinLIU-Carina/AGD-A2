@@ -1,15 +1,9 @@
 package com.mygdx.game.GameObject;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.utils.Timer;
 
-import java.util.ArrayList;
-import java.util.Map;
+
 
 public abstract class Chest {
 
@@ -69,22 +63,16 @@ public abstract class Chest {
                 return value;
             }
         }
-
-
-
-
-
-
-
         return 0;
     }
+
+
 
     public void draw(Batch batch){
         if (state == ChestState.CLOSE){
             animations[0].draw(batch);
 
         }else{
-
 
             // if the chest is opened
 
@@ -100,7 +88,6 @@ public abstract class Chest {
                     count++;
                     j= j + 30;
                 }
-
             }
         }
 
@@ -132,8 +119,6 @@ public abstract class Chest {
         }
         return 0;
     }
-
-
 
 
 

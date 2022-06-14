@@ -3,7 +3,9 @@ package com.mygdx.game.GameObject;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+
 public class Chest02 extends Chest {
+
     public Chest02(int x, int y){
         this.Xposition = x;
         this.Yposition = y;
@@ -13,9 +15,6 @@ public class Chest02 extends Chest {
         this.chestLight = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_light.png"));
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_coins.png"));
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_open.png"));
-
-
-
 
 
 

@@ -4,7 +4,10 @@ package com.mygdx.game.GameObject;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+
+
 public class GameObjects extends Actor {
+
     private Chest chest;
 
     private ScoreBar scoreBar;
@@ -20,8 +23,6 @@ public class GameObjects extends Actor {
 
     @Override
     public void draw(Batch batch, float alpha) {
-
-
 
         scoreBar.draw(batch);
         chest.draw(batch);

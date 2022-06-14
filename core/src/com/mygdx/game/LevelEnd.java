@@ -33,7 +33,7 @@ public class LevelEnd extends Character {
 
         // Initialize size and start position
         super.setDirection(Direction.LEFT);
-        super.getStartPosition().x = Gdx.graphics.getWidth() - 150;
+        super.getStartPosition().x = 5000;
 
 
         // ---- ANIMATIONS -------------------------
@@ -56,7 +56,6 @@ public class LevelEnd extends Character {
     public void act(float delta) {
 
         switchStates();
-        endLevelCondition();
     }
 
     public void reset() {
@@ -88,10 +87,22 @@ public class LevelEnd extends Character {
     }
 
     // Adds additional AI states specific to this enemy, primarily its Attack state
-    public void endLevelCondition() {
+    public void setAIStates(Player player) {
 
+        if (player.getIsAlive()) {
+
+            // The enemy is meant to turn around if the player goes past it.
+            // ** Bugs ** At the moment with the camera movement this is prevented from happening
+            if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
+                setDirection(Direction.RIGHT);
+            } else {
+                setDirection(Direction.LEFT);
+            }
+        }
+
+        // ----- End Level Condition -------------------
         // If the players reaches the endGoal, so that the bounding boxes intersect then the level end goal has been reached.
-        if(GameScreen.getInstance().player.getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
+        if(GameScreen.getInstance().getPlayer().getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
             goalState = GoalState.SPELL;
         }
     }

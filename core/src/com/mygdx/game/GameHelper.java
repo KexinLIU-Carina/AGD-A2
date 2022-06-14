@@ -38,9 +38,9 @@ and then loads those regions into an animation. The returned animation contains 
     }
 
     /*
-This method simplifies speed calculations.
-It takes a desired speed float, multiplies it by delta time and returns the result.
- */
+    This method simplifies speed calculations.
+    It takes a desired speed float, multiplies it by delta time and returns the result.
+    */
     public float setMovement(float movementSpeed) {
 
         deltaTime = Gdx.graphics.getDeltaTime();

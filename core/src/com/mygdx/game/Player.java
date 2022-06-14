@@ -27,11 +27,11 @@ public class Player extends Character {
 
     // Set movement speeds
     private int runningSpeed = 400;
-    private int jumpingSpeed = 400;
-    private int fallingSpeed = 400;
+    private int jumpingSpeed = 550;
+    private int fallingSpeed = 550;
 
     // Point where the state switches from jumping to falling
-    private int terminal_Velocity = 600;
+    private int terminal_Velocity = 520;
 
     // Guard that acts as a check to prevent other states from being enacted before the jump has finished.
     private boolean grounded = true;
@@ -77,7 +77,7 @@ public class Player extends Character {
         getStartPosition().x = 200;
         setDirection(Direction.RIGHT);
 
-        // HP
+        // Player Health Bar
         playerHP = new PlayerHP();
 
 
@@ -133,7 +133,8 @@ public class Player extends Character {
     // otherwise it enters the dying state
     // *** COMMENT OUT THIS METHOD FOR GOD MODE ***
     public void healthCheck(int damage) {
-        Gdx.app.log("Main", "HealthCheck");
+
+        // The player can only get hurt or die when on the ground.
         if(grounded) {
             if ((super.getHealth() - damage) > 0) {
                 playerState = PlayerState.HURT;
@@ -148,7 +149,8 @@ public class Player extends Character {
 
     @Override
     public void draw(Batch batch, float alpha) {
-playerHP.draw(batch);
+
+        playerHP.draw(batch);
         super.draw(batch, alpha);
 
         /*
@@ -291,14 +293,61 @@ playerHP.draw(batch);
     }
 
 
+    /**
+     Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
+     Can then apply this to find the new position for the sprite which is then translated to that position.
+     Player has its own version of moveCharacter, which is overwritten so that other characters don't have the camera speed added to their movement
+     */
+
+    @Override
+    public void moveCharacter() {
+
+        getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+        getPositionAmount().y = 0;
+
+        if(getDirection() == Direction.LEFT) {
+            getSprite().translate(-getPositionAmount().x, getPositionAmount().y);
+        }
+        else {
+            getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+        }
+
+    }
+
+    // Same as moveCharacter but applied to jumping. Adds the jumping speed to the Y axis.
+    public void jumpCharacter() {
+
+        getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+        getPositionAmount().y = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+
+        if(getDirection() == Direction.LEFT) {
+            getSprite().translate(-getPositionAmount().x, getPositionAmount().y);
+        }
+        else {
+            getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+        }
+    }
+
+    public void fallCharacter() {
+
+        getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
+        getPositionAmount().y = GameScreen.getInstance().getHelper().setMovement(-getCURRENT_MOVEMENT_SPEED());
+
+        if(getDirection() == Direction.LEFT) {
+            getSprite().translate(-getPositionAmount().x, getPositionAmount().y);
+        }
+        else {
+            getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+        }
+    }
+
+
     // ---------- GETTERS AND SETTERS -------------------------------------
     public PlayerState getPlayerState() { return playerState; }
 
     public void setPlayerState(PlayerState playerState) { this.playerState = playerState; }
 
     public int getNumberOfLives() { return numberOfLives; }
-
-    public void setNumberOfLives(int numberOfLives) { this.numberOfLives = numberOfLives; }
 
     public boolean getPowerUp() { return powerUp; }
 

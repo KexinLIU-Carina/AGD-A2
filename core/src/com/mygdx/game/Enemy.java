@@ -106,22 +106,14 @@ public class Enemy extends Character {
     }
 
 
-    // -----------------------------------------------------------
-
-    // Finds out how far away the player is from the enemy sprite.
-    public float distanceFromPlayer(Player player) {
-        return super.getCenteredSpritePosition().dst(player.getCenteredSpritePosition());
-    }
-
-    // -----------------------------------------------------------
 
 
     // For enemies with melee attacks, this method is only triggered when the enemy is in an attacking state.
     public void checkDamage() {
         // If the enemy has overlapped the players bounding box while attacking, it has attacked the player.
-        if(getSprite().getBoundingRectangle().overlaps(GameScreen.getInstance().player.getSprite().getBoundingRectangle())) {
-            if (GameScreen.getInstance().player.getIsAlive()) {
-                GameScreen.getInstance().player.healthCheck(getDamage());
+        if(getSprite().getBoundingRectangle().overlaps(GameScreen.getInstance().getPlayer().getSprite().getBoundingRectangle())) {
+            if (GameScreen.getInstance().getPlayer().getIsAlive()) {
+                GameScreen.getInstance().getPlayer().healthCheck(getDamage());
             }
         }
     }
@@ -141,11 +133,11 @@ public class Enemy extends Character {
             }
 
             // If the enemy is close enough to melee attack.
-//            if (distanceFromPlayer(player) < 200) {
-//                if (attackState == AttackState.MELEE) {
-//                    enemyState = EnemyState.ATTACKING;
-//                }
-//            }
+            if (distanceFromPlayer(player) < 200) {
+                if (attackState == AttackState.MELEE) {
+                    enemyState = EnemyState.ATTACKING;
+                }
+            }
             // The enemy is meant to turn around if the player goes past it.
             // ** Bugs ** At the moment with the camera movement this is prevented from happening
             if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
