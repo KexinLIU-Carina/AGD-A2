@@ -31,6 +31,7 @@ public class LevelCreator {
     private TiledMapRenderer foregroundTiledMapRenderer;
     private TiledMapRenderer backgroundTiledMapRenderer;
 
+
     // Viewports
     private FitViewport foregroundViewport1;
     private FitViewport foregroundViewport2;
