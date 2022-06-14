@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class LevelCreator {
 
 
+
     private int graphicsWidth;
     private int graphicsHeight;
 
