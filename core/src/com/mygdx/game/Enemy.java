@@ -11,7 +11,7 @@ public class Enemy extends Character {
 
 
     // ---- STATES -------------------------
-    public enum EnemyState { IDLE, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD }
+    public enum EnemyState { IDLE, IDLE1, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD }
     public enum MovingState { WALKING, RUNNING }
     public enum AttackState { MELEE, PROJECTILE }
 

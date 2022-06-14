@@ -15,7 +15,7 @@ public class Player extends Character {
 
 
     // ---- PLAYER STATS -------------------------
-    public enum PlayerState { IDLE, RUNNING, JUMPING, FALLING, ATTACKING, HURT, DYING, DEAD }
+    public enum PlayerState { IDLE, IDLE1, RUNNING, JUMPING, JUMPING1, FALLING, ATTACKING, HURT, DYING, DEAD }
 
     private PlayerState playerState = PlayerState.IDLE;
     private int numberOfLives = 3;

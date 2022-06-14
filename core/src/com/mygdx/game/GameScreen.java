@@ -43,13 +43,14 @@ public class GameScreen implements Screen {
     private int graphicsWidth;
     private int graphicsHeight;
     private Character character = new Character();
-    private Projectile projectile = new Projectile();
+//    private Projectile projectile = new Projectile();
     private Boolean s = true;
     private Boolean shut = true;
     // Render
     private Stage stage;
 
     private SpriteBatch uiBatch;
+
     // Music
     private Music music;
     private Image image;
@@ -57,9 +58,11 @@ public class GameScreen implements Screen {
     private Image image2;
     private Image image3;
     Texture texture;
+
     // Player
     public Player player;
     private String s1 = "0";
+
     // Enemies
     private EnemyFactory enemyFactory;
     private Enemy randomEnemy;
@@ -69,8 +72,8 @@ public class GameScreen implements Screen {
 
     // Map
     // private TiledMap level1;
-    private TiledMapRenderer foregroundTiledMapRenderer;
-    private TiledMapRenderer backgroundTiledMapRenderer;
+//    private TiledMapRenderer foregroundTiledMapRenderer;
+//    private TiledMapRenderer backgroundTiledMapRenderer;
 
     private LevelCreator level1;
 
@@ -99,6 +102,8 @@ public class GameScreen implements Screen {
     private Image gold1;
     private Image gold2;
     private Image gold4;
+
+
     private static GameScreen INSTANCE = null;
 
     // --- Singleton ---------------
@@ -178,10 +183,10 @@ public class GameScreen implements Screen {
         // SpriteBatches
         uiBatch = new SpriteBatch();
 
-        // Map
-        level1 = new TmxMapLoader().load("Levels/Level1/Level1.tmx");
-        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.5f);
-        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1f);
+//        // Map
+//        level1 = new TmxMapLoader().load("Levels/Level1/Level1.tmx");
+//        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 0.5f);
+//        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(level1, 1f);
 
         // Level Maps
         level1 = new LevelCreator();
@@ -198,14 +203,14 @@ public class GameScreen implements Screen {
         graphicsWidth = Gdx.graphics.getWidth();
         graphicsHeight = Gdx.graphics.getHeight();
 
-        // Cameras. Separate cameras setup for potential to implement parallax scrolling
-        OrthographicCamera foregroundCamera = new OrthographicCamera();
-        foregroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
-        foregroundViewport = new FitViewport(graphicsWidth, graphicsHeight, foregroundCamera);
+//        // Cameras. Separate cameras setup for potential to implement parallax scrolling
+//        OrthographicCamera foregroundCamera = new OrthographicCamera();
+//        foregroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
+//        foregroundViewport = new FitViewport(graphicsWidth, graphicsHeight, foregroundCamera);
 
-        OrthographicCamera backgroundCamera = new OrthographicCamera();
-        backgroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
-        backgroundViewport = new FitViewport(graphicsWidth, graphicsHeight, backgroundCamera);
+//        OrthographicCamera backgroundCamera = new OrthographicCamera();
+//        backgroundCamera.setToOrtho(false, graphicsWidth, graphicsHeight);
+//        backgroundViewport = new FitViewport(graphicsWidth, graphicsHeight, backgroundCamera);
         image.setPosition(graphicsWidth - 250, graphicsHeight - 100);
         image1.setPosition(graphicsWidth - 250, graphicsHeight - 100);
         image2.setPosition(graphicsWidth - 160, graphicsHeight - 100);
@@ -252,10 +257,12 @@ public class GameScreen implements Screen {
         // ----- STAGE ----------
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+
         stage.addActor(image);
         stage.addActor(image1);
         stage.addActor(image2);
         stage.addActor(image3);
+
         stage.addActor(player);
         stage.addActor(randomEnemy);
         stage.addActor(levelEnd);
@@ -265,6 +272,7 @@ public class GameScreen implements Screen {
         // stage.addActor(gold);
         stage.addListener(new MyInputListener());
 
+
         // --- START NEW GAME ---------
         newGame();
     }
@@ -273,7 +281,6 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
         player.reset();
         newEnemy();
-        randomEnemy.reset();
         levelEnd.reset();
     }
 
@@ -439,7 +446,7 @@ public class GameScreen implements Screen {
                     label.setText("grade:" + f + "\nGold value:" + f1);
                     if (shut){
                         if (f>=75&&f1>=1){
-                            MyGdxGame.startScreen.setStartScreen1();
+//                            MyGdxGame.startScreen.setStartScreen1();
                             player.setPlayerState(Player.PlayerState.IDLE);
                             player.reset();
                             f=0;
@@ -448,7 +455,7 @@ public class GameScreen implements Screen {
                         }
                     }else {
                         if (f>=100&&f1>=8){
-                            MyGdxGame.startScreen.setStartScreen2();
+//                            MyGdxGame.startScreen.setStartScreen2();
                             player.setPlayerState(Player.PlayerState.IDLE);
                             player.reset();
                             f=0;
@@ -493,10 +500,9 @@ public class GameScreen implements Screen {
                 player.setPlayerState(Player.PlayerState.RUNNING);
                 player.moveCharacter();
                 // Move the camera with the player
-                foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+//                foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
             }
 
-        update(delta);
         stage.act();
 
 
@@ -512,17 +518,10 @@ public class GameScreen implements Screen {
                 player.setPlayerState(Player.PlayerState.RUNNING);
                 player.moveCharacter();
                 // Move the camera with the player
-                foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
+//                foregroundViewport.getCamera().translate(player.getPositionAmount().x, 0, 0);
             }
         }
         stage.act();
-        // Render the map
-        backgroundViewport.update(graphicsWidth, graphicsHeight);
-        backgroundTiledMapRenderer.setView((OrthographicCamera) backgroundViewport.getCamera());
-        backgroundTiledMapRenderer.render(backgroundMapLayers);
-        foregroundViewport.update(graphicsWidth, graphicsHeight);
-        foregroundTiledMapRenderer.setView((OrthographicCamera) foregroundViewport.getCamera());
-        foregroundTiledMapRenderer.render(foregroundMapLayers);
 
 
         // Render the bounding boxes. ** Very useful for debugging **
