@@ -20,7 +20,7 @@ public class GameObjects extends Actor {
 
     public GameObjects() {
         scoreBar = new ScoreBar();
-        chest = new Chest01(1000,300);
+        chest = new Chest01(2000,300);
         positionAmount = new Vector2();
 
     }
@@ -50,10 +50,16 @@ public class GameObjects extends Actor {
         positionAmount.y = 0;
 
         if(left) {
-            chest.getCurrentSprite().translate(positionAmount.x, positionAmount.y);
+            if (chest.getCurrentSprite() != null){
+                chest.XCollide += positionAmount.x;
+            chest.getCurrentSprite().translate(positionAmount.x, positionAmount.y);}
         }
         else {
+
+            if (chest.getCurrentSprite() != null){
+                chest.XCollide -= positionAmount.x;
             chest.getCurrentSprite().translate(-positionAmount.x, positionAmount.y);
+                }
         }
     }
 
