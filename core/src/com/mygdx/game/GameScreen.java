@@ -489,11 +489,15 @@ public class GameScreen implements Screen {
         shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(),
                 levelEnd.getSprite().getHeight());
 
-        for (int i = 0; i < level[MyGdxGame.levelNum].getCollisionSprites().length; i++) {
-            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites()[i].getX(),
-                    level[MyGdxGame.levelNum].getCollisionSprites()[i].getY(),
-                    level[MyGdxGame.levelNum].getCollisionSprites()[i].getWidth(),
-                    level[MyGdxGame.levelNum].getCollisionSprites()[i].getHeight());
+        for (int i = 0; i < level[MyGdxGame.levelNum].getCollisionSprites1().length; i++) {
+            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites1()[i].getX(),
+                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getY(),
+                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getWidth(),
+                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getHeight());
+            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites2()[i].getX(),
+                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getY(),
+                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getWidth(),
+                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getHeight());
         }
 
         shapeRenderer.setColor(Color.RED);
