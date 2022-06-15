@@ -1,11 +1,9 @@
 package com.mygdx.game;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mygdx.game.GameObject.ScoreBar;
 
 
 /*
@@ -71,7 +69,7 @@ public class Player extends Character {
     private Animation<TextureRegion> jumpingLoopHandgunAnimation;
     private Animation<TextureRegion> jumpingLoopRifleAnimation;
 
-    PlayerHP playerHP;
+    PlayerHP playerHealthBar;
 
 
 
@@ -84,7 +82,7 @@ public class Player extends Character {
         setDirection(Direction.RIGHT);
 
         // Player Health Bar
-        playerHP = new PlayerHP();
+        playerHealthBar = new PlayerHP();
 
 
         // ---- PROJECTILE -------------------------
@@ -93,13 +91,12 @@ public class Player extends Character {
         playerProjectile.getProjectileSprite().setSize(45, 25);
 
         playerProjectile.setMovementSpeedX(400f);
-//        playerProjectile.setMovementSpeedY(-30f);
 
 
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
-        idleHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle - Handgun.png", 9, 2, 18);
-        idleRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle - Rifle.png", 6, 3, 18);
+        idleHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle Blinking - Handgun.png", 9, 2, 18);
+        idleRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle Blinking - Rifle.png", 6, 3, 18);
         runningHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Handgun.png", 9, 2, 18);
         runningRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Rifle.png", 6, 3, 18);
         jumpingStartHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Handgun.png", 3, 2, 6);
@@ -130,7 +127,7 @@ public class Player extends Character {
         grounded = true;
         playerState = PlayerState.IDLE;
 
-        playerHP.reset();
+        playerHealthBar.reset();
     }
 
 
@@ -148,14 +145,14 @@ public class Player extends Character {
                 playerState = PlayerState.DYING;
                 super.setHealth(0);
             }
-            playerHP.modifyHP(getHealth());
+            playerHealthBar.modifyHP(getHealth());
         }
     }
 
     @Override
     public void draw(Batch batch, float alpha) {
 
-        playerHP.draw(batch);
+        playerHealthBar.draw(batch);
         super.draw(batch, alpha);
 
         /*

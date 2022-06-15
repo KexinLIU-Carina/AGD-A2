@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
     private Image image1;
     private Image image2;
     private Image image3;
-    Texture texture;
+    private Texture texture;
 
     // Player
     public Player player;
@@ -434,33 +434,33 @@ public class GameScreen implements Screen {
 
 
         // ----------------- ** Render the bounding boxes. ** Very useful for debugging ** ---------------------
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(),
-                player.getSprite().getHeight());
-        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(),
-                player.getPlayerProjectile().getProjectileSprite().getY(),
-                player.getPlayerProjectile().getProjectileSprite().getWidth(),
-                player.getPlayerProjectile().getProjectileSprite().getHeight());
-        shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(),
-                randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
-        shapeRenderer.rect(getLevel().getLevelEnd().getSprite().getX(), getLevel().getLevelEnd().getSprite().getY(), getLevel().getLevelEnd().getSprite().getWidth(),
-                getLevel().getLevelEnd().getSprite().getHeight());
-
-        for (int i = 0; i < level[MyGdxGame.levelNum].getCollisionSprites1().length; i++) {
-            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites1()[i].getX(),
-                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getY(),
-                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getWidth(),
-                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getHeight());
-            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites2()[i].getX(),
-                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getY(),
-                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getWidth(),
-                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getHeight());
-        }
-        shapeRenderer.rect(level[MyGdxGame.levelNum].getGroundRectangle().getX(), level[MyGdxGame.levelNum].getGroundRectangle().getY(), level[MyGdxGame.levelNum].getGroundRectangle().getWidth(),
-                level[MyGdxGame.levelNum].getGroundRectangle().getHeight());
-
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.end();
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(),
+//                player.getSprite().getHeight());
+//        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(),
+//                player.getPlayerProjectile().getProjectileSprite().getY(),
+//                player.getPlayerProjectile().getProjectileSprite().getWidth(),
+//                player.getPlayerProjectile().getProjectileSprite().getHeight());
+//        shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(),
+//                randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
+//        shapeRenderer.rect(getLevel().getLevelEnd().getSprite().getX(), getLevel().getLevelEnd().getSprite().getY(), getLevel().getLevelEnd().getSprite().getWidth(),
+//                getLevel().getLevelEnd().getSprite().getHeight());
+//
+//        for (int i = 0; i < level[MyGdxGame.levelNum].getCollisionSprites1().length; i++) {
+//            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites1()[i].getX(),
+//                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getY(),
+//                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getWidth(),
+//                    level[MyGdxGame.levelNum].getCollisionSprites1()[i].getHeight());
+//            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites2()[i].getX(),
+//                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getY(),
+//                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getWidth(),
+//                    level[MyGdxGame.levelNum].getCollisionSprites2()[i].getHeight());
+//        }
+//        shapeRenderer.rect(level[MyGdxGame.levelNum].getGroundRectangle().getX(), level[MyGdxGame.levelNum].getGroundRectangle().getY(), level[MyGdxGame.levelNum].getGroundRectangle().getWidth(),
+//                level[MyGdxGame.levelNum].getGroundRectangle().getHeight());
+//
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.end();
 
 
         // Render the stage actors
@@ -530,23 +530,31 @@ public class GameScreen implements Screen {
         }
     }
 
+    // The player must kill the correct number of enemies, collect enough treasure. Only after that can rescue the levelEnd.
     public void checkVictoryConditions() {
 
         if (shut) {
-            if (enemyKilledScore >= 75 && goldAmount >= 1 && getLevel().getLevelEnd().getIsEndReached()) {
-                MyGdxGame.startScreen.setVictoryScreen1();
-                player.reset();
-                enemyKilledScore = 0;
-                goldAmount = 0;
-                shut = false;
+            // Defeated enemies, treasure
+            if (enemyKilledScore >= 75 && goldAmount >= 1) {
+                // Rescue the levelEnd
+                if(getLevel().getLevelEnd().getIsEndReached()){
+                    MyGdxGame.startScreen.setVictoryScreen1();
+                    player.reset();
+                    enemyKilledScore = 0;
+                    goldAmount = 0;
+                    shut = false;
+                }
             }
-        } else {
-            if (enemyKilledScore >= 100 && goldAmount >= 4 && getLevel().getLevelEnd().getIsEndReached()) {
-                MyGdxGame.startScreen.setVictoryScreen2();
-                player.reset();
-                enemyKilledScore = 0;
-                goldAmount = 0;
-                shut = true;
+        }
+        else {
+            if (enemyKilledScore >= 100 && goldAmount >= 4) {
+                if(getLevel().getLevelEnd().getIsEndReached()) {
+                    MyGdxGame.startScreen.setVictoryScreen2();
+                    player.reset();
+                    enemyKilledScore = 0;
+                    goldAmount = 0;
+                    shut = true;
+                }
             }
         }
     }
