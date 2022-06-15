@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-
 /*
 The screen that contains the actual game. It is a singleton in case other classes need to access its elements.
  */
@@ -77,7 +76,6 @@ public class GameScreen implements Screen {
     private int startingPoint = 200;
     private int mapPosition = startingPoint;
 
-
     Label label;
     private int f = 0;
     private int f1 = 0;
@@ -87,7 +85,8 @@ public class GameScreen implements Screen {
     private Image gold2;
     private Image gold4;
 
-
+    // Controller
+    private Controller controller;
 
     private static GameScreen INSTANCE = null;
 
@@ -103,14 +102,13 @@ public class GameScreen implements Screen {
     }
     // ----------------------------------
 
-
-
     @Override
     public void show() {
         create();
     }
 
     public void create() {
+
         // Music
         skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
         label = new Label("Score:" + f + "\nGold value:" + f1, skin);
@@ -149,9 +147,8 @@ public class GameScreen implements Screen {
         // gold.setSize(100,100);
         // gold.setPosition(200,300);
 
-
-
-        // Convenient to set up getWidth() and getHeight() here so the are easier to use.
+        // Convenient to set up getWidth() and getHeight() here so the are easier to
+        // use.
         graphicsWidth = Gdx.graphics.getWidth();
         graphicsHeight = Gdx.graphics.getHeight();
 
@@ -164,13 +161,17 @@ public class GameScreen implements Screen {
         helper = new GameHelper();
 
         // Level Maps
-        level = new LevelCreator[1];
+        level = new LevelCreator[2];
         level[0] = new LevelCreator();
+        level[1] = new LevelCreator();
 
         int[] background = { 0, 1, 2, 3, 4 };
         int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
         level[0].createLevel("Levels/Level1/Level1.tmx", foreground, background, 4);
-
+        // TODO
+        int[] level2background = { 0 };
+        int[] level2foreground = { 1, 2, 3, 4, 5 };
+        level[1].createLevel("Levels/Level1/level2.tmx", level2foreground, level2background, 1);
 
         gameObjects = new GameObjects();
 
@@ -179,12 +180,12 @@ public class GameScreen implements Screen {
 
         // Enemy
         enemyFactory = new EnemyFactory();
-        // Have to spawn an enemy at the start so that newEnemy() has something to remove from the stage
+        // Have to spawn an enemy at the start so that newEnemy() has something to
+        // remove from the stage
         randomEnemy = enemyFactory.spawnRandomEnemy();
 
         // Level End
         levelEnd = new LevelEnd();
-
 
         image.setPosition(graphicsWidth - 250, graphicsHeight - 100);
         image1.setPosition(graphicsWidth - 250, graphicsHeight - 100);
@@ -230,6 +231,8 @@ public class GameScreen implements Screen {
             }
         });
 
+        // Controller
+        controller = new Controller();
 
         // ----- STAGE ----------
         stage = new Stage();
@@ -244,11 +247,10 @@ public class GameScreen implements Screen {
         stage.addActor(randomEnemy);
         stage.addActor(levelEnd);
         stage.addActor(gameObjects);
-
+        stage.addActor(controller);
         stage.addActor(label);
         // stage.addActor(gold);
         stage.addListener(new MyInputListener());
-
 
         // --- START NEW GAME ---------
         newGame();
@@ -278,14 +280,14 @@ public class GameScreen implements Screen {
         boolean checkTouch = Gdx.input.isTouched();
         int touchX = Gdx.input.getX();
         int touchY = Gdx.input.getY();
-
+        controller.update(checkTouch, touchX, touchY);
 
         gameObjects.checkCollided(player.getSprite().getX(), player.getSprite().getY());
+        f = f + gameObjects.returnValue();
         randomEnemy.setAIStates(player);
         levelEnd.setAIStates(player);
 
-        level[0].checkMapPlatformCollision(player);
-
+        level[MyGdxGame.levelNum].checkMapPlatformCollision(player);
 
         switch (gameState) {
             case PLAYING:
@@ -295,57 +297,81 @@ public class GameScreen implements Screen {
                     gameState = GameState.GAMEOVER;
                 }
 
-                //----------------- RESTRICT PLAYER MOVEMENT ---------------------------------------------------------------------------------------------
-                // Prevent player from going off screen to the left, or Prevent player from going too far to the right
+                // ----------------- RESTRICT PLAYER MOVEMENT
+                // ---------------------------------------------------------------------------------------------
+                // Prevent player from going off screen to the left, or Prevent player from
+                // going too far to the right
 
                 // ** BUGS - To fix - Player can jump outside the screen **
-                if(mapPosition <= startingPoint) {
+                if (mapPosition <= startingPoint) {
                     start = true;
-                }
-                else {
+                } else {
                     start = false;
                 }
 
                 if (player.getSprite().getX() < 200) {
                     prohibitLeft = true;
-                }
-                else {
+                } else {
                     prohibitLeft = false;
                 }
 
-                if(player.getSprite().getX() > (graphicsWidth - 600)) {
+                if (player.getSprite().getX() > (graphicsWidth - 600)) {
                     prohibitRight = true;
-                }
-                else {
+                } else {
                     prohibitRight = false;
                 }
 
-
-                // -------------------- TOUCH CONTROLS --------------------------------------------------------------
+                // -------------------- TOUCH CONTROLS
+                // --------------------------------------------------------------
                 /*
-                 Divides the screen into quadrants. Tap bottom left or bottom right to move left or right. Tap top left to jump, top right to shoot
-
+                 * Divides the screen into quadrants. Tap bottom left or bottom right to move
+                 * left or right. Tap top left to jump, top right to shoot
+                 * 
                  */
                 if (checkTouch) {
                     // Move Left - Touch Bottom Left quadrant to move
-                    if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Make sure the player is on the ground - can't run if jumping
+                    // if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
+                    // // Make sure the player is on the ground - can't run if jumping
+                    // movePlayerLeft();
+                    // }
+                    if (controller.leftButton.isDown) {
+                        controller.leftButton.isDown = true;
                         movePlayerLeft();
                     }
                     // Move Right - Touch Bottom Right quadrant to move
-                    if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Make sure the player is on the ground - can't run if jumping
+                    // if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
+                    // // Make sure the player is on the ground - can't run if jumping
+                    // movePlayerRight();
+                    // }
+
+                    if (controller.rightButton.isDown) {
+                        controller.rightButton.isDown = true;
                         movePlayerRight();
                     }
                     // Jump - Touch Top Left quadrant to jump
-                    if (touchY < (graphicsHeight / 2) && touchX < (graphicsWidth / 2)) {
+                    // if (touchY < (graphicsHeight / 2) && touchX < (graphicsWidth / 2)) {
+                    // player.setPlayerState(Player.PlayerState.JUMPING);
+                    // }
+                    if (controller.jumpButton.isDown) {
+                        controller.jumpButton.isDown = true;
                         player.setPlayerState(Player.PlayerState.JUMPING);
                     }
 
                     // Shoot - Touch Top Right quadrant to shoot
-                    if (touchY < (graphicsHeight / 2) && touchX > (graphicsWidth / 2)) {
-                        // Make sure the player is on the ground - can't shoot if jumping
-                        if(player.getIsGrounded()) {
+                    // if (touchY < (graphicsHeight / 2) && touchX > (graphicsWidth / 2)) {
+                    // // Make sure the player is on the ground - can't shoot if jumping
+                    // if(player.getIsGrounded()) {
+                    //
+                    // if (player.getPlayerProjectile().getProjectileState() ==
+                    // Projectile.ProjectileState.RESET) {
+                    // player.setPlayerState(Player.PlayerState.ATTACKING);
+                    // }
+                    // }
+                    // }
+
+                    if (controller.shootButton.isDown) {
+                        controller.shootButton.isDown = true;
+                        if (player.getIsGrounded()) {
 
                             if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
                                 player.setPlayerState(Player.PlayerState.ATTACKING);
@@ -353,7 +379,8 @@ public class GameScreen implements Screen {
                         }
                     }
                 }
-                // If the screen is no longer being touched while the character is running, the running immediately stops and is idle.
+                // If the screen is no longer being touched while the character is running, the
+                // running immediately stops and is idle.
                 // Other animation states have to play out their animations before stopping.
                 if (!checkTouch) {
                     if (player.getPlayerState() == Player.PlayerState.RUNNING) {
@@ -361,8 +388,8 @@ public class GameScreen implements Screen {
                     }
                 }
 
-
-                // --------------- KEYBOARD CONTROLS ----------------------------------------------
+                // --------------- KEYBOARD CONTROLS
+                // ----------------------------------------------
                 if (s1.equals("1")) {
                     movePlayerLeft();
 
@@ -370,12 +397,13 @@ public class GameScreen implements Screen {
                     movePlayerRight();
                 }
 
-
                 // ------- ENEMY ------------------------------------------------------------
                 // randomEnemy.setAIStates(player);
 
-                // If the player projectile hits the enemies bounding box and the player is attacking, the player has attacked the enemy.
-                if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle().overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
+                // If the player projectile hits the enemies bounding box and the player is
+                // attacking, the player has attacked the enemy.
+                if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle()
+                        .overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
                     if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.FIRING) {
                         if (randomEnemy.getIsAlive()) {
                             player.getPlayerProjectile().setProjectileState(Projectile.ProjectileState.RESET);
@@ -384,17 +412,17 @@ public class GameScreen implements Screen {
                     }
                 }
 
-
                 // If the enemy has died, remove from the stage and respawn a new enemy.
                 if (randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
 
                     f = f + 25;
+
                     f1 = f1 + 1;
 
                     label.setText("grade:" + f + "\nGold value:" + f1);
 
-                    if (shut){
-                        if (f >= 75 && f1 >= 1){
+                    if (shut) {
+                        if (f >= 75 && f1 >= 1) {
                             MyGdxGame.startScreen.setVictoryScreen1();
                             player.setPlayerState(Player.PlayerState.IDLE);
                             player.reset();
@@ -402,9 +430,8 @@ public class GameScreen implements Screen {
                             f1 = 0;
                             shut = false;
                         }
-                    }
-                    else {
-                        if (f >=100 && f1 >= 8){
+                    } else {
+                        if (f >= 100 && f1 >= 8) {
                             MyGdxGame.startScreen.setVictoryScreen2();
                             player.setPlayerState(Player.PlayerState.IDLE);
                             player.reset();
@@ -425,7 +452,7 @@ public class GameScreen implements Screen {
 
                 break;
 
-            //-------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------
 
             case RESTART:
                 newGame();
@@ -447,19 +474,27 @@ public class GameScreen implements Screen {
         update(delta);
 
         stage.act();
-        level[0].renderMap(player);
+        level[MyGdxGame.levelNum].renderMap(player);
 
         // Render the bounding boxes. ** Very useful for debugging **
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
-        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
-        shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(), randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
-        shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(), levelEnd.getSprite().getHeight());
+        shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(),
+                player.getSprite().getHeight());
+        shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(),
+                player.getPlayerProjectile().getProjectileSprite().getY(),
+                player.getPlayerProjectile().getProjectileSprite().getWidth(),
+                player.getPlayerProjectile().getProjectileSprite().getHeight());
+        shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(),
+                randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
+        shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(),
+                levelEnd.getSprite().getHeight());
 
-//        for(int i = 0; i < level[0].getCollisionSprites1().length; i++) {
-//            shapeRenderer.rect(level[0].getCollisionSprites1()[i].getX(), level[0].getCollisionSprites1()[i].getY(), level[0].getCollisionSprites1()[i].getWidth(), level[0].getCollisionSprites1()[i].getHeight());
-//            shapeRenderer.rect(level[0].getCollisionSprites2()[i].getX(), level[0].getCollisionSprites2()[i].getY(), level[0].getCollisionSprites2()[i].getWidth(), level[0].getCollisionSprites2()[i].getHeight());
-//        }
+        for (int i = 0; i < level[MyGdxGame.levelNum].getCollisionSprites().length; i++) {
+            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites()[i].getX(),
+                    level[MyGdxGame.levelNum].getCollisionSprites()[i].getY(),
+                    level[MyGdxGame.levelNum].getCollisionSprites()[i].getWidth(),
+                    level[MyGdxGame.levelNum].getCollisionSprites()[i].getHeight());
+        }
 
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
@@ -467,44 +502,44 @@ public class GameScreen implements Screen {
         // Render the stage actors
         stage.draw();
 
-
     }
 
     public void movePlayerLeft() {
-        if(player.getIsGrounded()) {
+        if (player.getIsGrounded()) {
             // Set the player to running and move the player to the new position.
             player.setDirection(Player.Direction.LEFT);
             player.setPlayerState(Player.PlayerState.RUNNING);
 
-            if(!start) {
+            if (!start) {
                 if (!prohibitLeft) {
                     // Move the player
                     player.moveCharacter();
                 }
                 mapPosition -= player.getPositionAmount().x;
 
-                // Move the camera with the player, and compensate for the movement on other objects
-                level[0].moveCamera(player);
-                level[0].collisionCompensateCamera(player.getPositionAmount().x);
+                // Move the camera with the player, and compensate for the movement on other
+                // objects
+                level[MyGdxGame.levelNum].moveCamera(player);
+                level[MyGdxGame.levelNum].collisionCompensateCamera(player.getPositionAmount().x);
                 randomEnemy.compensateCamera(player.getPositionAmount().x);
                 levelEnd.compensateCamera(player.getPositionAmount().x);
 
                 player.getPlayerProjectile().compensateCamera(player.getPositionAmount().x);
-                if(randomEnemy.getHasProjectile()) {
+                if (randomEnemy.getHasProjectile()) {
                     randomEnemy.getEnemyProjectile().compensateCamera(player.getPositionAmount().x);
                 }
 
-                gameObjects.leftUpdate(player.getPositionAmount().x);
+                gameObjects.update(true, player.getCURRENT_MOVEMENT_SPEED());
+
             }
         }
     }
 
     public void movePlayerRight() {
-        if(player.getIsGrounded()) {
+        if (player.getIsGrounded()) {
             // Set the player to running and move the player to the new position.
             player.setDirection(Player.Direction.RIGHT);
             player.setPlayerState(Player.PlayerState.RUNNING);
-
 
             if (!prohibitRight) {
                 // Move the player
@@ -513,22 +548,23 @@ public class GameScreen implements Screen {
             // Move the camera with the player
             mapPosition += player.getPositionAmount().x;
 
-            // Move the camera with the player, and compensate for the movement on other objects
-            level[0].moveCamera(player);
-            level[0].collisionCompensateCamera(-player.getPositionAmount().x);
+            // Move the camera with the player, and compensate for the movement on other
+            // objects
+            level[MyGdxGame.levelNum].moveCamera(player);
+            level[MyGdxGame.levelNum].collisionCompensateCamera(-player.getPositionAmount().x);
             randomEnemy.compensateCamera(-player.getPositionAmount().x);
             levelEnd.compensateCamera(-player.getPositionAmount().x);
 
             player.getPlayerProjectile().compensateCamera(-player.getPositionAmount().x);
             // Guard to make sure this isn't null
-            if(randomEnemy.getHasProjectile()) {
+            if (randomEnemy.getHasProjectile()) {
                 randomEnemy.getEnemyProjectile().compensateCamera(-player.getPositionAmount().x);
             }
 
-            gameObjects.rightUpdate(player.getPositionAmount().x);
+            gameObjects.update(false, player.getCURRENT_MOVEMENT_SPEED());
+
         }
     }
-
 
     private class MyInputListener extends InputListener {
 
@@ -623,6 +659,6 @@ public class GameScreen implements Screen {
     }
 
     public LevelCreator getLevel() {
-        return level[0];
+        return level[MyGdxGame.levelNum];
     }
 }

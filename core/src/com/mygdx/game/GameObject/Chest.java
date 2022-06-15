@@ -22,6 +22,9 @@ public abstract class Chest {
     protected int Xhelper;
     protected int Yhelper;
 
+
+    protected int XCollide;
+
     // TODO: I just set this value will return something to player
     private int value = 100;
 
@@ -52,10 +55,8 @@ public abstract class Chest {
 
     public int checkCollided(float x, float y){
 
-        // if the position within the scope
-        System.out.println(Xposition + Xhelper >= x);
-        System.out.println(x >= Xposition-Xhelper);
-        if (Xposition + Xhelper >= x && x >= Xposition-Xhelper){
+
+        if (XCollide+ Xhelper >= x && x >= XCollide-Xhelper){
 
             if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
 
@@ -86,6 +87,8 @@ public abstract class Chest {
                 if (j == i){
 
                     count++;
+
+                    // internal time
                     j= j + 30;
                 }
             }
@@ -118,6 +121,13 @@ public abstract class Chest {
             return value;
         }
         return 0;
+    }
+
+    public Sprite getCurrentSprite(){
+        if (count < animations.length){
+            return animations[count];
+        }
+        return null;
     }
 
 

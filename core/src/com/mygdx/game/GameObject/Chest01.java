@@ -11,6 +11,7 @@ public class Chest01 extends Chest{
     public Chest01(int x, int y){
         this.Xposition = x;
         this.Yposition = y;
+        this.XCollide = x;
 
 
         this.chestClosed =new Sprite( new Texture("Game Objects/Chests & Coins PNG/Chests/chest 01_closed.png"));
