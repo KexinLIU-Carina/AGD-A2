@@ -44,9 +44,9 @@ public class VictoryScreen1 implements Screen {
         exit=new Image(textureRegion1);
 
         begin.setSize(300,100);
-        begin.setPosition(Gdx.graphics.getWidth()/4,Gdx.graphics.getHeight()/4);
+        begin.setPosition(Gdx.graphics.getWidth()/4f,Gdx.graphics.getHeight()/4f);
         exit.setSize(300,100);
-        exit.setPosition(Gdx.graphics.getWidth()/3*2,Gdx.graphics.getHeight()/4);
+        exit.setPosition(Gdx.graphics.getWidth()/3f*2,Gdx.graphics.getHeight()/4f);
 
         stage.addActor(back);
         stage.addActor(begin);

@@ -34,11 +34,6 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	}
 
 
-	public void setStartScreen() {
-
-	}
-
-
 	@Override
 	public void render () {
 		super.render();

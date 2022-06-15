@@ -112,8 +112,6 @@ public class Enemy extends Character {
     }
 
 
-
-
     // For enemies with melee attacks, this method is only triggered when the enemy is in an attacking state.
     public void checkDamage() {
         // If the enemy has overlapped the players bounding box while attacking, it has attacked the player.
@@ -147,9 +145,10 @@ public class Enemy extends Character {
 
             // The enemy is meant to turn around if the player goes past it.
             // ** Bugs ** At the moment with the camera movement this is prevented from happening
-            if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
+            if ((player.getCenteredSpritePosition().x - 200) > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
                 setDirection(Direction.RIGHT);
-            } else {
+            }
+            else if ((player.getCenteredSpritePosition().x + 200) < getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
                 setDirection(Direction.LEFT);
             }
 
@@ -157,23 +156,6 @@ public class Enemy extends Character {
             if (super.getCenteredSpritePosition().x < -100) {
                 reset();
             }
-
-//            Gdx.app.log("Main", "player.getBounds " + player.getBounds()[1]);
-//            Gdx.app.log("Main", "getBounds " + getBounds()[0]);
-//
-//            if(getSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
-//                // if player right side meets enemy left side
-//                Gdx.app.log("Main", "                  -----------true   " + player.getBounds()[1] + "   " + getBounds()[0]);
-//                if(player.getBounds()[1] >= getBounds()[0]) {
-//                    Gdx.app.log("Main", "                  -----------right side meets left");
-//                   getSprite().setX(player.getCenteredSpritePosition().x);
-//                }
-//                // if player left side meets enemy right side
-//                else if(player.getBounds()[0] <= getBounds()[1]) {
-//                    Gdx.app.log("Main", "                  -----------left side meets right");
-//                    getSprite().setX(player.getBounds()[0]);
-//                }
-//            }
         }
     }
 

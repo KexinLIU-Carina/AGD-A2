@@ -16,6 +16,8 @@ public class LevelEnd extends Character {
 
     private Direction direction = Direction.LEFT;
 
+    private boolean endReached = false;
+
 
     // ---- ANIMATIONS CONTAINERS -------------------------
     private Animation<TextureRegion> idleAnimation;
@@ -53,14 +55,17 @@ public class LevelEnd extends Character {
         super.draw(batch, alpha);
     }
 
+
     @Override
     public void act(float delta) {
 
         switchStates();
     }
 
+
     public void reset() {
         super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+        endReached = false;
     }
 
 
@@ -82,7 +87,7 @@ public class LevelEnd extends Character {
         if(goalState == GoalState.SPELL) {
             if(super.nonLoopingAnimation(spellAnimation)) {
                 // changeLevel()
-                // *** Put code here to change the level
+                endReached = true;
             }
         }
     }
@@ -108,4 +113,10 @@ public class LevelEnd extends Character {
         }
     }
 
+
+    public boolean getIsEndReached() { return endReached; }
+
+    public GoalType getGoalType() { return goalType; }
+
+    public void setGoalType(GoalType goalType) { this.goalType = goalType; }
 }

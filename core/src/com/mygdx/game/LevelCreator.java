@@ -22,7 +22,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class LevelCreator {
 
 
-
     private int graphicsWidth;
     private int graphicsHeight;
 
@@ -48,7 +47,7 @@ public class LevelCreator {
     Sprite[] collisionSprites2;
 
 //    private levelStart;
-//    private LevelEnd levelEnd;
+    private LevelEnd levelEnd;
 
     private float groundLevel;
     private Sprite currentPlatform;
@@ -63,7 +62,7 @@ public class LevelCreator {
 
     }
 
-    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects) {
+    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects, LevelEnd.GoalType goalType) {
 
         loadedMap = new TmxMapLoader().load(filePath);
 
@@ -71,7 +70,6 @@ public class LevelCreator {
         backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(loadedMap);
         backgroundMapLayers = backgroundLayers;
         foregroundMapLayers = foregroundLayers;
-
 
         /*
          * Map scrolling is first implemented with two viewports that will both draw the level. The first and second viewport will be drawn.
@@ -139,6 +137,9 @@ public class LevelCreator {
                 collisionSprites2[i].setX(collisionRectangle[i].getX() + graphicsWidth);
             }
         }
+
+        levelEnd = new LevelEnd();
+        levelEnd.setGoalType(goalType);
     }
 
     /*
@@ -292,7 +293,6 @@ public class LevelCreator {
                 foregroundTiledMapRenderer.setView((OrthographicCamera) foregroundViewport2.getCamera());
                 foregroundTiledMapRenderer.render(foregroundMapLayers);
             }
-
         }
 
         if (player.getDirection() == Character.Direction.LEFT) {
@@ -350,12 +350,15 @@ public class LevelCreator {
         loadedMap.dispose();
     }
 
-
     public TiledMap getLoadedMap() { return loadedMap; }
 
     public float getGroundLevel() { return groundLevel; }
 
+    public Rectangle getGroundRectangle() { return groundRectangle; }
+
     public Sprite[] getCollisionSprites1() { return collisionSprites1; }
 
     public Sprite[] getCollisionSprites2() { return collisionSprites2; }
+
+    public LevelEnd getLevelEnd() { return levelEnd; }
 }

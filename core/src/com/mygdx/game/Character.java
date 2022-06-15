@@ -35,8 +35,6 @@ public class Character extends Actor {
     // The amount that a sprite will be translated by to reach its new position
     private Vector2 positionAmount;
 
-    float[] bounds;
-
 
     // ---- ANIMATION -------------------------
     private TextureRegion currentFrame;
@@ -60,7 +58,6 @@ public class Character extends Actor {
         positionAmount = new Vector2();
 
         groundLevel = GameScreen.getInstance().getLevel().getGroundLevel();
-        Gdx.app.log("Main", "groundLevel  " + groundLevel);
         startPosition.y = groundLevel;
 
     }
@@ -188,7 +185,4 @@ public class Character extends Actor {
     public Vector2 getPositionAmount() { return positionAmount; }
 
     public float getGroundLevel() { return groundLevel; }
-
-
-
 }
