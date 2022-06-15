@@ -63,4 +63,8 @@ public class GameObjects extends Actor {
         }
     }
 
+    public int returnValue(){
+        return chest.getValue();
+    }
+
 }

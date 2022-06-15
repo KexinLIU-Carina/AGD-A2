@@ -14,6 +14,11 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	public static StartScreen startScreen;
 	public static OptionsScreen optionsScreen;
 	public static GameScreen gameScreen;
+	public static RestartScreen restartScreen;
+	public static VictoryScreen2 victoryScreen;
+	public static VictoryScreen1 victoryScreen1;
+
+	public static int levelNum = 0;
 
 
 	@Override
@@ -22,6 +27,9 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 		startScreen = new StartScreen(this);
 		optionsScreen = new OptionsScreen(this);
+		restartScreen = new RestartScreen(this);
+		victoryScreen = new VictoryScreen2(this);
+		victoryScreen1 = new VictoryScreen1(this);
 		gameScreen = GameScreen.getInstance();
 
 		setScreen(startScreen);

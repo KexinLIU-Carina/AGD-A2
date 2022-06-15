@@ -87,7 +87,9 @@ public abstract class Chest {
                 if (j == i){
 
                     count++;
-                    j= j + 30;
+
+                    // internal time
+                    j= j + 60;
                 }
             }
         }

@@ -64,6 +64,7 @@ public class GameScreen implements Screen {
 
     private LevelCreator[] level;
 
+
     private Rectangle collisionRectangle;
     private ShapeRenderer shapeRenderer;
 
@@ -168,8 +169,9 @@ public class GameScreen implements Screen {
         helper = new GameHelper();
 
         // Level Maps
-        level = new LevelCreator[1];
+        level = new LevelCreator[2];
         level[0] = new LevelCreator();
+        level[1] = new LevelCreator();
 
         int[] background = { 0, 1, 2, 3, 4 };
         int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
@@ -177,7 +179,7 @@ public class GameScreen implements Screen {
         // TODO
         int[] level2background={0};
         int[] level2foreground ={1,2,3,4,5};
-//        level[0].createLevel("Levels/Level1/level2.tmx", level2foreground, level2background, 1 );
+        level[1].createLevel("Levels/Level1/level2.tmx", level2foreground, level2background, 1 );
 
 
 
@@ -293,10 +295,12 @@ public class GameScreen implements Screen {
 
 
         gameObjects.checkCollided(player.getSprite().getX(), player.getSprite().getY());
+        f= f + gameObjects.returnValue();
         randomEnemy.setAIStates(player);
         levelEnd.setAIStates(player);
 
-        level[0].checkMapPlatformCollision(player);
+        level[MyGdxGame.levelNum].checkMapPlatformCollision(player);
+
 
 
         switch (gameState) {
@@ -424,6 +428,7 @@ public class GameScreen implements Screen {
                 if (randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
 
                     f = f + 25;
+
                     f1 = f1 + 1;
 
                     label.setText("grade:" + f + "\nGold value:" + f1);
@@ -482,7 +487,7 @@ public class GameScreen implements Screen {
         update(delta);
 
         stage.act();
-        level[0].renderMap(player);
+        level[MyGdxGame.levelNum].renderMap(player);
 
         // Render the bounding boxes. ** Very useful for debugging **
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -491,8 +496,8 @@ public class GameScreen implements Screen {
         shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(), randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
         shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(), levelEnd.getSprite().getHeight());
 
-        for(int i = 0; i < level[0].getCollisionSprites().length; i++) {
-            shapeRenderer.rect(level[0].getCollisionSprites()[i].getX(), level[0].getCollisionSprites()[i].getY(), level[0].getCollisionSprites()[i].getWidth(), level[0].getCollisionSprites()[i].getHeight());
+        for(int i = 0; i < level[MyGdxGame.levelNum].getCollisionSprites().length; i++) {
+            shapeRenderer.rect(level[MyGdxGame.levelNum].getCollisionSprites()[i].getX(), level[MyGdxGame.levelNum].getCollisionSprites()[i].getY(), level[MyGdxGame.levelNum].getCollisionSprites()[i].getWidth(), level[MyGdxGame.levelNum].getCollisionSprites()[i].getHeight());
         }
 
         shapeRenderer.setColor(Color.RED);
@@ -518,8 +523,8 @@ public class GameScreen implements Screen {
                 mapPosition -= player.getPositionAmount().x;
 
                 // Move the camera with the player, and compensate for the movement on other objects
-                level[0].moveCamera(player);
-                level[0].collisionCompensateCamera(player.getPositionAmount().x);
+                level[MyGdxGame.levelNum].moveCamera(player);
+                level[MyGdxGame.levelNum].collisionCompensateCamera(player.getPositionAmount().x);
                 randomEnemy.compensateCamera(player.getPositionAmount().x);
                 levelEnd.compensateCamera(player.getPositionAmount().x);
 
@@ -551,8 +556,8 @@ public class GameScreen implements Screen {
             mapPosition += player.getPositionAmount().x;
 
             // Move the camera with the player, and compensate for the movement on other objects
-            level[0].moveCamera(player);
-            level[0].collisionCompensateCamera(-player.getPositionAmount().x);
+            level[MyGdxGame.levelNum].moveCamera(player);
+            level[MyGdxGame.levelNum].collisionCompensateCamera(-player.getPositionAmount().x);
             randomEnemy.compensateCamera(-player.getPositionAmount().x);
             levelEnd.compensateCamera(-player.getPositionAmount().x);
 
@@ -661,6 +666,6 @@ public class GameScreen implements Screen {
     }
 
     public LevelCreator getLevel() {
-        return level[0];
+        return level[MyGdxGame.levelNum];
     }
 }
