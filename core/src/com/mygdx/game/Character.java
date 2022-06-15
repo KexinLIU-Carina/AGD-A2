@@ -146,27 +146,14 @@ public class Character extends Actor {
         }
     }
 
+    /*
+     * Moves the characters in the opposite direction to oppose the cameras movement,
+     * giving the impression that they are static objects or if they are moving the cameras movement is not added to their own.
+     * All "compensate" methods do this.
+     */
     public void compensateCamera(float cameraPositionAmount) {
 
         sprite.translate(cameraPositionAmount, positionAmount.y);
-
-    }
-
-
-    public float[] getBounds() {
-
-        bounds = new float[4];
-
-        // Left side
-        bounds[0] = getCenteredSpritePosition().x - (getSprite().getBoundingRectangle().getWidth() / 2);
-        // Right side
-        bounds[1] = getCenteredSpritePosition().x + (getSprite().getBoundingRectangle().getWidth() / 2);
-        // Bottom side
-        bounds[2] = getCenteredSpritePosition().x - (getSprite().getBoundingRectangle().getHeight() / 2);
-        // Top side
-        bounds[3] = getCenteredSpritePosition().x + (getSprite().getBoundingRectangle().getHeight() / 2);
-
-        return bounds;
 
     }
 
