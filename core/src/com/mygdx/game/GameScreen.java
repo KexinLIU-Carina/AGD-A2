@@ -450,16 +450,16 @@ public class GameScreen implements Screen {
         level[0].renderMap(player);
 
         // Render the bounding boxes. ** Very useful for debugging **
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.rect(player.getSprite().getX(), player.getSprite().getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
         shapeRenderer.rect(player.getPlayerProjectile().getProjectileSprite().getX(), player.getPlayerProjectile().getProjectileSprite().getY(), player.getPlayerProjectile().getProjectileSprite().getWidth(), player.getPlayerProjectile().getProjectileSprite().getHeight());
         shapeRenderer.rect(randomEnemy.getSprite().getX(), randomEnemy.getSprite().getY(), randomEnemy.getSprite().getWidth(), randomEnemy.getSprite().getHeight());
         shapeRenderer.rect(levelEnd.getSprite().getX(), levelEnd.getSprite().getY(), levelEnd.getSprite().getWidth(), levelEnd.getSprite().getHeight());
 
-        for(int i = 0; i < level[0].getCollisionSprites1().length; i++) {
-            shapeRenderer.rect(level[0].getCollisionSprites1()[i].getX(), level[0].getCollisionSprites1()[i].getY(), level[0].getCollisionSprites1()[i].getWidth(), level[0].getCollisionSprites1()[i].getHeight());
-            shapeRenderer.rect(level[0].getCollisionSprites2()[i].getX(), level[0].getCollisionSprites2()[i].getY(), level[0].getCollisionSprites2()[i].getWidth(), level[0].getCollisionSprites2()[i].getHeight());
-        }
+//        for(int i = 0; i < level[0].getCollisionSprites1().length; i++) {
+//            shapeRenderer.rect(level[0].getCollisionSprites1()[i].getX(), level[0].getCollisionSprites1()[i].getY(), level[0].getCollisionSprites1()[i].getWidth(), level[0].getCollisionSprites1()[i].getHeight());
+//            shapeRenderer.rect(level[0].getCollisionSprites2()[i].getX(), level[0].getCollisionSprites2()[i].getY(), level[0].getCollisionSprites2()[i].getWidth(), level[0].getCollisionSprites2()[i].getHeight());
+//        }
 
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.end();
