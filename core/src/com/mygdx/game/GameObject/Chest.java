@@ -120,6 +120,13 @@ public abstract class Chest {
         return 0;
     }
 
+    public Sprite getCurrentSprite(){
+        if (count < animations.length){
+            return animations[count];
+        }
+        return null;
+    }
+
 
 
 

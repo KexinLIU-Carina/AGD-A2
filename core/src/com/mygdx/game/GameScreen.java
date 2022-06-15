@@ -493,7 +493,10 @@ public class GameScreen implements Screen {
                     randomEnemy.getEnemyProjectile().compensateCamera(player.getPositionAmount().x);
                 }
 
-                gameObjects.leftUpdate(player.getPositionAmount().x);
+
+                gameObjects.update(true, player.getCURRENT_MOVEMENT_SPEED());
+
+
             }
         }
     }
@@ -524,7 +527,8 @@ public class GameScreen implements Screen {
                 randomEnemy.getEnemyProjectile().compensateCamera(-player.getPositionAmount().x);
             }
 
-            gameObjects.rightUpdate(player.getPositionAmount().x);
+            gameObjects.update(false, player.getCURRENT_MOVEMENT_SPEED());
+
         }
     }
 
