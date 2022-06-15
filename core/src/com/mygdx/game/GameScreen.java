@@ -88,6 +88,10 @@ public class GameScreen implements Screen {
     private Image gold4;
 
 
+    // Controller
+    private Controller controller;
+
+
 
     private static GameScreen INSTANCE = null;
 
@@ -170,6 +174,11 @@ public class GameScreen implements Screen {
         int[] background = { 0, 1, 2, 3, 4 };
         int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
         level[0].createLevel("Levels/Level1/Level1.tmx", foreground, background, 4);
+        // TODO
+        int[] level2background={0};
+        int[] level2foreground ={1,2,3,4,5};
+//        level[0].createLevel("Levels/Level1/level2.tmx", level2foreground, level2background, 1 );
+
 
 
         gameObjects = new GameObjects();
@@ -230,6 +239,8 @@ public class GameScreen implements Screen {
             }
         });
 
+        // Controller
+        controller = new Controller();
 
         // ----- STAGE ----------
         stage = new Stage();
@@ -244,7 +255,7 @@ public class GameScreen implements Screen {
         stage.addActor(randomEnemy);
         stage.addActor(levelEnd);
         stage.addActor(gameObjects);
-
+        stage.addActor(controller);
         stage.addActor(label);
         // stage.addActor(gold);
         stage.addListener(new MyInputListener());
@@ -278,6 +289,7 @@ public class GameScreen implements Screen {
         boolean checkTouch = Gdx.input.isTouched();
         int touchX = Gdx.input.getX();
         int touchY = Gdx.input.getY();
+        controller.update(checkTouch, touchX, touchY);
 
 
         gameObjects.checkCollided(player.getSprite().getX(), player.getSprite().getY());
@@ -328,23 +340,46 @@ public class GameScreen implements Screen {
                  */
                 if (checkTouch) {
                     // Move Left - Touch Bottom Left quadrant to move
-                    if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Make sure the player is on the ground - can't run if jumping
+//                    if ((touchX < (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
+//                        // Make sure the player is on the ground - can't run if jumping
+//                        movePlayerLeft();
+//                    }
+                    if (controller.leftButton.isDown){
+                        controller.leftButton.isDown = true;
                         movePlayerLeft();
                     }
                     // Move Right - Touch Bottom Right quadrant to move
-                    if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
-                        // Make sure the player is on the ground - can't run if jumping
+//                    if ((touchX > (graphicsWidth / 2) && (touchY > (graphicsHeight / 2)))) {
+//                        // Make sure the player is on the ground - can't run if jumping
+//                        movePlayerRight();
+//                    }
+
+                    if (controller.rightButton.isDown){
+                        controller.rightButton.isDown = true;
                         movePlayerRight();
                     }
                     // Jump - Touch Top Left quadrant to jump
-                    if (touchY < (graphicsHeight / 2) && touchX < (graphicsWidth / 2)) {
+//                    if (touchY < (graphicsHeight / 2) && touchX < (graphicsWidth / 2)) {
+//                        player.setPlayerState(Player.PlayerState.JUMPING);
+//                    }
+                    if (controller.jumpButton.isDown){
+                        controller.jumpButton.isDown = true;
                         player.setPlayerState(Player.PlayerState.JUMPING);
                     }
 
                     // Shoot - Touch Top Right quadrant to shoot
-                    if (touchY < (graphicsHeight / 2) && touchX > (graphicsWidth / 2)) {
-                        // Make sure the player is on the ground - can't shoot if jumping
+//                    if (touchY < (graphicsHeight / 2) && touchX > (graphicsWidth / 2)) {
+//                        // Make sure the player is on the ground - can't shoot if jumping
+//                        if(player.getIsGrounded()) {
+//
+//                            if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
+//                                player.setPlayerState(Player.PlayerState.ATTACKING);
+//                            }
+//                        }
+//                    }
+
+                    if (controller.shootButton.isDown){
+                        controller.shootButton.isDown = true;
                         if(player.getIsGrounded()) {
 
                             if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.RESET) {
