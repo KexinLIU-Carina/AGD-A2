@@ -89,7 +89,7 @@ public abstract class Chest {
                     count++;
 
                     // internal time
-                    j= j + 60;
+                    j= j + 30;
                 }
             }
         }

@@ -32,7 +32,12 @@ public class StartScreen implements Screen {
     private VictoryScreen2 victoryScreen2;
 
 
-    public StartScreen(MyGdxGame game) { this.game = game; }
+    public StartScreen(MyGdxGame game) { this.game = game;
+
+        // victory screen
+        victoryScreen1 = new VictoryScreen1(game);
+        victoryScreen2 = new VictoryScreen2(game);
+    }
 
 
 

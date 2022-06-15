@@ -116,6 +116,9 @@ public class GameScreen implements Screen {
     }
 
     public void create() {
+
+
+
         // Music
         skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
         label = new Label("Score:" + f + "\nGold value:" + f1, skin);
