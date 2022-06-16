@@ -55,7 +55,7 @@ public class VictoryScreen2 implements Screen {
         begin.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                MyGdxGame.levelNum = 0;
+                MyGdxGame.levelNum = LevelFactory.LevelNum.Level1;
                 game.setScreen(GameScreen.getInstance());
                 return true;
             }

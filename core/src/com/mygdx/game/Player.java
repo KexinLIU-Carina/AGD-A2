@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,7 +27,7 @@ public class Player extends Character {
     // Set movement speeds
     private int runningSpeed = 500;
     private int jumpingSpeed = 600;
-    private int fallingSpeed = 600;
+    private int fallingSpeed = 800;
 
     // Point where the state switches from jumping to falling
     private int terminal_Velocity = 500;
@@ -73,6 +74,7 @@ public class Player extends Character {
 
 
 
+
     public Player() {
 
         // Initialize start position
@@ -90,7 +92,7 @@ public class Player extends Character {
         playerProjectile = new Projectile("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3");
         playerProjectile.getProjectileSprite().setSize(45, 25);
 
-        playerProjectile.setMovementSpeedX(400f);
+        playerProjectile.setMovementSpeedX(500f);
 
 
         // ---- ANIMATIONS -------------------------
@@ -137,16 +139,16 @@ public class Player extends Character {
     public void healthCheck(int damage) {
 
         // The player can only get hurt or die when on the ground.
-        if(grounded) {
-            if ((super.getHealth() - damage) > 0) {
-                playerState = PlayerState.HURT;
-                super.setHealth(getHealth() - damage);
-            } else {
-                playerState = PlayerState.DYING;
-                super.setHealth(0);
-            }
-            playerHealthBar.modifyHP(getHealth());
-        }
+//        if(grounded) {
+//            if ((super.getHealth() - damage) > 0) {
+//                playerState = PlayerState.HURT;
+//                super.setHealth(getHealth() - damage);
+//            } else {
+//                playerState = PlayerState.DYING;
+//                super.setHealth(0);
+//            }
+//            playerHealthBar.modifyHP(getHealth());
+//        }
     }
 
     @Override
@@ -186,6 +188,11 @@ public class Player extends Character {
         playerProjectile.getProjectileStartPosition().y = getSprite().getY();
         playerProjectile.act(delta);
 
+//        Gdx.app.log("Main", "Player y" + getSprite().getY());
+//        Gdx.app.log("Main", "Player state" + playerState);
+//        Gdx.app.log("Main", "Player IsGrounded(" + getIsGrounded());
+//        Gdx.app.log("Main", "Player ProjectileState" + playerProjectile.getProjectileState());
+
         switchStates();
     }
 
@@ -204,8 +211,9 @@ public class Player extends Character {
             hurtAnimation = hurtRifleAnimation;
             dyingAnimation = dyingRifleAnimation;
 
-            // The rifle does more damage
-            super.setDamage(100);
+            // The rifle is faster and does more damage
+            playerProjectile.setMovementSpeedX(900f);
+            super.setDamage(35);
         }
         else {
             idleAnimation = idleHandgunAnimation;
@@ -217,6 +225,7 @@ public class Player extends Character {
             hurtAnimation = hurtHandgunAnimation;
             dyingAnimation = dyingHandgunAnimation;
 
+            playerProjectile.setMovementSpeedX(500f);
             super.setDamage(20);
         }
 
@@ -257,7 +266,7 @@ public class Player extends Character {
                 // Start falling
                 fallCharacter();
 
-                if (super.nonLoopingAnimation(jumpingEndAnimation)) {
+//                if (super.nonLoopingAnimation(jumpingEndAnimation)) {
                     // If the player has fallen back to ground level then stop falling
                     if (getSprite().getY() < getGroundLevel()) {
                         getSprite().setPosition(getSprite().getX(), getGroundLevel());
@@ -265,7 +274,7 @@ public class Player extends Character {
                         playerLevel = getGroundLevel();
                         playerState = PlayerState.IDLE;
                     }
-                }
+//                }
 
                 break;
 

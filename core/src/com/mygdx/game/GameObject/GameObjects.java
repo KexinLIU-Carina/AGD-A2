@@ -4,45 +4,75 @@ package com.mygdx.game.GameObject;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mygdx.game.Character;
 import com.mygdx.game.GameScreen;
+import com.mygdx.game.LevelEnd;
+import com.mygdx.game.Player;
 
 
 public class GameObjects extends Actor {
 
-    private Chest chest;
+    private ChestCreator chest;
 
     private ScoreBar scoreBar;
 
     private Vector2 positionAmount;
 
+    private PowerUp powerUp;
+
+    private LevelEnd levelEnd;
 
 
     public GameObjects() {
-        scoreBar = new ScoreBar();
-        chest = new Chest01(2000,300);
+
         positionAmount = new Vector2();
 
+        scoreBar = new ScoreBar();
+
+        powerUp = new PowerUp("Game Objects/Diamond.png", "Audio/Sounds/shot.mp3", "Audio/Sounds/shot.mp3");
+
+        chest = new ChestCreator();
+
+
+        levelEnd = new LevelEnd();
+
     }
+
 
 
 
     @Override
     public void draw(Batch batch, float alpha) {
-
         scoreBar.draw(batch, alpha);
         chest.draw(batch);
+        powerUp.draw(batch, alpha);
+        levelEnd.draw(batch, alpha);
+    }
+
+    @Override
+    public void act(float delta) {
+        powerUp.act(delta);
+        levelEnd.act(delta);
     }
 
 
+    public void reset() {
+        powerUp.reset();
+        levelEnd.reset();
+    }
 
-    public void checkCollided(float x, float y) {
 
-               chest.checkCollided(x, y) ;
-               ScoreBar.goldAmount += chest.getValue();
+    public void checkCollided(Player player) {
+
+        chest.checkCollided(player.getSprite().getX(), player.getSprite().getY());
+        ScoreBar.goldAmount += chest.getValue();
+        powerUp.checkCollided(player);
 
     }
 
+    public void compensateCamera(float cameraPositionAmount) {
+        powerUp.compensateCamera(cameraPositionAmount);
+        levelEnd.compensateCamera(cameraPositionAmount);
+    }
 
 
 
@@ -53,22 +83,44 @@ public class GameObjects extends Actor {
         if(left) {
             if (chest.getCurrentSprite() != null){
                 chest.XCollide += positionAmount.x;
-            chest.getCurrentSprite().translate(positionAmount.x, positionAmount.y);}
+                chest.getCurrentSprite().translate(positionAmount.x, positionAmount.y);
+            }
         }
         else {
 
             if (chest.getCurrentSprite() != null){
                 chest.XCollide -= positionAmount.x;
-            chest.getCurrentSprite().translate(-positionAmount.x, positionAmount.y);
-                }
+                chest.getCurrentSprite().translate(-positionAmount.x, positionAmount.y);
+            }
         }
+    }
 
+    public void configureChest(Chest.ChestType chestType, int positionX, int positionY) {
 
-
+        switch(chestType) {
+            case Chest01:
+                chest.createChest01(positionX, positionY);
+                break;
+            case Chest02:
+                chest.createChest02(positionX, positionY);
+                break;
+            case Chest03:
+                chest.createChest03(positionX, positionY);
+                break;
+            case Chest04:
+                chest.createChest04(positionX, positionY);
+                break;
+        }
     }
 
     public int returnValue(){
         return chest.getValue();
     }
 
+
+    public PowerUp getPowerUp() { return powerUp; }
+
+    public Chest getChest() { return chest; }
+
+    public LevelEnd getLevelEnd() { return levelEnd; }
 }
