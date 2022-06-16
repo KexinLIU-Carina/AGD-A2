@@ -3,28 +3,33 @@ package com.mygdx.game.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 public class ScoreBar {
-    private BitmapFont font;
-    public int score;
-
-
+    private Label label;
+    public static int enemyKilledScore = 0;
+    public static int goldAmount = 0;
     public ScoreBar(){
-        score = 0;
+        Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
+        label = new Label("Score:" + enemyKilledScore + "\nGold value:" + goldAmount, skin);
+        label.setFontScale(3f);
+        label.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - label.getHeight() - 100);
 
 
-        font = new BitmapFont();
 
-        font.getData().setScale(5);
+
 
     }
 
 
 
-    public void draw(Batch batch){
-       font.draw(batch, "Score\n" + score, Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 100) ;
 
+
+    public void draw(Batch batch, float alpha){
+
+        label.setText("grade:" + enemyKilledScore + "\nGold value:" + goldAmount);
+        label.draw(batch, alpha);
     }
 }

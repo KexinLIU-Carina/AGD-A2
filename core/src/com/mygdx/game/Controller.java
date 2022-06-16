@@ -55,7 +55,12 @@ public class Controller extends Actor {
         jumpButton.update(checkTouch, touchX, touchY);
         shootButton.update(checkTouch,touchX,touchY);
     }
+
     public void dispose(){
+        leftButton.dispose();
+        rightButton.dispose();
+        jumpButton.dispose();
+        shootButton.dispose();
 
     }
 

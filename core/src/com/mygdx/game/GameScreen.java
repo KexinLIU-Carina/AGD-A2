@@ -74,9 +74,8 @@ public class GameScreen implements Screen {
     private int startingPoint = 200;
     private int mapPosition = startingPoint;
 
-    Label label;
-    private int enemyKilledScore = 0;
-    private int goldAmount = 0;
+
+
     private Image gold;
     private Image gold1;
     private Image gold2;
@@ -111,9 +110,6 @@ public class GameScreen implements Screen {
 
         // Music
         Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
-        label = new Label("Score:" + enemyKilledScore + "\nGold value:" + goldAmount, skin);
-        label.setFontScale(3f);
-        label.setPosition(0, Gdx.graphics.getHeight() - label.getHeight() - 100);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Music/back.mp3"));
         music.setLooping(true);
@@ -246,7 +242,6 @@ public class GameScreen implements Screen {
         stage.addActor(getLevel().getLevelEnd());
         stage.addActor(gameObjects);
         stage.addActor(controller);
-        stage.addActor(label);
         // stage.addActor(gold);
         stage.addListener(new MyInputListener());
 
@@ -280,7 +275,6 @@ public class GameScreen implements Screen {
         int touchY = Gdx.input.getY();
         controller.update(checkTouch, touchX, touchY);
 
-        enemyKilledScore = enemyKilledScore + gameObjects.returnValue();
         randomEnemy.setAIStates(player);
         getLevel().getLevelEnd().setAIStates(player);
 
@@ -390,11 +384,10 @@ public class GameScreen implements Screen {
                 if (randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
 
                     // Victory conditions
-                    enemyKilledScore = enemyKilledScore + 25;
+                    ScoreBar.enemyKilledScore+=  25;
 
-                    goldAmount = goldAmount + 1;
+                    ScoreBar.goldAmount += 1;
 
-                    label.setText("grade:" + enemyKilledScore + "\nGold value:" + goldAmount);
 
                     randomEnemy.remove();
                     randomEnemy = enemyFactory.spawnRandomEnemy();
@@ -535,24 +528,24 @@ public class GameScreen implements Screen {
 
         if (shut) {
             // Defeated enemies, treasure
-            if (enemyKilledScore >= 75 && goldAmount >= 1) {
+            if (ScoreBar.enemyKilledScore >= 75 && ScoreBar.goldAmount >= 1) {
                 // Rescue the levelEnd
                 if(getLevel().getLevelEnd().getIsEndReached()){
                     MyGdxGame.startScreen.setVictoryScreen1();
                     player.reset();
-                    enemyKilledScore = 0;
-                    goldAmount = 0;
+                    ScoreBar.enemyKilledScore = 0;
+                    ScoreBar.goldAmount = 0;
                     shut = false;
                 }
             }
         }
         else {
-            if (enemyKilledScore >= 100 && goldAmount >= 4) {
+            if (ScoreBar.enemyKilledScore >= 100 && ScoreBar.goldAmount >= 4) {
                 if(getLevel().getLevelEnd().getIsEndReached()) {
                     MyGdxGame.startScreen.setVictoryScreen2();
                     player.reset();
-                    enemyKilledScore = 0;
-                    goldAmount = 0;
+                    ScoreBar.enemyKilledScore = 0;
+                    ScoreBar.goldAmount = 0;
                     shut = true;
                 }
             }

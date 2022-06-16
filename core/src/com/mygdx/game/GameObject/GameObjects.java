@@ -30,16 +30,17 @@ public class GameObjects extends Actor {
     @Override
     public void draw(Batch batch, float alpha) {
 
-        scoreBar.draw(batch);
+        scoreBar.draw(batch, alpha);
         chest.draw(batch);
     }
 
 
 
     public void checkCollided(float x, float y) {
-       chest.checkCollided(x, y) ;
 
-       scoreBar.score += chest.getValue();
+               chest.checkCollided(x, y) ;
+               ScoreBar.goldAmount += chest.getValue();
+
     }
 
 
@@ -61,6 +62,9 @@ public class GameObjects extends Actor {
             chest.getCurrentSprite().translate(-positionAmount.x, positionAmount.y);
                 }
         }
+
+
+
     }
 
     public int returnValue(){

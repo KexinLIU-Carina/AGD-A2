@@ -52,4 +52,8 @@ public class Button {
     public boolean justPressed() {
         return isDown && !isDownPrev;
     }
+    public void dispose(){
+        textureUp.dispose();
+        textureDown.dispose();
+    }
 }

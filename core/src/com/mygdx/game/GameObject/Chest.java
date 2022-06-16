@@ -56,7 +56,9 @@ public abstract class Chest {
     public int checkCollided(float x, float y){
 
 
-        if (XCollide+ Xhelper >= x && x >= XCollide-Xhelper){
+
+        // if the player is on the position
+        if (XCollide+ Xhelper >= x && x >= XCollide-Xhelper ){
 
             if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
 
