@@ -182,6 +182,6 @@
   <object id="1" name="GroundLevel" x="1.33" y="798.67" width="1916" height="24"/>
  </objectgroup>
  <objectgroup id="5" name="Collision">
-  <object id="2" name="Platform1" x="199.497" y="422.358" width="776.33" height="25.1618"/>
+  <object id="2" name="Platform1" x="199.497" y="422.358" width="800.33" height="25.1618"/>
  </objectgroup>
 </map>

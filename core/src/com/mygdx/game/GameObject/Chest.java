@@ -23,10 +23,10 @@ public abstract class Chest {
     protected int Yhelper;
 
 
-    protected int XCollide;
+    protected int XCollide = 0;
 
     // TODO: I just set this value will return something to player
-    private int value = 100;
+    protected  int value = 100;
 
     private boolean hasReturn =false;
 

@@ -12,6 +12,7 @@ public class Chest04 extends Chest {
         this.Yposition = y;
 
 
+        this.XCollide = x;
         this.chestClosed =new Sprite( new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_closed.png"));
         this.chestLight = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_light.png"));
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_coins.png"));
@@ -29,7 +30,10 @@ public class Chest04 extends Chest {
             i.setPosition(x,y);
             i.setSize(200, 200);
         }
+        Xhelper = 100;
+        Yhelper = 100;
 
+        value = 400;
 
     }
 }

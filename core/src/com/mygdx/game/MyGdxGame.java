@@ -16,6 +16,9 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	public static GameScreen gameScreen;
 	public static RestartScreen restartScreen;
 
+
+
+	// level
 	public static int levelNum = 0;
 
 
