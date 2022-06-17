@@ -57,7 +57,7 @@ public class Character extends Actor {
         startPosition = new Vector2();
         positionAmount = new Vector2();
 
-        groundLevel = GameScreen.getInstance().getLevel().getGroundLevel();
+        groundLevel = GameScreen.getInstance().getLevelFactory().getCurrentLevel().getGroundLevel();
         startPosition.y = groundLevel;
 
     }
@@ -106,7 +106,9 @@ public class Character extends Actor {
     }
 
     public void loopingAnimation(Animation<TextureRegion> animation) {
+
         loopingStateTime += deltaTime;
+
         currentFrame = animation.getKeyFrame(loopingStateTime, true);
     }
 

@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public abstract class Chest {
 
+    public enum ChestType { Chest01, Chest02, Chest03, Chest04 }
+    private ChestType chestType = ChestType.Chest01;
 
     // Four chest images
     protected Sprite chestClosed;
@@ -28,8 +30,7 @@ public abstract class Chest {
     // TODO: I just set this value will return something to player
     protected  int value = 100;
 
-    private boolean hasReturn =false;
-
+    private boolean hasReturn = false;
 
 
     // Chest states
@@ -54,7 +55,6 @@ public abstract class Chest {
 
 
     public int checkCollided(float x, float y){
-
 
 
         // if the player is on the position
@@ -131,9 +131,5 @@ public abstract class Chest {
         }
         return null;
     }
-
-
-
-
 
 }

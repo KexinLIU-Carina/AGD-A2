@@ -47,7 +47,7 @@ public class EnemyYeti extends Enemy {
         yetiProjectile = new Projectile("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3");
         yetiProjectile.getProjectileSprite().setSize(70f, 50f);
 
-        yetiProjectile.setMovementSpeedX(300f);
+        yetiProjectile.setMovementSpeedX(400f);
 
 
 

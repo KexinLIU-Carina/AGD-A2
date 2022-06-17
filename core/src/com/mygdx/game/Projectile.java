@@ -163,10 +163,6 @@ public class Projectile extends Actor {
 
     public void setMovementSpeedX(float movementSpeedX) { this.movementSpeedX = movementSpeedX; }
 
-    public float getMovementSpeedY() { return movementSpeedY; }
-
-    public void setMovementSpeedY(float movementSpeedY) { this.movementSpeedY = movementSpeedY; }
-
     public Vector2 getProjectileStartPosition() { return projectileStartPosition; }
 
     public Vector2 getProjectileStartWithOffset() {

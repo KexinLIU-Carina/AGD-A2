@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends Game implements ApplicationListener {
 
+	public static LevelFactory.LevelNum levelNum;
 
 	public Batch batch;
 
@@ -15,11 +16,6 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	public static OptionsScreen optionsScreen;
 	public static GameScreen gameScreen;
 	public static RestartScreen restartScreen;
-
-
-
-	// level
-	public static int levelNum = 0;
 
 
 	@Override
@@ -31,6 +27,8 @@ public class MyGdxGame extends Game implements ApplicationListener {
 		restartScreen = new RestartScreen(this);
 
 		gameScreen = GameScreen.getInstance();
+
+		levelNum = LevelFactory.LevelNum.Level1;
 
 		setScreen(startScreen);
 
@@ -61,5 +59,6 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	public void dispose () {
 		super.dispose();
 	}
+
 }
 

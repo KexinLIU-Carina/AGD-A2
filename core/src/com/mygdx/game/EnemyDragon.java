@@ -39,7 +39,7 @@ public class EnemyDragon extends Enemy {
         dragonProjectile = new Projectile("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3");
         dragonProjectile.getProjectileSprite().setSize(70f, 50f);
 
-        dragonProjectile.setMovementSpeedX(350f);
+        dragonProjectile.setMovementSpeedX(400f);
 
 
 

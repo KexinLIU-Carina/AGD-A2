@@ -47,7 +47,6 @@ public class LevelCreator {
     Sprite[] collisionSprites2;
 
 //    private levelStart;
-    private LevelEnd levelEnd;
 
     private float groundLevel;
     private Sprite currentPlatform;
@@ -62,7 +61,7 @@ public class LevelCreator {
 
     }
 
-    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects, LevelEnd.GoalType goalType) {
+    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects) {
 
         loadedMap = new TmxMapLoader().load(filePath);
 
@@ -137,9 +136,6 @@ public class LevelCreator {
                 collisionSprites2[i].setX(collisionRectangle[i].getX() + graphicsWidth);
             }
         }
-
-        levelEnd = new LevelEnd();
-        levelEnd.setGoalType(goalType);
     }
 
     /*
@@ -359,6 +355,4 @@ public class LevelCreator {
     public Sprite[] getCollisionSprites1() { return collisionSprites1; }
 
     public Sprite[] getCollisionSprites2() { return collisionSprites2; }
-
-    public LevelEnd getLevelEnd() { return levelEnd; }
 }
