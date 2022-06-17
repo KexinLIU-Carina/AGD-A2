@@ -21,6 +21,9 @@ public class GameObjects extends Actor {
 
     public GameObjects() {
         scoreBar = new ScoreBar();
+
+
+        // Chests [levels][type]
         chests = new Chest[2][2];
         chests[0][0] = new Chest01(2000,300);
         chests[0][1] = new Chest02(2500, 750);
