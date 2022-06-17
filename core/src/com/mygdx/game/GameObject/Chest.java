@@ -27,8 +27,7 @@ public abstract class Chest {
 
     protected int XCollide = 0;
 
-    // TODO: I just set this value will return something to player
-    protected  int value = 100;
+    protected  int value ;
 
     private boolean hasReturn = false;
 

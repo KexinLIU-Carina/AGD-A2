@@ -23,6 +23,7 @@ public class ChestCreator extends Chest {
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 01_open.png"));
 
         setAnimations(x, y);
+        this.value = 100;
     }
 
     public void createChest02(int x, int y) {
@@ -36,6 +37,7 @@ public class ChestCreator extends Chest {
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_coins.png"));
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_open.png"));
 
+        this.value = 200;
         setAnimations(x, y);
     }
 
@@ -44,6 +46,7 @@ public class ChestCreator extends Chest {
         this.Yposition = y;
         this.XCollide = x;
 
+        this.value = 300;
 
         this.chestClosed =new Sprite( new Texture("Game Objects/Chests & Coins PNG/Chests/chest 03_closed.png"));
         this.chestLight = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 03_light.png"));
@@ -59,6 +62,7 @@ public class ChestCreator extends Chest {
         this.Yposition = y;
         this.XCollide = x;
 
+        this.value = 400;
 
         this.chestClosed =new Sprite( new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_closed.png"));
         this.chestLight = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_light.png"));
