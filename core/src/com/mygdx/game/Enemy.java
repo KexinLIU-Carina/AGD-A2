@@ -123,8 +123,8 @@ public class Enemy extends Character {
     public void particleAppeared(){
 
         // TODO: the currentFrame position is not right
-        int touchX = this.currentFrame.getRegionX() - 100;
-        int touchY =  this.currentFrame.getRegionY();
+        int touchX = (int) this.sprite.getX() ;
+        int touchY = (int) this.sprite.getY() + 50;
 
 
        this.particles.spawn();

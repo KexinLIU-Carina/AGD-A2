@@ -30,7 +30,7 @@ public class Character extends Actor {
 
 
     // ---- SPRITES -------------------------
-    private Sprite sprite;
+    protected Sprite sprite;
     private Vector2 startPosition;
     // The amount that a sprite will be translated by to reach its new position
     private Vector2 positionAmount;
@@ -72,9 +72,8 @@ public class Character extends Actor {
      */
     @Override
     public void draw(Batch batch, float alpha) {
-        this.particles.render(batch);
 
-        this.particles.update(deltaTime);
+
 
         // Flips the sprite according to the correct direction.
         if (direction == Direction.LEFT) {
@@ -89,6 +88,7 @@ public class Character extends Actor {
             }
         }
         batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        this.particles.render(batch);
     }
 
 

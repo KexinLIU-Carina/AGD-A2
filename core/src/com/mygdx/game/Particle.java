@@ -58,7 +58,7 @@ public class Particle {
         explosionFrames[15] = new TextureRegion(spriteSheet, 252, 306, 45, 45);
 
 
-        animation = new Animation(0.33f, explosionFrames);
+        animation = new Animation(0.1f, explosionFrames);
 
 
 
@@ -81,7 +81,7 @@ public class Particle {
     public void render(Batch batch) {
         if (show) {
             statetime += Gdx.graphics.getDeltaTime();
-            current = (TextureRegion) animation.getKeyFrame(statetime, false);
+            current = (TextureRegion) animation.getKeyFrame(statetime, true);
             batch.draw(current, position.x, position.y);
             if (animation.getKeyFrameIndex(statetime) == 15){
                 show = false;
