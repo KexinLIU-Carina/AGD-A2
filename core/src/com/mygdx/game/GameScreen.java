@@ -63,8 +63,6 @@ public class GameScreen implements Screen {
     private Enemy randomEnemy;
 
 
-    private ScoreBar scoreBar;
-
 
 
 
