@@ -37,7 +37,7 @@ public class Character extends Actor {
 
 
     // ---- ANIMATION -------------------------
-    private TextureRegion currentFrame;
+    protected TextureRegion currentFrame;
 
     private float loopingStateTime;
     private float nonLoopingStateTime;
@@ -47,9 +47,12 @@ public class Character extends Actor {
 
     private float groundLevel;
 
-
+    // particle
+    protected Particle particles;
 
     public Character() {
+
+        particles = new Particle();
 
         sprite = new Sprite();
         sprite.setSize(250, 250);
@@ -69,6 +72,9 @@ public class Character extends Actor {
      */
     @Override
     public void draw(Batch batch, float alpha) {
+        this.particles.render(batch);
+
+        this.particles.update(deltaTime);
 
         // Flips the sprite according to the correct direction.
         if (direction == Direction.LEFT) {

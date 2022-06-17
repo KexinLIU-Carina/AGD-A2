@@ -4,6 +4,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 /*
 The parent class for all enemies. Inherits from the Character super class.
@@ -35,6 +36,7 @@ public class Enemy extends Character {
 
 
     public Enemy() {
+
 
         // Default states as a backup. Individual enemies should override these.
         super.setDirection(Direction.LEFT);
@@ -96,8 +98,13 @@ public class Enemy extends Character {
                 break;
 
             case HURT:
+
+
                 super.setCURRENT_MOVEMENT_SPEED(0);
+
                 if (super.nonLoopingAnimation(hurtAnimation)) {
+
+                    particleAppeared();
                     enemyState = EnemyState.MOVING;
                 }
                 break;
@@ -105,10 +112,26 @@ public class Enemy extends Character {
             case DYING:
                 super.setCURRENT_MOVEMENT_SPEED(0);
                 if (super.nonLoopingAnimation(dyingAnimation)) {
+
+                    particleAppeared();
                     killEnemy();
                 }
                 break;
         }
+    }
+
+    public void particleAppeared(){
+
+        // TODO: the currentFrame position is not right
+        int touchX = this.currentFrame.getRegionX() - 100;
+        int touchY =  this.currentFrame.getRegionY();
+
+
+       this.particles.spawn();
+        this.particles.position = new Vector2(touchX, touchY);
+
+
+
     }
 
 

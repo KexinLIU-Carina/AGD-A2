@@ -3,6 +3,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -25,6 +26,9 @@ public class ParticleSystem {
     public Vector2[] position;
     public Vector2[] velocity;
     public float[] lifetime;
+
+
+
 
 
 
@@ -121,7 +125,7 @@ public class ParticleSystem {
         }
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(Batch batch) {
 
         for(int index = 0; index < MAX_PARTICLES; index++) {
             float frame = 0;
