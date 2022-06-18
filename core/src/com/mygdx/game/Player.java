@@ -139,16 +139,16 @@ public class Player extends Character {
     public void healthCheck(int damage) {
 
         // The player can only get hurt or die when on the ground.
-//        if(grounded) {
-//            if ((super.getHealth() - damage) > 0) {
-//                playerState = PlayerState.HURT;
-//                super.setHealth(getHealth() - damage);
-//            } else {
-//                playerState = PlayerState.DYING;
-//                super.setHealth(0);
-//            }
-//            playerHealthBar.modifyHP(getHealth());
-//        }
+        if(grounded) {
+            if ((super.getHealth() - damage) > 0) {
+                playerState = PlayerState.HURT;
+                super.setHealth(getHealth() - damage);
+            } else {
+                playerState = PlayerState.DYING;
+                super.setHealth(0);
+            }
+            playerHealthBar.modifyHP(getHealth());
+        }
     }
 
     @Override

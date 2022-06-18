@@ -168,8 +168,12 @@ public class LevelCreator {
 
                 player.getSprite().setY(currentPlatform.getY() + currentPlatform.getHeight());
                 player.setPlayerLevel(currentPlatform.getY() + currentPlatform.getHeight());
+
                 player.setIsGrounded(true);
                 player.setPlayerState(Player.PlayerState.IDLE);
+
+
+
             }
         }
 

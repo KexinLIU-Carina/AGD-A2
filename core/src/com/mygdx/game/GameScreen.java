@@ -378,7 +378,6 @@ public class GameScreen implements Screen {
                     // Victory conditions
                     ScoreBar.enemyKilledScore+=  25;
 
-                    ScoreBar.goldAmount += 1;
 
 
                     randomEnemy.remove();
@@ -460,6 +459,7 @@ public class GameScreen implements Screen {
             player.setDirection(Player.Direction.LEFT);
             player.setPlayerState(Player.PlayerState.RUNNING);
 
+
             if (!start) {
 
                 // Move the player
@@ -520,24 +520,25 @@ public class GameScreen implements Screen {
 
         if (shut) {
             // Defeated enemies, treasure
-            if (ScoreBar.enemyKilledScore >= 25 && ScoreBar.goldAmount >= 1) {
+            // the score reaches 175 moving to next level
+            if (ScoreBar.enemyKilledScore >= 175 ) {
                 // Rescue the levelEnd
                 if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()){
                     MyGdxGame.startScreen.setVictoryScreen1();
                     player.reset();
                     ScoreBar.enemyKilledScore = 0;
-                    ScoreBar.goldAmount = 0;
                     shut = false;
                 }
             }
         }
         else {
-            if (ScoreBar.enemyKilledScore >= 100 && ScoreBar.goldAmount >= 4) {
+
+            // the score reaches 200
+            if (ScoreBar.enemyKilledScore >= 300 ) {
                 if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()) {
                     MyGdxGame.startScreen.setVictoryScreen2();
                     player.reset();
                     ScoreBar.enemyKilledScore = 0;
-                    ScoreBar.goldAmount = 0;
                     shut = true;
                 }
             }
