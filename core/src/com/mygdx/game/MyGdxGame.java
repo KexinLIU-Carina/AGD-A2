@@ -6,6 +6,18 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
+/**
+ * Team members
+ *
+ * Name: Kieran Hambledon
+ * Email ID: hamkj008
+ *
+ * Name: Kexin Liu
+ * Email ID: liuky042
+ *
+ * Name: Shiwei Liang
+ * Email ID: liasy032
+ */
 public class MyGdxGame extends Game implements ApplicationListener {
 
 	public static LevelFactory.LevelNum levelNum;
