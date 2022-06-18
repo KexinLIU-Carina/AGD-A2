@@ -64,7 +64,7 @@ public class GameObjects extends Actor {
     public void checkCollided(Player player) {
 
         chest.checkCollided(player.getSprite().getX(), player.getSprite().getY());
-        ScoreBar.goldAmount += chest.getValue();
+        ScoreBar.enemyKilledScore+= chest.getValue();
         powerUp.checkCollided(player);
 
     }
