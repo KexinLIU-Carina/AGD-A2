@@ -147,7 +147,6 @@ public class EnemyYeti extends Enemy {
 
         super.setAIStates(player);
 
-
         // The yeti has a projectile attack and a melee attack. If it is far enough away from the player it uses the projectile attack.
         if (distanceFromPlayer(player) > 700 && distanceFromPlayer(player) < 1000) {
             setAttackState(AttackState.PROJECTILE);
@@ -160,13 +159,13 @@ public class EnemyYeti extends Enemy {
             setAttackState(AttackState.MELEE);
         }
 
-
-        // If the projectile has overlapped the players bounding box, it has hit the player and does damage.
-        if(yetiProjectile.getProjectileSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
+        if(yetiProjectile.getProjectileSprite().getBoundingRectangle().overlaps(GameScreen.getInstance().getPlayer().getSprite().getBoundingRectangle())) {
             if(yetiProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
-                if(player.getIsAlive()) {
-                    player.healthCheck(getDamage());
+                if(GameScreen.getInstance().getPlayer().getIsAlive()) {
+                    // If the projectile has overlapped the players bounding box, it has hit the player and does damage.
+                    GameScreen.getInstance().getPlayer().healthCheck(getDamage());
                     yetiProjectile.setProjectileState(Projectile.ProjectileState.RESET);
+                    yetiProjectile.switchState();
                 }
             }
         }

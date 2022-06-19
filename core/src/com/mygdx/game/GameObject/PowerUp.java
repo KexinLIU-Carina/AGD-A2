@@ -23,15 +23,15 @@ public class PowerUp extends Actor {
 
     // Sounds
     private Sound powerUpSound;
-    private boolean playPowerUpSound = true;
+    private boolean playPowerUpSound = false;
 
     private Sound powerDownSound;
-    private boolean playPowerDownSound = true;
+    private boolean playPowerDownSound = false;
 
 
     private float timePeriod = 0;
     // Power Up will last for 30 secs
-    private int powerUpTimeDuration = 10;
+    private int powerUpTimeDuration = 20;
 
 
 
@@ -65,7 +65,7 @@ public class PowerUp extends Actor {
 
             if(powerUpTimeDuration == 0) {
                 powerUpState = PowerUpState.INACTIVE;
-                powerUpTimeDuration = 10;
+                powerUpTimeDuration = 20;
             }
         }
 
@@ -120,7 +120,7 @@ public class PowerUp extends Actor {
 
 
     public void compensateCamera(float cameraPositionAmount) {
-        Gdx.app.log("Main", "power up compensate " + powerUpSprite.getX());
+
            powerUpSprite.translate(cameraPositionAmount, 0);
     }
 

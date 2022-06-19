@@ -4,7 +4,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.GameObject.Chest;
 import com.mygdx.game.GameObject.GameObjects;
-
+import com.mygdx.game.GameObject.ScoreBar;
 
 
 public class LevelFactory {
@@ -31,6 +31,8 @@ public class LevelFactory {
         currentLevelObjects.configureChest(Chest.ChestType.Chest01, 2500, 800);
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.BABY);
 
+        ScoreBar.enemyKilledMax = 175;
+
     }
 
     public void createLevel2() {
@@ -44,6 +46,8 @@ public class LevelFactory {
         currentLevelObjects.getPowerUp().getStartPosition().set(2400, 600);
         currentLevelObjects.configureChest(Chest.ChestType.Chest02, 500, 600);
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.PRINCESS);
+
+        ScoreBar.enemyKilledMax = 300;
     }
 
 

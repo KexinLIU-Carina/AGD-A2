@@ -109,6 +109,7 @@ public class EnemyDragon extends Enemy {
         }
     }
 
+
     @Override
     public void setAIStates(Player player) {
 
@@ -121,12 +122,14 @@ public class EnemyDragon extends Enemy {
             }
         }
 
-        // If the projectile hits the player it does damage
-        if(dragonProjectile.getProjectileSprite().getBoundingRectangle().overlaps(player.getSprite().getBoundingRectangle())) {
+        if(dragonProjectile.getProjectileSprite().getBoundingRectangle().overlaps(GameScreen.getInstance().getPlayer().getSprite().getBoundingRectangle())) {
             if(dragonProjectile.getProjectileState() == Projectile.ProjectileState.FIRING) {
-                if(player.getIsAlive()) {
+                if(GameScreen.getInstance().getPlayer().getIsAlive()) {
+                    // If the projectile hits the player it does damage
+                    GameScreen.getInstance().getPlayer().healthCheck(getDamage());
                     dragonProjectile.setProjectileState(Projectile.ProjectileState.RESET);
-                    player.healthCheck(getDamage());
+                    dragonProjectile.switchState();
+
                 }
             }
         }

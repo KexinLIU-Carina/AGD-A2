@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
     private Texture texture;
 
     // Player
-    public Player player;
+    private Player player;
     private String s1 = "0";
 
     // Player movement restrictions
@@ -61,8 +61,6 @@ public class GameScreen implements Screen {
     // Enemies
     private EnemyFactory enemyFactory;
     private Enemy randomEnemy;
-
-
 
 
 
@@ -193,8 +191,7 @@ public class GameScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 image2.setVisible(false);
                 image3.setVisible(true);
-                player.setPlayerState(Player.PlayerState.IDLE);
-                randomEnemy.setEnemyState(Enemy.EnemyState.IDLE);
+                Gdx.graphics.setContinuousRendering(false);
                 s1 = "0";
                 return true;
             }
@@ -204,8 +201,8 @@ public class GameScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 image3.setVisible(false);
                 image2.setVisible(true);
-                player.setPlayerState(Player.PlayerState.JUMPING);
-                randomEnemy.setEnemyState(Enemy.EnemyState.IDLE);
+                Gdx.graphics.setContinuousRendering(true);
+                Gdx.graphics.requestRendering();
                 return true;
             }
         });
@@ -226,7 +223,6 @@ public class GameScreen implements Screen {
 
         stage.addActor(player);
         stage.addActor(randomEnemy);
-        stage.addActor(levelFactory.getGameObjects());
         stage.addActor(controller);
         // stage.addActor(gold);
         stage.addListener(new MyInputListener());
@@ -241,7 +237,11 @@ public class GameScreen implements Screen {
         gameState = GameState.PLAYING;
         player.reset();
         newEnemy();
+        levelFactory.getGameObjects().remove();
+        levelFactory.setCurrentLevel();
         levelFactory.getGameObjects().reset();
+        ScoreBar.enemyKilledScore = 0;
+        stage.addActor(levelFactory.getGameObjects());
         mapPosition = startingPoint;
     }
 
@@ -400,7 +400,6 @@ public class GameScreen implements Screen {
 
             case GAMEOVER:
                 MyGdxGame.startScreen.getMusic().stop();
-
                 MyGdxGame.startScreen.setStartScreen();
                 break;
         }
@@ -521,12 +520,10 @@ public class GameScreen implements Screen {
         if (shut) {
             // Defeated enemies, treasure
             // the score reaches 175 moving to next level
-            if (ScoreBar.enemyKilledScore >= 175 ) {
+            if (ScoreBar.enemyKilledScore >= ScoreBar.enemyKilledMax) {
                 // Rescue the levelEnd
                 if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()){
                     MyGdxGame.startScreen.setVictoryScreen1();
-                    player.reset();
-                    ScoreBar.enemyKilledScore = 0;
                     shut = false;
                 }
             }
@@ -534,11 +531,9 @@ public class GameScreen implements Screen {
         else {
 
             // the score reaches 200
-            if (ScoreBar.enemyKilledScore >= 300 ) {
+            if (ScoreBar.enemyKilledScore >= ScoreBar.enemyKilledMax ) {
                 if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()) {
                     MyGdxGame.startScreen.setVictoryScreen2();
-                    player.reset();
-                    ScoreBar.enemyKilledScore = 0;
                     shut = true;
                 }
             }
@@ -553,14 +548,10 @@ public class GameScreen implements Screen {
             switch (keycode) {
                 case Input.Keys.P:
                     if (s) {
-                        player.setPlayerState(Player.PlayerState.IDLE);
-                        randomEnemy.setEnemyState(Enemy.EnemyState.IDLE);
                         s1 = "0";
                         Gdx.graphics.setContinuousRendering(false);
                         s = false;
                     } else {
-                        player.setPlayerState(Player.PlayerState.JUMPING);
-                        randomEnemy.setEnemyState(Enemy.EnemyState.IDLE);
                         Gdx.graphics.setContinuousRendering(true);
                         Gdx.graphics.requestRendering();
                         s = true;

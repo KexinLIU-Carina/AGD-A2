@@ -98,10 +98,7 @@ public class Enemy extends Character {
                 break;
 
             case HURT:
-
-
                 super.setCURRENT_MOVEMENT_SPEED(0);
-
                 if (super.nonLoopingAnimation(hurtAnimation)) {
 
                     particleAppeared();
@@ -208,16 +205,6 @@ public class Enemy extends Character {
     public int getRunningSpeed() { return runningSpeed; }
 
     public void setRunningSpeed(int runningSpeed) { this.runningSpeed = runningSpeed; }
-
-    public int getJumpingSpeed() { return jumpingSpeed; }
-
-    public void setJumpingSpeed(int jumpingSpeed) { this.jumpingSpeed = jumpingSpeed; }
-
-    public int getFallingSpeed() { return fallingSpeed; }
-
-    public void setFallingSpeed(int fallingSpeed) { this.fallingSpeed = fallingSpeed; }
-
-    public boolean getHasRunningState() { return hasRunningState; }
 
     public void setHasRunningState(boolean hasRunningState) { this.hasRunningState = hasRunningState; }
 

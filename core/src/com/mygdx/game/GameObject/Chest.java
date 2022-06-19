@@ -1,5 +1,6 @@
 package com.mygdx.game.GameObject;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -31,6 +32,9 @@ public abstract class Chest {
 
     private boolean hasReturn = false;
 
+    protected Sound chestCollectedSound;
+    private boolean playChestCollectedSound = false;
+
 
     // Chest states
     protected enum ChestState{
@@ -61,8 +65,12 @@ public abstract class Chest {
 
             if (Yposition + Yhelper >= y && y >= Yposition-Yhelper){
 
+                playChestCollectedSound();
                 state = ChestState.OPEN;
                 return value;
+            }
+            else {
+                playChestCollectedSound = true;
             }
         }
         return 0;
@@ -104,6 +112,14 @@ public abstract class Chest {
 //        }
 
 
+    }
+
+    public void playChestCollectedSound() {
+
+        if(playChestCollectedSound) {
+            chestCollectedSound.play();
+            playChestCollectedSound = false;
+        }
     }
 
     public void dispose(){

@@ -20,7 +20,6 @@ This method takes in a spritesheet, as well as how many rows, columns and total 
 and then loads those regions into an animation. The returned animation contains all the frames.
  */
     public Animation<TextureRegion> processAnimation(String texturePath, int sheetCols, int sheetRows, int maxFrames) {
-        Gdx.app.log("MyDebug: ", "processPlayerAnimation()");
 
         Texture texture = new Texture(texturePath);
         TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / sheetCols, texture.getHeight() / sheetRows);

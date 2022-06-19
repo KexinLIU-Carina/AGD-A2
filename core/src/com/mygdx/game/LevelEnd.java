@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.GameObject.ScoreBar;
 
 public class LevelEnd extends Character {
 
@@ -109,7 +110,9 @@ public class LevelEnd extends Character {
         // ----- End Level Condition -------------------
         // If the players reaches the endGoal, so that the bounding boxes intersect then the level end goal has been reached.
         if(GameScreen.getInstance().getPlayer().getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
-            goalState = GoalState.SPELL;
+            if(ScoreBar.enemyKilledScore == ScoreBar.enemyKilledMax) {
+                goalState = GoalState.SPELL;
+            }
         }
     }
 

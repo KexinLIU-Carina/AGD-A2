@@ -1,6 +1,7 @@
 package com.mygdx.game.GameObject;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -22,6 +23,8 @@ public class ChestCreator extends Chest {
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 01_coins.png"));
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 01_open.png"));
 
+        this.chestCollectedSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Chest.mp3"));
+
         setAnimations(x, y);
         this.value = 100;
     }
@@ -36,6 +39,8 @@ public class ChestCreator extends Chest {
         this.chestLight = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_light.png"));
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_coins.png"));
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 02_open.png"));
+
+        this.chestCollectedSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Chest.mp3"));
 
         this.value = 200;
         setAnimations(x, y);
@@ -53,6 +58,8 @@ public class ChestCreator extends Chest {
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 03_coins.png"));
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 03_open.png"));
 
+        this.chestCollectedSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Chest.mp3"));
+
         setAnimations(x, y);
 
     }
@@ -68,6 +75,8 @@ public class ChestCreator extends Chest {
         this.chestLight = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_light.png"));
         this.chestCoins = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_coins.png"));
         this.chestOpen = new Sprite(new Texture("Game Objects/Chests & Coins PNG/Chests/chest 04_open.png"));
+
+        this.chestCollectedSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Chest.mp3"));
 
         setAnimations(x, y);
 

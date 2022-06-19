@@ -28,10 +28,9 @@ public class GameObjects extends Actor {
 
         scoreBar = new ScoreBar();
 
-        powerUp = new PowerUp("Game Objects/Diamond.png", "Audio/Sounds/shot.mp3", "Audio/Sounds/shot.mp3");
+        powerUp = new PowerUp("Game Objects/Diamond.png", "Audio/Sounds/PowerUp.mp3", "Audio/Sounds/PowerDown.mp3");
 
         chest = new ChestCreator();
-
 
         levelEnd = new LevelEnd();
 

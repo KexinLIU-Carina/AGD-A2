@@ -50,6 +50,7 @@ public class StartScreen implements Screen {
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Music/back.mp3"));
         music.setLooping(true);
         music.setVolume(0.5f);
+        music.stop();
         // Sets the music to play depending on the selection in the options menu
         if(MyGdxGame.optionsScreen.getState()) {
             if (!music.isPlaying()) {
@@ -60,7 +61,7 @@ public class StartScreen implements Screen {
         // Buttons
         Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
 
-        Label gameTitle = new Label("Some Adventures", skin);
+        Label gameTitle = new Label("DWALIN HERO", skin);
         final TextButton playButton = new TextButton("Play", skin, "default");
         final TextButton optionsButton = new TextButton("Options", skin, "default");
         final TextButton exitButton = new TextButton("Exit", skin, "default");

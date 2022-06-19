@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -46,7 +47,6 @@ public class Player extends Character {
     private Animation<TextureRegion> runningAnimation;
     private Animation<TextureRegion> jumpingStartAnimation;
     private Animation<TextureRegion> jumpingLoopAnimation;
-    private Animation<TextureRegion> jumpingEndAnimation;
     private Animation<TextureRegion> attackingAnimation;
     private Animation<TextureRegion> hurtAnimation;
     private Animation<TextureRegion> dyingAnimation;
@@ -58,8 +58,8 @@ public class Player extends Character {
     private Animation<TextureRegion> runningRifleAnimation;
     private Animation<TextureRegion> jumpingStartHandgunAnimation;
     private Animation<TextureRegion> jumpingStartRifleAnimation;
-    private Animation<TextureRegion> jumpingEndHandgunAnimation;
-    private Animation<TextureRegion> jumpingEndRifleAnimation;
+    private Animation<TextureRegion> jumpingLoopHandgunAnimation;
+    private Animation<TextureRegion> jumpingLoopRifleAnimation;
     private Animation<TextureRegion> attackingHandgunAnimation;
     private Animation<TextureRegion> attackingRifleAnimation;
     private Animation<TextureRegion> hurtHandgunAnimation;
@@ -67,12 +67,17 @@ public class Player extends Character {
     private Animation<TextureRegion> dyingHandgunAnimation;
     private Animation<TextureRegion> dyingRifleAnimation;
 
-    private Animation<TextureRegion> jumpingLoopHandgunAnimation;
-    private Animation<TextureRegion> jumpingLoopRifleAnimation;
 
     PlayerHP playerHealthBar;
 
+    private Sound jumpSound;
+    private boolean playJumpSound = true;
 
+    private Sound hurtSound;
+    private boolean playHurtSound = true;
+
+    private Sound dieSound;
+    private boolean playDieSound = true;
 
 
     public Player() {
@@ -105,8 +110,6 @@ public class Player extends Character {
         jumpingStartRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Rifle.png", 3, 2, 6);
         jumpingLoopHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Handgun.png", 3, 2, 6);
         jumpingLoopRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Rifle.png", 3, 2, 6);
-        jumpingEndHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump End - Handgun.png", 3, 2, 6);
-        jumpingEndRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump End - Rifle.png", 3, 2, 6);
         attackingHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Handgun.png", 3, 3, 9);
         attackingRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Rifle.png", 4, 1, 4);
         hurtHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Handgun.png", 4, 3, 12);
@@ -114,6 +117,9 @@ public class Player extends Character {
         dyingHandgunAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Handgun.png", 3, 4, 12);
         dyingRifleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Rifle.png", 4, 3, 12);
 
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Jump.mp3"));
+        hurtSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Hurt.mp3"));
+        dieSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Dying.mp3"));
     }
 
 
@@ -206,7 +212,6 @@ public class Player extends Character {
             runningAnimation = runningRifleAnimation;
             jumpingStartAnimation = jumpingStartRifleAnimation;
             jumpingLoopAnimation = jumpingLoopRifleAnimation;
-            jumpingEndAnimation = jumpingEndRifleAnimation;
             attackingAnimation = attackingRifleAnimation;
             hurtAnimation = hurtRifleAnimation;
             dyingAnimation = dyingRifleAnimation;
@@ -220,7 +225,6 @@ public class Player extends Character {
             runningAnimation = runningHandgunAnimation;
             jumpingStartAnimation = jumpingStartHandgunAnimation;
             jumpingLoopAnimation = jumpingLoopHandgunAnimation;
-            jumpingEndAnimation = jumpingEndHandgunAnimation;
             attackingAnimation = attackingHandgunAnimation;
             hurtAnimation = hurtHandgunAnimation;
             dyingAnimation = dyingHandgunAnimation;
@@ -235,6 +239,8 @@ public class Player extends Character {
             case IDLE:
                 // Set the speed and animation for idle
                 super.setCURRENT_MOVEMENT_SPEED(0);
+                playDieSound = true;
+                playHurtSound = true;
                 super.loopingAnimation(idleAnimation);
                 break;
 
@@ -251,6 +257,7 @@ public class Player extends Character {
                 if(!grounded) {
                     // Start jumping
                     jumpCharacter();
+                    playJumpSound();
                     // Once the animation has finished and terminal velocity has been hit, the player can start falling
                     if (super.nonLoopingAnimation(jumpingStartAnimation)) {
                         if (getSprite().getY() > terminal_Velocity) {
@@ -265,6 +272,7 @@ public class Player extends Character {
                 super.nonLoopingAnimation(jumpingLoopAnimation);
                 // Start falling
                 fallCharacter();
+                playJumpSound = true;
 
 //                if (super.nonLoopingAnimation(jumpingEndAnimation)) {
                     // If the player has fallen back to ground level then stop falling
@@ -288,6 +296,7 @@ public class Player extends Character {
 
             case HURT:
                 super.setCURRENT_MOVEMENT_SPEED(0);
+                playHurtSound();
                 if (super.nonLoopingAnimation(hurtAnimation)) {
                     playerState = PlayerState.IDLE;
                 }
@@ -295,6 +304,7 @@ public class Player extends Character {
 
             case DYING:
                 super.setCURRENT_MOVEMENT_SPEED(0);
+                playDieSound();
                 if (super.nonLoopingAnimation(dyingAnimation)) {
                     super.setIsAlive(false);
                     playerState = PlayerState.DEAD;
@@ -350,6 +360,27 @@ public class Player extends Character {
         }
         else {
             getSprite().translate(getPositionAmount().x, getPositionAmount().y);
+        }
+    }
+
+    public void playJumpSound() {
+        if(playJumpSound) {
+            jumpSound.play();
+            playJumpSound = false;
+        }
+    }
+
+    public void playHurtSound() {
+        if(playHurtSound) {
+            hurtSound.play();
+            playHurtSound = false;
+        }
+    }
+
+    public void playDieSound() {
+        if(playDieSound) {
+            dieSound.play();
+            playDieSound = false;
         }
     }
 

@@ -17,7 +17,7 @@ Each instance of a projectile is owned by the character that fires it.
  */
 public class Projectile extends Actor {
 
-    public enum ProjectileState { FIRING, EXPLODING, RESET }
+    public enum ProjectileState { FIRING, RESET }
 
     private ProjectileState projectileState = ProjectileState.RESET;
     private Character.Direction direction;
@@ -88,17 +88,12 @@ public class Projectile extends Actor {
             case RESET:
                 projectileSprite.setPosition(getProjectileStartWithOffset().x, getProjectileStartWithOffset().y);
                 playFiringSound = true;
-//                playExplodingSound = true;
                 break;
 
             case FIRING:
                 moveProjectile();
                 playFiringSound();
                 break;
-//            case EXPLODING:
-//                currentFrame = currentExplodingFrame;
-//                setExplodingSound();
-//                break;
         }
     }
 
@@ -108,13 +103,6 @@ public class Projectile extends Actor {
             playFiringSound = false;
         }
     }
-
-//    public void setExplodingSound() {
-//        if(playExplodingSound) {
-//            explodingSound.play();
-//            playExplodingSound = false;
-//        }
-//    }
 
     public void setProjectileBounds() {
         if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
