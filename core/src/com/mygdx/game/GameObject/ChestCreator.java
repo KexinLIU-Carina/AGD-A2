@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-
+/**
+ * Can create four different types of chests with animations, specified by the chest type.
+ */
 public class ChestCreator extends Chest {
 
 

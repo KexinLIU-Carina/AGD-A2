@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 
-
+/**
+ * Abstract super class for chests. Provides the template to make chests.
+ */
 public abstract class Chest {
 
     public enum ChestType { Chest01, Chest02, Chest03, Chest04 }

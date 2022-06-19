@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-/*
-The player class. Inherits from the Character super class.
+/**
+ * The player class. Inherits from the Character super class.
  */
 public class Player extends Character {
 
@@ -154,6 +154,8 @@ public class Player extends Character {
         }
     }
 
+    // Additional conditions needed for projectiles. This is handled by overriding the draw method inherited from Character super class,
+    // calling the super draw method, and then providing the additional conditions.
     @Override
     public void draw(Batch batch, float alpha) {
 
@@ -266,15 +268,13 @@ public class Player extends Character {
                 fallCharacter();
                 playJumpSound = true;
 
-//                if (super.nonLoopingAnimation(jumpingEndAnimation)) {
-                    // If the player has fallen back to ground level then stop falling
-                    if (getSprite().getY() < getGroundLevel()) {
-                        getSprite().setPosition(getSprite().getX(), getGroundLevel());
-                        grounded = true;
-                        playerLevel = getGroundLevel();
-                        playerState = PlayerState.IDLE;
-                    }
-//                }
+                // Once the player has returned back to ground level, it is set at ground level to prevent falling offscreen.
+                if (getSprite().getY() < getGroundLevel()) {
+                    getSprite().setPosition(getSprite().getX(), getGroundLevel());
+                    grounded = true;
+                    playerLevel = getGroundLevel();
+                    playerState = PlayerState.IDLE;
+                }
 
                 break;
 
@@ -310,7 +310,8 @@ public class Player extends Character {
     /**
      Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
      Can then apply this to find the new position for the sprite which is then translated to that position.
-     Player has its own version of moveCharacter, which is overwritten so that other characters don't have the camera speed added to their movement
+     Player needs its own version of moveCharacter.
+     It overrides the super.moveCharacter so that other characters don't have the camera speed added to their movement
      */
 
     @Override
@@ -342,6 +343,7 @@ public class Player extends Character {
         }
     }
 
+    // Same as moveCharacter but applied to falling. Subtracts the falling speed to the Y axis.
     public void fallCharacter() {
 
         getPositionAmount().x = GameScreen.getInstance().getHelper().setMovement(getCURRENT_MOVEMENT_SPEED());
@@ -354,6 +356,7 @@ public class Player extends Character {
             getSprite().translate(getPositionAmount().x, getPositionAmount().y);
         }
     }
+
 
     public void playJumpSound() {
         if(playJumpSound) {

@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-/*
-The parent superclass.
-Both Player and Enemies inherit from it and it provides the basic template that both of them require.
+/**
+ * The parent superclass for all characters.
+ * Both Player and Enemies inherit from this class and it provides the basic template that both of them require.
  */
 public class Character extends Actor {
 
@@ -93,10 +93,9 @@ public class Character extends Actor {
 
 
     /*
-     Processes animations for both looping and non looping versions. Non looping resets the statetime so that it only plays once.
-     Applies separate statetime to each version so that they don't interfere with each other when the non looping resets.
+     Processes animations for both looping and non looping versions. Non looping resets the state time so that it only plays once.
+     Applies separate state time to each version so that they don't interfere with each other when the non looping resets.
      */
-
     public boolean nonLoopingAnimation(Animation<TextureRegion> animation) {
 
         nonLoopingStateTime += deltaTime;
@@ -138,6 +137,10 @@ public class Character extends Actor {
     // -----------------------------------------------------------
 
 
+    /* A characters movement speed * delta time gives a position amount.
+    * This is the amount of distance that the sprite has to travel to to reach the new position.
+    * The sprites are then translated to the new position given by the position amount
+    */
     public void moveCharacter() {
 
         positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
@@ -153,7 +156,8 @@ public class Character extends Actor {
 
     /*
      * Moves the characters in the opposite direction to oppose the cameras movement,
-     * giving the impression that they are static objects or if they are moving the cameras movement is not added to their own.
+     * giving the impression that they are not moving if they are static objects.
+     * Characters that are moving also do not have the cameras movement added to their own.
      * All "compensate" methods do this.
      */
     public void compensateCamera(float cameraPositionAmount) {

@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
-/*
-A class for projectiles that need to be fired around by player and enemies. It manages the states, sounds and behaviour of projectiles.
-Each instance of a projectile is owned by the character that fires it.
+/**
+ * A class for projectiles that need to be fired around by player and enemies. It manages the states, sounds and behaviour of projectiles.
+ * Each instance of a projectile is owned by the character that fires it.
  */
 public class Projectile extends Actor {
 
@@ -51,6 +51,9 @@ public class Projectile extends Actor {
     }
 
 
+    /*
+    The default drawing method. It flips the sprites to face the correct direction.
+     */
     @Override
     public void draw(Batch batch, float alpha) {
 
@@ -105,6 +108,7 @@ public class Projectile extends Actor {
         }
     }
 
+    // If the projectile goes off screen it is reset.
     public void setProjectileBounds() {
         if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
             projectileState = ProjectileState.RESET;
@@ -132,6 +136,11 @@ public class Projectile extends Actor {
     }
 
 
+    /*
+     * Moves the projectiles in the opposite direction to oppose the cameras movement,
+     * so that they do not have the cameras movement added to their own.
+     * All "compensate" methods do this.
+     */
     public void compensateCamera(float cameraPositionAmount) {
 
         projectileSprite.translate(cameraPositionAmount, 0);

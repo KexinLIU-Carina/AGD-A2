@@ -9,16 +9,17 @@ import com.mygdx.game.LevelEnd;
 import com.mygdx.game.Player;
 
 
+/**
+ * A collection of objects needed for each level.
+ * Collecting them together allows them to be processed together.
+ */
 public class GameObjects extends Actor {
-
-    private ChestCreator chest;
-
-    private ScoreBar scoreBar;
 
     private Vector2 positionAmount;
 
+    private ChestCreator chest;
+    private ScoreBar scoreBar;
     private PowerUp powerUp;
-
     private LevelEnd levelEnd;
 
 
@@ -27,15 +28,10 @@ public class GameObjects extends Actor {
         positionAmount = new Vector2();
 
         scoreBar = new ScoreBar();
-
         powerUp = new PowerUp("Game Objects/Diamond.png", "Audio/Sounds/PowerUp.mp3", "Audio/Sounds/PowerDown.mp3");
-
         chest = new ChestCreator();
-
         levelEnd = new LevelEnd();
-
     }
-
 
 
 
@@ -46,6 +42,7 @@ public class GameObjects extends Actor {
         powerUp.draw(batch, alpha);
         levelEnd.draw(batch, alpha);
     }
+
 
     @Override
     public void act(float delta) {
@@ -68,6 +65,11 @@ public class GameObjects extends Actor {
 
     }
 
+
+    /*
+     * Moves the characters in the opposite direction to oppose the cameras movement,
+     * giving the impression that they are not moving if they are static objects.
+     */
     public void compensateCamera(float cameraPositionAmount) {
         powerUp.compensateCamera(cameraPositionAmount);
         levelEnd.compensateCamera(cameraPositionAmount);
@@ -94,6 +96,7 @@ public class GameObjects extends Actor {
         }
     }
 
+    // Creates the desired chest depending on the chest type provided.
     public void configureChest(Chest.ChestType chestType, int positionX, int positionY) {
 
         switch(chestType) {

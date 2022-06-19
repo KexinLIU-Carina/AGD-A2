@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-
+/**
+ * Dragon has a projectile attack
+ */
 public class EnemyDragon extends Enemy {
 
 
@@ -91,14 +93,16 @@ public class EnemyDragon extends Enemy {
 
 
     /*
-     Calls switchStates in Enemy class to handle default states then provides the ability to specify custom states.
-     These states might be unique to the enemy or require more functionality than the default. All enemies will set their own Attacking state.
+     First handles default states with a call to super.switchStates in Enemy class.
+     Then custom states are specified. Not all enemies have these states, they are specific to the enemy.
      */
     public void switchCustomStates() {
 
         // Switch states in Enemy class has a set of default behaviours for standard animations.
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
 
+
+        // --- Custom states ------
 
         if(super.getEnemyState() == EnemyState.ATTACKING) {
             super.setCURRENT_MOVEMENT_SPEED(0);

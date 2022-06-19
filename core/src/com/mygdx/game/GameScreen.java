@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -153,7 +152,7 @@ public class GameScreen implements Screen {
 
         // Level Maps
         levelFactory = new LevelFactory();
-        levelFactory.setCurrentLevel();
+        levelFactory.createCurrentLevel();
 
         // Player
         player = new Player();
@@ -230,15 +229,18 @@ public class GameScreen implements Screen {
 
 
         // --- START NEW GAME ---------
-        newGame();
+        newLevel();
     }
 
-    private void newGame() {
+    /**
+     * Starts a fresh new level with all game objects reset ready for play.
+     */
+    private void newLevel() {
         gameState = GameState.PLAYING;
         player.reset();
         newEnemy();
         levelFactory.getGameObjects().remove();
-        levelFactory.setCurrentLevel();
+        levelFactory.createCurrentLevel();
         levelFactory.getGameObjects().reset();
         ScoreBar.enemyKilledScore = 0;
         stage.addActor(levelFactory.getGameObjects());
@@ -251,6 +253,7 @@ public class GameScreen implements Screen {
     }
 
 
+    // Remove the old enemy from the stage and spawn a new one, then add it back to the stage.
     public void newEnemy() {
         randomEnemy.remove();
         randomEnemy = enemyFactory.spawnRandomEnemy();
@@ -266,6 +269,7 @@ public class GameScreen implements Screen {
         int touchY = Gdx.input.getY();
         controller.update(checkTouch, touchX, touchY);
 
+        // Poll the AI states for character behaviour
         randomEnemy.setAIStates(player);
         levelFactory.getGameObjects().getLevelEnd().setAIStates(player);
 
@@ -278,8 +282,11 @@ public class GameScreen implements Screen {
                     gameState = GameState.GAMEOVER;
                 }
 
+                // Check for collisions
                 levelFactory.getGameObjects().checkCollided(player);
                 levelFactory.getCurrentLevel().checkMapPlatformCollision(player);
+
+                // Check if the conditions have been met to clear the level.
                 checkVictoryConditions();
 
 
@@ -365,6 +372,7 @@ public class GameScreen implements Screen {
                 if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle()
                         .overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
                     if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.FIRING) {
+                        // If the enemy is alive when it has been hit the projectile is reset and the enemy checks how much damage it received.
                         if (randomEnemy.getIsAlive()) {
                             player.getPlayerProjectile().setProjectileState(Projectile.ProjectileState.RESET);
                             randomEnemy.healthCheck(player.getDamage());
@@ -376,9 +384,7 @@ public class GameScreen implements Screen {
                 if (randomEnemy.getEnemyState() == Enemy.EnemyState.DEAD) {
 
                     // Victory conditions
-                    ScoreBar.enemyKilledScore+=  25;
-
-
+                    ScoreBar.enemyKilledScore +=  25;
 
                     randomEnemy.remove();
                     randomEnemy = enemyFactory.spawnRandomEnemy();
@@ -395,7 +401,7 @@ public class GameScreen implements Screen {
             // -------------------------------------------------------------------------------------
 
             case RESTART:
-                newGame();
+                newLevel();
                 break;
 
             case GAMEOVER:
@@ -451,7 +457,10 @@ public class GameScreen implements Screen {
     }
 
 
-
+    /**
+     * Moves the player, keeps track of how far the player moved, moves the level camera,
+     * and moves everything else in the opposite direction to compensate for the level camera
+     */
     public void movePlayerLeft() {
         if (player.getIsGrounded()) {
             // Set the player to running and move the player to the new position.
@@ -463,6 +472,7 @@ public class GameScreen implements Screen {
 
                 // Move the player
                 player.moveCharacter();
+                // Map position keeps track of how far the player is moving so it can return back to the starting point on the map.
                 mapPosition -= player.getPositionAmount().x;
 
 
@@ -497,7 +507,6 @@ public class GameScreen implements Screen {
 
             // ------ CAMERA COMPENSATE -------------------------------
             // Move the camera with the player, and compensate for the movement on other objects
-
             levelFactory.getCurrentLevel().moveCamera(player);
             levelFactory.getCurrentLevel().collisionCompensateCamera(-player.getPositionAmount().x);
             randomEnemy.compensateCamera(-player.getPositionAmount().x);
@@ -541,6 +550,7 @@ public class GameScreen implements Screen {
     }
 
 
+    // Listener for Keyboard controls
     private class MyInputListener extends InputListener {
 
         @Override
@@ -606,6 +616,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
 
+        music.dispose();
         texture.dispose();
         levelFactory.dispose();
         stage.dispose();

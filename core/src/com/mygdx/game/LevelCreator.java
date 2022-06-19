@@ -120,6 +120,7 @@ public class LevelCreator {
         collisionSprites2 = new Sprite[numberOfCollisionObjects];
         currentPlatform = new Sprite();
 
+        // Extract all the collision objects from the map, and duplicate them ready for infinite map scrolling.
         MapLayer collisionLayer = loadedMap.getLayers().get("Collision");
         for(int i = 0; i < collisionLayer.getObjects().getCount(); i++) {
             if(collisionLayer.getObjects().get(i) instanceof RectangleMapObject) {

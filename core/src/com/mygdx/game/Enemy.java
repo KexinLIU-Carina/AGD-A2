@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-/*
-The parent class for all enemies. Inherits from the Character super class.
+/**
+ * The parent class for all enemies. Inherits from the Character super class.
  */
 public class Enemy extends Character {
 
@@ -37,14 +37,13 @@ public class Enemy extends Character {
 
     public Enemy() {
 
-
-        // Default states as a backup. Individual enemies should override these.
+        // All enemies start facing left.
         super.setDirection(Direction.LEFT);
 
     }
 
 
-    public Projectile getEnemyProjectile() { return enemyProjectile; }
+    public Projectile getEnemyProjectile() { return this.enemyProjectile; }
 
 
 
@@ -77,7 +76,7 @@ public class Enemy extends Character {
         super.setIsAlive(false);
     }
 
-    // A default set of states for every enemy that sets movement and applies animations
+    // A default set of states for every enemy. Responsible for setting basic movement and applying basic animations
     public void switchStates(Animation<TextureRegion> idleAnimation, Animation<TextureRegion> walkingAnimation,
                              Animation<TextureRegion> hurtAnimation, Animation<TextureRegion> dyingAnimation) {
 
@@ -142,9 +141,10 @@ public class Enemy extends Character {
         }
     }
 
-    /*
-    A set of default AI states that all enemies will share.
-    More specific AI states can be added to in individual enemies by overriding completely or with a call to super
+    /**
+     * A set of default AI states that all enemies will share for some basic behaviour.
+     * AI states specific to each enemy can be added in the enemies respective classes,
+     * by overriding completely, or in conjunction with a call to super.
      */
     public void setAIStates(Player player) {
 
@@ -163,8 +163,8 @@ public class Enemy extends Character {
                 }
             }
 
-            // The enemy is meant to turn around if the player goes past it.
-            // ** Bugs ** At the moment with the camera movement this is prevented from happening
+            // The enemy will turn around if the player goes past it.
+            // It will continue to travel for a short distance before it does so, to avoid the facing both directions at the same time bug.
             if ((player.getCenteredSpritePosition().x - 200) > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
                 setDirection(Direction.RIGHT);
             }

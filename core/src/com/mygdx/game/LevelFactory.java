@@ -1,12 +1,16 @@
 package com.mygdx.game;
 
 
-import com.badlogic.gdx.Gdx;
 import com.mygdx.game.GameObject.Chest;
 import com.mygdx.game.GameObject.GameObjects;
 import com.mygdx.game.GameObject.ScoreBar;
 
 
+/**
+ * Contains the configuration logic needed to create an entire level, with map and game objects.
+ * New levels can be easily added and configured here.
+ * The correct current level is created automatically by calling createCurrentLevel which will overwrite the current level container.
+ */
 public class LevelFactory {
 
     public enum LevelNum { Level1, Level2 }
@@ -51,12 +55,9 @@ public class LevelFactory {
     }
 
 
-    public void dispose() {
-        currentLevel.dispose();
-    }
 
-
-    public void setCurrentLevel() {
+    // Creates whatever level MyGdxGame calls the current level
+    public void createCurrentLevel() {
         if(MyGdxGame.levelNum == LevelNum.Level1) {
             createLevel1();
         }
@@ -65,9 +66,14 @@ public class LevelFactory {
         }
     }
 
-    public LevelCreator getCurrentLevel() {
-        return currentLevel;
+    public void dispose() {
+        currentLevel.dispose();
     }
+
+
+    // ---------- GETTERS AND SETTERS -------------------------------------
+
+    public LevelCreator getCurrentLevel() { return currentLevel; }
 
     public GameObjects getGameObjects() { return currentLevelObjects; }
 }

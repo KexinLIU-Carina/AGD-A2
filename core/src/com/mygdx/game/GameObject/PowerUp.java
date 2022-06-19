@@ -11,6 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Player;
 
 
+/**
+ * A collectible Power Up that gives the player a more powerful rifle weapon for a short duration of 20 seconds,
+ * and will then deactivate returning to the default weapon. The power up sill respawn and can be collected again.
+ */
 public class PowerUp extends Actor {
 
     public enum PowerUpState { ACTIVE, INACTIVE }
@@ -30,7 +34,7 @@ public class PowerUp extends Actor {
 
 
     private float timePeriod = 0;
-    // Power Up will last for 30 secs
+    // Power Up will last for 20 secs
     private int powerUpTimeDuration = 20;
 
 
@@ -72,6 +76,7 @@ public class PowerUp extends Actor {
         switchState();
     }
 
+    // Sets whether the power up is activated or not.
     public void switchState() {
 
         switch (powerUpState) {
@@ -93,6 +98,7 @@ public class PowerUp extends Actor {
 
     }
 
+    // Check for collisions
     public void checkCollided(Player player) {
         if(player.getSprite().getBoundingRectangle().overlaps(powerUpSprite.getBoundingRectangle())) {
             powerUpState = PowerUpState.ACTIVE;
@@ -118,6 +124,7 @@ public class PowerUp extends Actor {
         }
     }
 
+    // Moves the power up in the opposite direction to the players camera movement, giving the appearance of being a static object.
     public void compensateCamera(float cameraPositionAmount) {
 
            powerUpSprite.translate(cameraPositionAmount, 0);
