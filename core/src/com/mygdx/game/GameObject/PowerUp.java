@@ -118,10 +118,15 @@ public class PowerUp extends Actor {
         }
     }
 
-
     public void compensateCamera(float cameraPositionAmount) {
 
            powerUpSprite.translate(cameraPositionAmount, 0);
+    }
+
+
+    public void dispose() {
+        powerUpSound.dispose();
+        powerDownSound.dispose();
     }
 
     public Vector2 getStartPosition() { return startPosition; }

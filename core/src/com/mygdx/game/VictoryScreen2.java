@@ -105,6 +105,9 @@ public class VictoryScreen2 implements Screen {
 
     @Override
     public void dispose() {
+        texture.dispose();
+        texture1.dispose();
+        texture2.dispose();
         stage.dispose();
     }
 }

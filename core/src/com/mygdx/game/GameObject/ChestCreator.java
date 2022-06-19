@@ -83,8 +83,6 @@ public class ChestCreator extends Chest {
     }
 
 
-
-
     public void setAnimations(int x, int y) {
         this.animations[0] = chestClosed;
         this.animations[1] = chestOpen;
@@ -100,4 +98,10 @@ public class ChestCreator extends Chest {
         Xhelper = 100;
         Yhelper = 100;
     }
+
+
+    public void dispose() {
+        chestCollectedSound.dispose();
+    }
+
 }

@@ -21,9 +21,6 @@ public class Player extends Character {
     private int numberOfLives = 3;
 
     private boolean powerUp = false;
-    private int numberOfCoins = 0;
-    private int numberOfTreasures = 0;
-    private int score = 0;
 
     // Set movement speeds
     private int runningSpeed = 500;
@@ -193,11 +190,6 @@ public class Player extends Character {
         playerProjectile.getProjectileStartPosition().x = getSprite().getX();
         playerProjectile.getProjectileStartPosition().y = getSprite().getY();
         playerProjectile.act(delta);
-
-//        Gdx.app.log("Main", "Player y" + getSprite().getY());
-//        Gdx.app.log("Main", "Player state" + playerState);
-//        Gdx.app.log("Main", "Player IsGrounded(" + getIsGrounded());
-//        Gdx.app.log("Main", "Player ProjectileState" + playerProjectile.getProjectileState());
 
         switchStates();
     }
@@ -384,6 +376,13 @@ public class Player extends Character {
         }
     }
 
+    public void dispose() {
+        jumpSound.dispose();
+        hurtSound.dispose();
+        dieSound.dispose();
+        playerProjectile.dispose();
+    }
+
 
     // ---------- GETTERS AND SETTERS -------------------------------------
     public PlayerState getPlayerState() { return playerState; }
@@ -397,18 +396,6 @@ public class Player extends Character {
     public void setPowerUp(boolean powerUp) { this.powerUp = powerUp; }
 
     public Projectile getPlayerProjectile() { return playerProjectile; }
-
-    public int getNumberOfCoins() { return numberOfCoins; }
-
-    public void setNumberOfCoins(int numberOfCoins) { this.numberOfCoins = numberOfCoins; }
-
-    public int getNumberOfTreasures() { return numberOfTreasures; }
-
-    public void setNumberOfTreasures(int numberOfTreasures) { this.numberOfTreasures = numberOfTreasures; }
-
-    public int getScore() { return score; }
-
-    public void setScore(int score) { this.score = score; }
 
     public boolean getIsGrounded() { return grounded;}
 

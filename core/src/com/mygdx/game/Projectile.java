@@ -30,6 +30,7 @@ public class Projectile extends Actor {
     private Vector2 offset;
     private Vector2 projectileStartWithOffset;
     private Vector2 PROJECTILE_MOVEMENT;
+
     private Sound firingSound;
     private boolean playFiringSound = true;
 
@@ -137,6 +138,10 @@ public class Projectile extends Actor {
 
     }
 
+
+    public void dispose() {
+        firingSound.dispose();
+    }
 
 
     // ------ GETTERS AND SETTERS --------------------------------

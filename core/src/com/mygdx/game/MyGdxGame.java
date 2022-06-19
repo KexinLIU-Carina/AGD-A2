@@ -40,7 +40,7 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 		gameScreen = GameScreen.getInstance();
 
-		levelNum = LevelFactory.LevelNum.Level2;
+		levelNum = LevelFactory.LevelNum.Level1;
 
 		setScreen(startScreen);
 
