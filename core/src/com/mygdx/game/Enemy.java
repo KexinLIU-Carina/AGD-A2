@@ -179,6 +179,12 @@ public class Enemy extends Character {
         }
     }
 
+    public void dispose() {
+        if(hasProjectile) {
+            enemyProjectile.dispose();
+        }
+    }
+
 
 
     // ---------- GETTERS AND SETTERS -------------------------------------

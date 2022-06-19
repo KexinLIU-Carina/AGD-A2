@@ -119,6 +119,11 @@ public class GameObjects extends Actor {
         return chest.getValue();
     }
 
+    public void dispose() {
+        powerUp.dispose();
+        chest.dispose();
+    }
+
 
     public PowerUp getPowerUp() { return powerUp; }
 
